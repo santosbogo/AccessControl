@@ -1,10 +1,10 @@
 package accesscontrol.dto;
 
 public class AttemptDto {
-    private String uid;
-    private String access;
-    private String time;
-    private String date;
+    private final String uid;
+    private final String access;
+    private final String time;
+    private final String date;
 
     // Constructor
     public AttemptDto(String uid, String access, String time, String date) {
