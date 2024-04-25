@@ -1,0 +1,32 @@
+plugins {
+    id 'java'
+}
+
+group = 'org.example'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    //MQTT Suscribe
+    implementation 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.5'
+
+    testImplementation platform('org.junit:junit-bom:5.9.1')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    implementation 'org.hibernate:hibernate-core:5.6.5.Final'
+    implementation 'org.hsqldb:hsqldb:2.7.2'
+
+    //Implementation of the Spark Java framework
+    implementation 'com.sparkjava:spark-core:2.9.3'
+    implementation 'com.sparkjava:spark-template-freemarker:2.7.1'
+    implementation 'com.google.guava:guava:31.1-jre'
+    implementation 'com.google.code.gson:gson:2.9.0'
+
+    implementation 'com.auth0:java-jwt:3.18.2'
+}
+
+test {
+    useJUnitPlatform()
+}
