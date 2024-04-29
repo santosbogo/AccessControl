@@ -2,27 +2,36 @@ import React from 'react';
 import './SignUp.css'; // Importa el archivo CSS
 
 const SignUp = () => {
-
     return (
         <div className="signup-container">
-
             {/* Contenedor izquierdo para la imagen */}
-            <div className="form-container">
-                {<img src="/Users/luzlaura/IdeaProjects/AccessControl/src/main/frontend/public/accessControl.jpeg" />}
+            <div className="form-container left">
+                <img src="/accessControl.jpeg" alt="Access Control" />
             </div>
 
             {/* Contenedor derecho para el formulario */}
-            <div className="form-container">
-                    <div className="signup-title">
-                        <div className="text"> Sign Up </div>
+            <div className="form-container right">
+                <div className="signup-header">
+                    <div className="logo">
+                        {/* Aquí falta cerrar la etiqueta div */}
                     </div>
-                <form>
-                    <input type="text" placeholder="Name"/>
-                    <input type="text" placeholder="Lastname"/>
-                    <input type="text" placeholder="Username"/>
-                    <input type="text" placeholder={"Password"}/>
-                    <button type="submit">Registrarse</button>
-                </form>
+                    <div className="text"> Sign Up </div>
+                </div>
+                <div className="signup-inputs">
+                    <div className="signup-input">
+                        <input type="text" placeholder="Name" />
+                    </div>
+                    <div className="signup-input">
+                        <input type="text" placeholder="Lastname" />
+                    </div> {/* Cierra la etiqueta div para el segundo input */}
+                    <div className="signup-input">
+                        <input type="text" placeholder="Username" />
+                    </div> {/* Cierra la etiqueta div para el tercer input */}
+                    <div className="signup-input">
+                        <input type="password" placeholder="Password" />
+                    </div> {/* Cierra la etiqueta div para el cuarto input */}
+                </div>
+                <button className="signup-button" type="submit">Registrarse</button>
             </div>
         </div>
     );

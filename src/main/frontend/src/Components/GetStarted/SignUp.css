@@ -1,49 +1,96 @@
 .signup-container {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
-
-.signup-container img {
-    width: 100%;
-    height: auto;
-}
-
-.form-container {
-    flex: 1;
-}
-.form-container {
-    background-color: #819171; /* Aquí defines el color sage green */
-}
-
-.form-container form {
-    display: flex;
     flex-direction: column;
     align-items: center;
+    background: #fff;
+    width: 100%;
+    padding: 40px 20px;
+    margin: 0 auto;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.form-container input {
-    margin: 10px;
-    padding: 10px;
-    width: 80%;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+.signup-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
 }
 
-.form-container button {
-    margin: 10px;
-    padding: 10px 20px;
-    background: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+.signup-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+    margin-bottom: 30px;
 }
 
-.form-container.left {
+.logo img {
+    width: 150px;
+}
+
+.text {
+    color: #00d6d1;
+    font-size: 36px;
+    font-weight: 700;
+}
+
+.signup-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    width: 100%;
+}
+
+.signup-input {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 80px;
+    background: #eaeaea;
+    border-color: #00d6d1;
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 6px;
+}
+
+.signup-input img {
+    margin: 0px 30px;
+}
+
+.signup-input input {
     flex: 1;
-    background-image: url('/Users/luzlaura/IdeaProjects/AccessControl/src/main/frontend/public/accessControl.jpeg');
-    background-size: cover;
-    background-position: center;
+    height: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 19px;
+    border-radius: 25px;
+}
+
+.signup-button {
+    padding: 15px 30px;
+    border: none;
+    border-radius: 30px;
+    color: #fff;
+    font-size: 20px;
+    font-weight: 600;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    width: 50%;
+    font-family: 'Poppins', sans-serif;
+    background-image: linear-gradient(145deg, #004aad, #0084d1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    outline: none;
+    margin-top: 20px;
+}
+
+.signup-button:hover {
+    background-image: linear-gradient(145deg, #00d6d1, #00b2aa);
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
