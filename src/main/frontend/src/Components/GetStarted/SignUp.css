@@ -1,0 +1,49 @@
+.signup-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.signup-container img {
+    width: 100%;
+    height: auto;
+}
+
+.form-container {
+    flex: 1;
+}
+.form-container {
+    background-color: #819171; /* Aquí defines el color sage green */
+}
+
+.form-container form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.form-container input {
+    margin: 10px;
+    padding: 10px;
+    width: 80%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.form-container button {
+    margin: 10px;
+    padding: 10px 20px;
+    background: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.form-container.left {
+    flex: 1;
+    background-image: url('/Users/luzlaura/IdeaProjects/AccessControl/src/main/frontend/public/accessControl.jpeg');
+    background-size: cover;
+    background-position: center;
+}
