@@ -13,12 +13,12 @@ const Login = () =>{
             {/* Contenedor derecho para el formulario */}
             <div className="form-container">
                 <div className="login-title">
-                    <div className="text"> Login </div> {/* Cambia el título a "Login" */}
+                    <div className="text"> Login </div>
                 </div>
                 <form>
                     <input type="text" placeholder="Username"/>
-                    <input type="password" placeholder="Password"/> {/* Usa type="password" para ocultar la contraseña */}
-                    <button type="submit">Iniciar sesión</button> {/* Cambia el texto del botón a "Iniciar sesión" */}
+                    <input type="password" placeholder="Password"/>
+                    <button type="submit">Iniciar sesión</button>
                 </form>
             </div>
         </div>
