@@ -1,26 +1,50 @@
 import React from "react";
-import './Login.css';
-// import image from './ruta/a/la/imagen'; // Importa la imagen
+import { Link } from 'react-router-dom';
+import './Login.css'; // Importa el archivo CSS
 
-const Login = () =>{
+const Login = () => {
+    const [username, setUsername] = React.useState("");
+    const [password, setPassword] = React.useState("");
+
+    const handleLogin = () => {
+        // Agrega la lógica de inicio de sesión aquí
+    }
+
     return (
         <div className="login-container">
-            {/* Contenedor izquierdo para la imagen */}
-            <div className="form-container">
-                {/*<img src={image} alt="Imagen de ejemplo"/> /!* Usa la variable de imagen *!/*/}
-            </div>
-
-            {/* Contenedor derecho para el formulario */}
-            <div className="form-container">
+            <div className="login-header">
                 <div className="login-title">
                     <div className="text"> Login </div>
                 </div>
-                <form>
-                    <input type="text" placeholder="Username"/>
-                    <input type="password" placeholder="Password"/>
-                    <button type="submit">Iniciar sesión</button>
-                </form>
+                <div className="logo">
+                    {/* Agrega tu logo aquí */}
+                </div>
             </div>
+            <div className="login-inputs">
+                <div className="login-input">
+                    <input
+                        type="text"
+                        name="username"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        placeholder="Username"
+                    />
+                </div>
+                <div className="login-input">
+                    <input
+                        type="password"
+                        name="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="Password"
+                    />
+                </div>
+            </div>
+
+            <div className="general-error-message"></div>
+
+            <button className="login-button" onClick={handleLogin}>Login</button>
+            <Link to="/" className="Go-back-button">Go back</Link>
         </div>
     );
 }

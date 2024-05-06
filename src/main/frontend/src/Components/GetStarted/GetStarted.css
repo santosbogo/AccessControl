@@ -1,0 +1,81 @@
+.get-started-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; /* Para centrar verticalmente */
+    background-color: #1a1f2e; /* Dark navy blue background */
+    color: #d0e0ff; /* Light blue text color for readability */
+    font-family: 'Arial', sans-serif; /* Modern, sans-serif font */
+    width: 90%; /* Ajusta el ancho según tus necesidades */
+    max-width: 1000px; /* Establece un ancho máximo */
+    margin: auto; /* Auto para centrar horizontalmente */
+    padding: 50px;
+    max-height: 90vh;
+    overflow-y: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 120, 255, 0.3);
+    background-image: url("../../../public/accessControl.jpeg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    position: relative;
+}
+
+
+@media (max-width: 768px) {
+    .get-started-container {
+        width: 95%; /* Aumenta el ancho en dispositivos más pequeños para usar más espacio */
+        padding: 20px; /* Reduce el padding para dispositivos más pequeños */
+    }
+}
+
+@media (max-width: 480px) {
+    .get-started-container {
+        width: 100%; /* Utiliza todo el ancho disponible en dispositivos muy pequeños */
+    }
+}
+
+.get-started-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
+}
+
+.logo-get-started img {
+    width: 150px;
+    margin-bottom: 40px;
+}
+
+.get-started-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+}
+
+.get-started-button {
+    padding: 15px 30px;
+    border: none;
+    border-radius: 30px;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 600;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: linear-gradient(to right, #007bff, #0056b3);
+    font-family: 'Poppins', sans-serif;
+}
+
+.get-started-button:not(:last-child) {
+    margin-bottom: 10px;
+}
+
+.get-started-button:hover {
+    background-image: linear-gradient(145deg, #00d6d1, #00b2aa);
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
