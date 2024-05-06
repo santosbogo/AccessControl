@@ -9,7 +9,7 @@ const GetStarted = ()=>{
         <div className='get-started-container'>
             <div className="get-started-header">
                 <div className="get-started-title">
-                    <div className="text"> Get Started </div>
+                    <div className="title"> Get Started </div>
                 </div>
             </div>
             <div className='logo-get-started'>
