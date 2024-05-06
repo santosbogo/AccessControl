@@ -14,7 +14,7 @@
     flex: 1;
 }
 .form-container {
-    background-color: #819171; /* Aquí defines el color sage green */
+    background-color: #819171;
 }
 
 .form-container form {
@@ -43,7 +43,6 @@
 
 .form-container.left {
     flex: 1;
-    background-image: url('/Users/luzlaura/IdeaProjects/AccessControl/src/main/frontend/public/accessControl.jpeg');
     background-size: cover;
     background-position: center;
 }
