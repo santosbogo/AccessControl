@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./History.css";
 
 const ViewHistory = () => {
@@ -16,21 +16,7 @@ const ViewHistory = () => {
             { id: 1, user: "User1", time: "08:00 AM" },
             { id: 2, user: "User2", time: "09:15 AM" },
             { id: 3, user: "User3", time: "10:30 AM" },
-            { id: 1, user: "User1", time: "08:00 AM" },
-            { id: 2, user: "User2", time: "09:15 AM" },
-            { id: 3, user: "User3", time: "10:30 AM" },
-            { id: 1, user: "User1", time: "08:00 AM" },
-            { id: 2, user: "User2", time: "09:15 AM" },
-            { id: 3, user: "User3", time: "10:30 AM" },
-            { id: 1, user: "User1", time: "08:00 AM" },
-            { id: 2, user: "User2", time: "09:15 AM" },
-            { id: 3, user: "User3", time: "10:30 AM" },
-            { id: 1, user: "User1", time: "08:00 AM" },
-            { id: 2, user: "User2", time: "09:15 AM" },
-            { id: 3, user: "User3", time: "10:30 AM" },
-            { id: 1, user: "User1", time: "08:00 AM" },
-            { id: 2, user: "User2", time: "09:15 AM" },
-            { id: 3, user: "User3", time: "10:30 AM" },
+
             // más datos...
         ];
         setHistoryData(exampleData);
