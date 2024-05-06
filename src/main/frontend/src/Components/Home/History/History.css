@@ -18,7 +18,7 @@ body {
     border-radius: 8px;
     background-color: #1a1f2e;
     box-shadow: 0 4px 8px rgba(0, 120, 255, 0.3);
-    background-image: url("/Users/claralopez/IdeaProjects/electronica/AccessControl/src/main/frontend/public/accessControl.jpeg");
+    background-image: url("../../../../public/accessControl.jpeg");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
