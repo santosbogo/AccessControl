@@ -59,3 +59,14 @@
     transform: scale(1.05);
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
+
+
+.main-title {
+    color: #004aad; /* Azul oscuro */
+    font-size: 24px; /* Tamaño de fuente ajustado */
+    font-weight: bold; /* Texto en negrita */
+    margin-bottom: 10px; /* Espaciado inferior */
+    padding: 10px 20px; /* Ajustar el espacio alrededor del texto */
+    background-color: white; /* Fondo blanco */
+    border-radius: 20px;
+}

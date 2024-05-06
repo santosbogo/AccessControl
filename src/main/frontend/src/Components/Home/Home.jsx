@@ -17,7 +17,7 @@ const HomePage = () => {
 
     return(
         <div className="home-page">
-            <h1>Welcome to the Access Control System</h1>
+            <div className="main-title"> Welcome to the Access Control System</div>
             <div className="button-container">
                 <button onClick={handleManageUsers}>Manage Users</button>
             </div>

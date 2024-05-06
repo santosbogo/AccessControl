@@ -18,7 +18,7 @@ const SignUp = () => {
         <div className="signup-container">
             <div className="signup-header">
                 <div className="signup-title">
-                    <div className="text"> Sign Up</div>
+                    <div className="title"> Sign Up</div>
                 </div>
                 <div className="logo">
                 </div>

@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./ManageUsers.css"; // Importar los estilos CSS
+import { Link } from 'react-router-dom'; // Importar Link si es necesario
+
 
 const ManageUsers = () => {
     const [searchTerm, setSearchTerm] = useState("");
@@ -41,7 +43,7 @@ const ManageUsers = () => {
 
     return (
         <div className="manage-users">
-            <h1>Manage Users</h1>
+            <div className="main-title">Manage Users</div>
             <button onClick={handleCreateUser}>Create New User</button>
             <form onSubmit={handleSearchSubmit}>
                 <input
@@ -51,6 +53,7 @@ const ManageUsers = () => {
                     onChange={handleSearchChange}
                 />
                 <button type="submit">Search</button>
+                <Link to="/Home/" className="home-button">Home</Link>
             </form>
             <div>
                 {/* Aquí se debería renderizar la lista de usuarios buscados */}

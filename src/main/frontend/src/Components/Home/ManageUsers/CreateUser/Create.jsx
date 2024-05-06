@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { Link } from 'react-router-dom'; // Importar Link si es necesario
+
 
 const CreateUser = () => {
     const [firstName, setFirstName] = useState("");
@@ -23,37 +25,49 @@ const CreateUser = () => {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="create-user-form">
-            <h1>Create New User</h1>
-            <label>
-                First Name:
-                <input
-                    type="text"
-                    name="firstName"
-                    value={firstName}
-                    onChange={handleInputChange}
-                />
-            </label>
-            <label>
-                Last Name:
-                <input
-                    type="text"
-                    name="lastName"
-                    value={lastName}
-                    onChange={handleInputChange}
-                />
-            </label>
-            <label>
-                Username:
-                <input
-                    type="text"
-                    name="username"
-                    value={username}
-                    onChange={handleInputChange}
-                />
-            </label>
-            <button type="submit">Create User</button>
-        </form>
+        <div className="signup-container">
+            <div className="signup-header">
+                <div className="signup-title">
+                    <div className="title"> Create New User</div>
+                </div>
+                <div className="logo">
+                    {/* Agrega tu logo aquí si es necesario */}
+                </div>
+            </div>
+            <div className="signup-inputs">
+                <div className="signup-input">
+                    <input
+                        type="text"
+                        name="firstName"
+                        value={firstName}
+                        onChange={handleInputChange}
+                        placeholder="First name"
+                    />
+                </div>
+                <div className="signup-input">
+                    <input
+                        type="text"
+                        name="lastName"
+                        value={lastName}
+                        onChange={handleInputChange}
+                        placeholder="Last name"
+                    />
+                </div>
+                <div className="signup-input">
+                    <input
+                        type="text"
+                        name="username"
+                        value={username}
+                        onChange={handleInputChange}
+                        placeholder="Username"
+                    />
+                </div>
+            </div>
+
+            <div className="general-error-message"></div>
+
+            <button className="signup-button" onClick={handleSubmit}>Create User</button>
+        </div>
     );
 };
 
