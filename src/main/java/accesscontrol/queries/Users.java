@@ -24,16 +24,23 @@ public class Users {
 
     public List<User> findUsersByFirstName(String firstName) {
         TypedQuery<User> query = entityManager.createQuery(
-                "SELECT u FROM User u WHERE u.firstName = :firstName", User.class);
+            "SELECT u FROM User u WHERE u.firstName = :firstName", User.class);
         query.setParameter("firstName", firstName);
         return query.getResultList();
     }
 
     public List<User> findUsersByLastName(String lastName) {
         TypedQuery<User> query = entityManager.createQuery(
-                "SELECT u FROM User u WHERE u.lastName = :lastName", User.class);
+            "SELECT u FROM User u WHERE u.lastName = :lastName", User.class);
         query.setParameter("lastName", lastName);
         return query.getResultList();
+    }
+
+    public boolean existsByUsername(String username) {
+        TypedQuery<Long> query = entityManager.createQuery(
+            "SELECT COUNT(u) FROM User u WHERE u.username = :username", Long.class);
+        query.setParameter("username", username);
+        return query.getSingleResult() > 0;
     }
 
     public void persist(User user) {

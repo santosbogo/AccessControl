@@ -6,6 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
+
 public class AccessAttempts {
     private final EntityManager entityManager;
 
@@ -15,21 +16,21 @@ public class AccessAttempts {
 
     public List<AccessAttempt> findAttemptsByUid(Long uid) {
         TypedQuery<AccessAttempt> query = entityManager.createQuery(
-                "SELECT a FROM AccessAttempt a WHERE a.uid = :uid", AccessAttempt.class);
+            "SELECT a FROM AccessAttempt a WHERE a.uid = :uid", AccessAttempt.class);
         query.setParameter("uid", uid);
         return query.getResultList();
     }
 
     public List<AccessAttempt> findAttemptsByDate(String date) {
         TypedQuery<AccessAttempt> query = entityManager.createQuery(
-                "SELECT a FROM AccessAttempt a WHERE a.attemptDate = :date", AccessAttempt.class);
+            "SELECT a FROM AccessAttempt a WHERE a.attemptDate = :date", AccessAttempt.class);
         query.setParameter("date", date);
         return query.getResultList();
     }
 
     public List<AccessAttempt> findAttemptsByStatus(boolean status) {
         TypedQuery<AccessAttempt> query = entityManager.createQuery(
-                "SELECT a FROM AccessAttempt a WHERE a.attemptStatus = :status", AccessAttempt.class);
+            "SELECT a FROM AccessAttempt a WHERE a.attemptStatus = :status", AccessAttempt.class);
         query.setParameter("status", status);
         return query.getResultList();
     }
@@ -51,7 +52,7 @@ public class AccessAttempts {
 
     public List<AccessAttempt> findAttemptsByUserUid(Long userUid) {
         TypedQuery<AccessAttempt> query = entityManager.createQuery(
-                "SELECT a FROM AccessAttempt a WHERE a.uid = :userUid", AccessAttempt.class);
+            "SELECT a FROM AccessAttempt a WHERE a.uid = :userUid", AccessAttempt.class);
         query.setParameter("userUid", userUid);
         return query.getResultList();
     }
