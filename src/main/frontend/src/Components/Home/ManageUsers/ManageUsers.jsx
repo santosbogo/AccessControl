@@ -1,10 +1,17 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "./ManageUsers.css"; // Importar los estilos CSS
 
 const ManageUsers = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const navigate = useNavigate();
-
+    const [users, setUsers] = useState([
+        { id: 1, name: "John Doe", email: "john@example.com" },
+        { id: 2, name: "Jane Smith", email: "jane@example.com" },
+        { id: 3, name: "Alice Johnson", email: "alice@example.com" },
+        { id: 4, name: "Bob Brown", email: "bob@example.com" },
+        { id: 5, name: "Emma Davis", email: "emma@example.com" }
+    ]);
     const handleCreateUser = () => {
         console.log("Redirect to create new user page");
         navigate("/Home/manage-users/create");
@@ -27,6 +34,7 @@ const ManageUsers = () => {
     const handleSearchSubmit = (event) => {
         event.preventDefault();
         console.log(`Searching for users with term: ${searchTerm}`);
+
         // Aquí implementar lógica para enviar la búsqueda a la base de datos
         // Por ejemplo, una llamada a API para obtener los usuarios filtrados
     };

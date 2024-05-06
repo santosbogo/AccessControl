@@ -1,5 +1,6 @@
 import React from "react";
-import { useNavigate } from "react-router-dom"; // Make sure to import useNavigate
+import { useNavigate } from "react-router-dom";
+import './Home.css'; // Importa los estilos CSS
 
 const HomePage = () => {
     const navigate = useNavigate();
@@ -17,8 +18,12 @@ const HomePage = () => {
     return(
         <div className="home-page">
             <h1>Welcome to the Access Control System</h1>
-            <button onClick={handleManageUsers}>Manage Users</button>
-            <button onClick={handleViewHistory}>View History</button>
+            <div className="button-container">
+                <button onClick={handleManageUsers}>Manage Users</button>
+            </div>
+            <div className="button-container">
+                <button onClick={handleViewHistory}>View History</button>
+            </div>
         </div>
     );
 };
