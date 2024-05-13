@@ -7,7 +7,6 @@ import accesscontrol.queries.*;
 import com.google.gson.Gson;
 import org.eclipse.paho.client.mqttv3.*;
 
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import java.time.*;
@@ -25,6 +24,7 @@ public class Aplication {
 
         ExitController exitController = new ExitController();
         AttemptController attemptController = new AttemptController();
+        PublisherMQTT publisher = new PublisherMQTT();
 
         try {
             MqttClient client = new MqttClient(broker, clientId);
@@ -34,6 +34,8 @@ public class Aplication {
             System.out.println("Connecting to MQTT broker: " + broker);
             client.connect(options);
             System.out.println("Connected");
+
+            publisher.publishUserCreation(client, "test1");
 
             client.setCallback(new MqttCallback() {
                 public void connectionLost(Throwable cause) {
