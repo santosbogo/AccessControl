@@ -1,11 +1,17 @@
 package accesscontrol;
 
+import accesscontrol.controller.ExitController;
+import accesscontrol.dto.DateTimeMessage;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import org.eclipse.paho.client.mqttv3.*;
 
 public class MQTT {
+    public static Gson gson = new Gson();
     public static void main(String[] args) {
-        String broker = "tcp://54.164.157.200:1883";
+        String broker = "tcp://3.80.25.82:1883";
         String clientId = "JavaClient";
+
         try {
             MqttClient client = new MqttClient(broker, clientId);
             MqttConnectOptions options = new MqttConnectOptions();
@@ -21,7 +27,16 @@ public class MQTT {
                 }
 
                 public void messageArrived(String topic, MqttMessage message) throws Exception {
-                    System.out.println("Message received:\n\tTopic: " + topic + "\n\tMessage: " + new String(message.getPayload()));
+                    String messageString = new String(message.getPayload());
+                    System.out.println("Message received:\n\tTopic: " + topic + "\n\tMessage: " + messageString);
+
+                    if (topic.equals("exit")) {
+                        DateTimeMessage dateTimeMessage = gson.fromJson(messageString, DateTimeMessage.class);
+                        System.out.println("Date: " + dateTimeMessage.getDate());
+                        System.out.println("Time: " + dateTimeMessage.getTime());
+
+                    }
+
                 }
 
                 public void deliveryComplete(IMqttDeliveryToken token) {
@@ -30,7 +45,6 @@ public class MQTT {
             });
 
             client.subscribe("#");
-            // Wait to ensure JVM does not exit
             Thread.sleep(60000);
             client.disconnect();
             System.out.println("Disconnected");
@@ -46,4 +60,6 @@ public class MQTT {
             System.out.println("Thread interrupted");
         }
     }
+
+
 }

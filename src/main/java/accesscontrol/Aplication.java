@@ -23,7 +23,7 @@ public class Aplication {
         final EntityManager entityManager = factory.createEntityManager();
         final UserController userController = new UserController(entityManager);
         final AttemptController attemptController = new AttemptController(entityManager);
-        final ExitController exitContriller = new ExitController(entityManager);
+        final ExitController exitController = new ExitController(entityManager);
 
     }
 }
