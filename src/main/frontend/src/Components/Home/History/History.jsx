@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "./History.css";
 
 const ViewHistory = () => {
     const [selectedDate, setSelectedDate] = useState("");
     const [historyData, setHistoryData] = useState([]);
+    const navigate = useNavigate(); // Importa useNavigate
 
     const handleDateChange = (event) => {
         setSelectedDate(event.target.value);
@@ -16,10 +18,13 @@ const ViewHistory = () => {
             { id: 1, user: "User1", time: "08:00 AM" },
             { id: 2, user: "User2", time: "09:15 AM" },
             { id: 3, user: "User3", time: "10:30 AM" },
-
             // más datos...
         ];
         setHistoryData(exampleData);
+    };
+
+    const handleGoBack = () => {
+        navigate("/home"); // Redireccionar a la página de inicio (Home)
     };
 
     return (
@@ -46,6 +51,7 @@ const ViewHistory = () => {
                     <p>No history available for this date.</p>
                 )}
             </div>
+            <button onClick={handleGoBack}>Back to Home</button> {/* Botón de regreso a Home */}
         </div>
     );
 };
