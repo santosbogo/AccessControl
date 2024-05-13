@@ -5,34 +5,32 @@ import java.time.format.*;
 
 public class AttemptDto {
     private String uid;
-    private String access;
-    private String time;
     private String date;
+    private String time;
+    private String status;
 
-    public AttemptDto(String uid, String access, String time, String date) {
+    public AttemptDto(String uid, String date, String time, String status) {
         this.uid = uid;
-        this.access = access;
-        this.time = time;
         this.date = date;
+        this.time = time;
+        this.status = status;
     }
 
     public Long getUid() {
         return Long.parseLong(uid);
     }
 
-    public boolean getAccess() {
-        int accessNum = Integer.parseInt(access);
-        if(accessNum == 1) return true;
-        else return false;
-    }
-    public LocalTime getTime() {
-        return LocalTime.parse(time, DateTimeFormatter.ISO_LOCAL_TIME);
-    }
-
     public LocalDate getDate() {
-        return LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE);
+        return LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
     }
 
 
+    public LocalTime getTime() {
+        return LocalTime.parse(time, DateTimeFormatter.ofPattern("HH:mm:ss"));
+    }
+
+    public Boolean getStatus() {
+        return Boolean.parseBoolean(status);
+    }
 }
 

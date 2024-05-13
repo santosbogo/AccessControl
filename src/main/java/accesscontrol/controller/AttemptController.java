@@ -17,21 +17,12 @@ public class AttemptController {
     private final AccessAttempts accessAttempt;
     private final Gson gson = new Gson();
 
-    public AttemptController(EntityManager entityManager) {
-        this.accessAttempt = new AccessAttempts(entityManager);
+    public AttemptController() {
+        this.accessAttempt = new AccessAttempts();
     }
 
-    public void addAttempt(Request req, Response res){
-        AttemptDto attemptDto = gson.fromJson(req.body(), AttemptDto.class);
-        long attemptUID = attemptDto.getUid();
-        boolean attemptBool = attemptDto.getAccess();
-        LocalTime attemptTime = attemptDto.getTime();
-        LocalDate attemptDate = attemptDto.getDate();
-
-        AccessAttempt attempt = new AccessAttempt(attemptUID, attemptDate, attemptTime, attemptBool);
-
-        accessAttempt.persist(attempt);
-        res.type("application/json");
-
+    public void addAttempt(Long uid, LocalDate date, LocalTime time, boolean success) {
+        AccessAttempt accessAttempt = new AccessAttempt(uid, date, time, success);
+        this.accessAttempt.persist(accessAttempt);
     }
 }

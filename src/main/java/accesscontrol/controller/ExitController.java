@@ -13,17 +13,12 @@ public class ExitController {
     private final Gson gson = new Gson();
     private final ExitAttempts exitAttempts;
 
-    public ExitController(EntityManager entityManager){
-        this.exitAttempts = new ExitAttempts(entityManager);
+    public ExitController(){
+        this.exitAttempts = new ExitAttempts();
     }
 
-    public void addExit(String date, String time){
-        ExitButtonDto exitDto = new ExitButtonDto(date, time);
-        LocalDate exitDate = exitDto.getDate();
-        LocalTime exitTime = exitDto.getTime();
-
-        ExitButton exitButton = new ExitButton(exitDate, exitTime);
-
+    public void addExit(LocalDate date, LocalTime time){
+        ExitButton exitButton = new ExitButton(date, time);
         exitAttempts.persist(exitButton);
     }
 
