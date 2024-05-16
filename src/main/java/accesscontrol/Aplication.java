@@ -6,12 +6,14 @@ import accesscontrol.model.*;
 import accesscontrol.queries.*;
 import com.google.gson.Gson;
 import org.eclipse.paho.client.mqttv3.*;
+import spark.*;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import java.time.*;
 
 import static accesscontrol.EntityManagerController.*;
+import static spark.Spark.*;
 
 
 public class Aplication {
@@ -25,6 +27,24 @@ public class Aplication {
         ExitController exitController = new ExitController();
         AttemptController attemptController = new AttemptController();
         PublisherMQTT publisher = new PublisherMQTT();
+
+        Spark.port(3333);
+
+        before((req, resp) -> {
+            resp.header("Access-Control-Allow-Origin", "*");
+            resp.header("Access-Control-Allow-Headers", "*");
+            resp.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT, PATCH, OPTIONS");
+            resp.header("Access-Control-Allow-Credentials", "true");
+
+        });
+
+        options("/*", (req, resp) -> {
+            resp.status(200);
+            return "ok";
+        });
+
+        //Spark.get("/exit", exitController::getExits);
+        Spark.get("/attempt/:date/getAttempt", attemptController::getAttempts);
 
         try {
             MqttClient client = new MqttClient(broker, clientId);
@@ -72,7 +92,6 @@ public class Aplication {
 
                         attemptController.addAttempt(uid, date, time, status);
                     }
-
 
                 }
 

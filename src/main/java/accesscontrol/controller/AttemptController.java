@@ -4,13 +4,12 @@ import accesscontrol.dto.*;
 import com.google.gson.Gson;
 import accesscontrol.queries.AccessAttempts;
 
-import javax.persistence.EntityManager;
 import accesscontrol.model.AccessAttempt;
 import spark.Request;
 import spark.Response;
-import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.*;
 
 
 public class AttemptController {
@@ -24,5 +23,16 @@ public class AttemptController {
     public void addAttempt(Long uid, LocalDate date, LocalTime time, boolean success) {
         AccessAttempt accessAttempt = new AccessAttempt(uid, date, time, success);
         this.accessAttempt.persist(accessAttempt);
+    }
+
+    public String getAttempts(Request request, Response response) {
+        LocalDate date = LocalDate.parse(request.params(":date"));
+        List<AccessAttempt> attempts = accessAttempt.findAttemptsByDate(date);
+        List<AttemptDto> attemptDtos = new ArrayList<>();
+        for(AccessAttempt attempt : attempts) {
+            attemptDtos.add(new AttemptDto(attempt.getUid().toString(), attempt.getAttemptDate().toString(), attempt.getAttemptHour().toString(), String.valueOf(attempt.getAttemptStatus())));
+        }
+        response.type("application/json");
+        return gson.toJson(attemptDtos);
     }
 }

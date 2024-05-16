@@ -4,6 +4,7 @@ import accesscontrol.model.AccessAttempt;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import java.time.*;
 import java.util.List;
 
 import static accesscontrol.EntityManagerController.*;
@@ -21,7 +22,7 @@ public class AccessAttempts {
         return query.getResultList();
     }
 
-    public List<AccessAttempt> findAttemptsByDate(String date) {
+    public List<AccessAttempt> findAttemptsByDate(LocalDate date) {
         TypedQuery<AccessAttempt> query = entityManager().createQuery(
             "SELECT a FROM AccessAttempt a WHERE a.attemptDate = :date", AccessAttempt.class);
         query.setParameter("date", date);
