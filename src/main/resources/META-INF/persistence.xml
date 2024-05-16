@@ -5,6 +5,8 @@
     <persistence-unit name="accessControlDB">
         <class>accesscontrol.model.User</class>
         <class>accesscontrol.model.AccessAttempt</class>
+        <class>accesscontrol.model.ExitButton</class>
+        <class>accesscontrol.model.Admin</class>
 
         <properties>
             <property name="javax.persistence.jdbc.driver" value="org.hsqldb.jdbc.JDBCDriver"/>
