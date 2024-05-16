@@ -46,6 +46,7 @@ public class Aplication {
 
         Spark.get("/attempt/:date/getAttempt", attemptController::getAttempts);
         Spark.post("/user/signup", adminController::createAdmin);
+        Spark.post("/admin/login", adminController::loginAdmin);
 
         try {
             MqttClient client = new MqttClient(broker, clientId);

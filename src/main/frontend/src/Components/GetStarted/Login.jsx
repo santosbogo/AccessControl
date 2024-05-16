@@ -9,6 +9,7 @@ const Login = () => {
     const [password, setPassword] = React.useState("");
 
     const [loginError, setLoginError] = React.useState('');
+    const navigate = useNavigate();
 
     const login = async () => {
         try {
