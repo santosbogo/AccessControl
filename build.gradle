@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'com.diffplug.spotless' version '6.10.0'
 }
 
 group = 'org.example'
@@ -10,7 +11,7 @@ repositories {
 }
 
 dependencies {
-    //MQTT Suscribe
+    // MQTT Subscribe
     implementation 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.5'
 
     testImplementation platform('org.junit:junit-bom:5.9.1')
@@ -18,7 +19,7 @@ dependencies {
     implementation 'org.hibernate:hibernate-core:5.6.5.Final'
     implementation 'org.hsqldb:hsqldb:2.7.2'
 
-    //Implementation of the Spark Java framework
+    // Implementation of the Spark Java framework
     implementation 'com.sparkjava:spark-core:2.9.3'
     implementation 'com.sparkjava:spark-template-freemarker:2.7.1'
     implementation 'com.google.guava:guava:31.1-jre'
@@ -29,4 +30,16 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+spotless {
+    java {
+        googleJavaFormat()
+
+        // Target specific files or directories
+        target 'src/main/java/**/*.java', 'src/test/java/**/*.java'
+
+        // You can also include other formats like import order, license headers, etc.
+        importOrder 'java', 'javax', 'org', 'com', 'accesscontrol'  // Specifies import order
+    }
 }

@@ -10,6 +10,9 @@
 #include <PubSubClient.h>
 #include <ArduinoJson.h>
 
+#include <SPI.h> //NEW
+#include <SD.h>  //NEW
+
 // Keypad pins
 const byte rows = 4;     // Number of rows in the keypad
 const byte columns = 4;  // Number of columns in the keypad
@@ -58,7 +61,7 @@ String adminkey = "123456";                 //Deffault admin password
 const String encryptionKey = "SantosBogo";  //It is used for encrypt and decrypt system file
 
 //MQTT instance
-#define PUBLIC_IP "54.164.157.200"
+#define PUBLIC_IP "54.89.165.46"
 PubSubClient MQTT_CLIENT;
 
 //WIFI instance
@@ -97,8 +100,8 @@ void setup() {
     }
   }
 
-  //connectWifi("UA-Alumnos", "41umn05WLC");
-  connectWifi("Flia Lando 2", "aabbccddeeff");
+  connectWifi("UA-Alumnos", "41umn05WLC");
+  // connectWifi("Flia Lando 2", "aabbccddeeff");
   //connectWifi(wifiSSIDFileRead(), wifiPasswordFileRead());
 
   //Set Time
@@ -110,7 +113,7 @@ void setup() {
   }
 
   //Connect to MQTT server
-  // connectMQTT();
+  connectMQTT();
 
   LCDinitialMessage();
 }
@@ -122,7 +125,7 @@ void loop() {
 
   buttonInterruption();
 
-  checkMQTTConnection();
+  // checkMQTTConnection();
 
   if (key) {
     if (key == '*') {
@@ -176,7 +179,7 @@ void testMQTT(){
   String message = "Hola";
   char msg[5];
   message.toCharArray(msg, 5);
-  MQTT_CLIENT.publish("AccessControl", msg);
+  MQTT_CLIENT.publish("exit", msg);
   delay(5000);
 }
 
