@@ -11,6 +11,8 @@ const SignUp = () => {
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
 
+    const [emailError, setEmailError] = useState('');
+
     const handleSignUp = async () => {
         try {
             const reponse = await axios.post('http://localhost:3333/user/signup', {
@@ -21,9 +23,12 @@ const SignUp = () => {
             })
         }
         catch (error) {
-            console.error('Error signing up:', error);
-            document.querySelector('.general-error-message').textContent = 'Error signing up. Please try again.';
-            return;
+            const errorMsg = error.response?.data || 'An unexpected error occurred.';
+            console.error('Error while sending request:', errorMsg);
+            setEmailError('');
+            if (errorMsg.includes("Username or email already registered")) {
+                setEmailError('Username or email already registered');
+            }
         }
     };
 
@@ -63,6 +68,7 @@ const SignUp = () => {
             <div className="general-error-message"></div>
 
             <button className="signup-button" onClick={handleSignUp}>Sign Up</button>
+            {emailError && <div className="error-message">{emailError}</div>}
 
             <Link to="/" className="Go-back-button">Go back</Link>
         </div>
