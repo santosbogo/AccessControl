@@ -20,7 +20,7 @@ public class Admin {
   @Column(nullable = false)
   private String password;
 
-  public Admin(String username, String firstName, String lastName, String password) {
+  public Admin(String firstName, String lastName, String username,  String password) {
     this.username = username;
     this.firstName = firstName;
     this.lastName = lastName;
@@ -31,8 +31,12 @@ public class Admin {
   }
 
   public String asJson() {
-    Gson gson = new Gson();
-    return gson.toJson(this);
+    JsonObject json = new JsonObject();
+    json.addProperty("firstName", this.firstName);
+    json.addProperty("lastName", this.lastName);
+    json.addProperty("username", this.username);
+    json.addProperty("password", this.password);
+    return json.toString();
   }
 
 }

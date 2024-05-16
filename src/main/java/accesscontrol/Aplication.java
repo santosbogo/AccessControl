@@ -44,9 +44,9 @@ public class Aplication {
             return "ok";
         });
 
-        //Spark.get("/exit", exitController::getExits);
         Spark.get("/attempt/:date/getAttempt", attemptController::getAttempts);
         Spark.post("/user/signup", adminController::createAdmin);
+
         try {
             MqttClient client = new MqttClient(broker, clientId);
             MqttConnectOptions options = new MqttConnectOptions();

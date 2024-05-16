@@ -15,12 +15,14 @@ const SignUp = () => {
 
     const handleSignUp = async () => {
         try {
-            const reponse = await axios.post('http://localhost:3333/user/signup', {
+            const response = await axios.post('http://localhost:3333/user/signup', {
                 firstName: firstName,
                 lastName: lastName,
                 username: username,
                 password: password
-            })
+            });
+            console.log(response.data);
+            navigate('/login');
         }
         catch (error) {
             const errorMsg = error.response?.data || 'An unexpected error occurred.';

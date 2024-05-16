@@ -7,9 +7,9 @@ public class AdminDto {
     private String password;
 
     public AdminDto(String firstName, String lastName, String username, String password) {
-        this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.username = username;
         this.password = password;
     }
 
