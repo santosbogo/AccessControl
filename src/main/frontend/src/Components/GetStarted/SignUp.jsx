@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './SignUp.css';
 import { Link, useNavigate } from 'react-router-dom';
 import GetStarted from "./GetStarted";
+import axios from 'axios';
 
 const SignUp = () => {
     const [firstName, setFirstName] = useState('');
@@ -10,8 +11,20 @@ const SignUp = () => {
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
 
-    const handleSignUp = () => {
-        // Lógica para manejar el registro
+    const handleSignUp = async () => {
+        try {
+            const reponse = await axios.post('http://localhost:3333/user/signup', {
+                firstName: firstName,
+                lastName: lastName,
+                username: username,
+                password: password
+            })
+        }
+        catch (error) {
+            console.error('Error signing up:', error);
+            document.querySelector('.general-error-message').textContent = 'Error signing up. Please try again.';
+            return;
+        }
     };
 
     return (

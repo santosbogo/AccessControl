@@ -26,6 +26,7 @@ public class Aplication {
 
         ExitController exitController = new ExitController();
         AttemptController attemptController = new AttemptController();
+        AdminController adminController = new AdminController();
         PublisherMQTT publisher = new PublisherMQTT();
 
         Spark.port(3333);
@@ -45,7 +46,7 @@ public class Aplication {
 
         //Spark.get("/exit", exitController::getExits);
         Spark.get("/attempt/:date/getAttempt", attemptController::getAttempts);
-
+        Spark.post("/user/signup", adminController::createAdmin);
         try {
             MqttClient client = new MqttClient(broker, clientId);
             MqttConnectOptions options = new MqttConnectOptions();

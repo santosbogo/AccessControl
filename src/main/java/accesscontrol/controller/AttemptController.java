@@ -11,7 +11,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
 
-
 public class AttemptController {
     private final AccessAttempts accessAttempt;
     private final Gson gson = new Gson();
