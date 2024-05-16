@@ -7,7 +7,7 @@ import ManageUsers from "./Components/Home/ManageUsers/ManageUsers";
 import Create from "./Components/Home/ManageUsers/CreateUser/Create";
 import History from "./Components/Home/History/History";
 import GetStarted from "./Components/GetStarted/GetStarted";
-import Test from "./Components/Home/Test";
+
 
 function App() {
     return (

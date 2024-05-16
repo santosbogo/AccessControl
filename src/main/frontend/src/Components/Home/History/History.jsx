@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./History.css";
+import axios from "axios";
 
 const ViewHistory = () => {
     const [selectedDate, setSelectedDate] = useState("");
@@ -12,20 +13,28 @@ const ViewHistory = () => {
         fetchHistoryData(event.target.value);
     };
 
-    const fetchHistoryData = (date) => {
-        console.log(`Fetching history for date: ${date}`);
-        const exampleData = [
-            { id: 1, user: "User1", time: "08:00 AM" },
-            { id: 2, user: "User2", time: "09:15 AM" },
-            { id: 3, user: "User3", time: "10:30 AM" },
-            // más datos...
-        ];
-        setHistoryData(exampleData);
+    const fetchHistoryData = async (selectedDate) => {
+        if (!selectedDate) {
+            console.log("No date selected");
+            return; // Exit the function if no date is selected
+        }
+        const url = `http://localhost:3333/attempt/${selectedDate}/getAttempt`;
+        console.log(`Fetching history for date: ${selectedDate} from ${url}`);
+        try {
+            const response = await axios.get(url);
+            setHistoryData(response.data);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
     };
 
     const handleGoBack = () => {
         navigate("/home"); // Redireccionar a la página de inicio (Home)
     };
+
+    useEffect(() => {
+        fetchHistoryData(selectedDate);
+    }, [selectedDate]);
 
     return (
         <div className="view-history">
@@ -43,7 +52,7 @@ const ViewHistory = () => {
                     <ul>
                         {historyData.map((entry) => (
                             <li key={entry.id}>
-                                {entry.user} entered at {entry.time}
+                                {entry.user.username} entered at {entry.time}
                             </li>
                         ))}
                     </ul>
