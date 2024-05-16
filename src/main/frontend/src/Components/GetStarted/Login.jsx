@@ -1,14 +1,34 @@
 import React from "react";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Login.css'; // Importa el archivo CSS
+import axios from "axios";
+
 
 const Login = () => {
     const [username, setUsername] = React.useState("");
     const [password, setPassword] = React.useState("");
 
-    const handleLogin = () => {
-        // Agrega la lógica de inicio de sesión aquí
-    }
+    const [loginError, setLoginError] = React.useState('');
+
+    const login = async () => {
+        try {
+            const response = await axios.post(`http://localhost:3333/admin/login`, {
+                username: username,
+                password: password
+            });
+
+            console.log(response.data);
+            navigate('/home')
+
+        } catch (error) {
+            const errorMsg = error.response?.data || 'An unexpected error occurred.';
+            console.error('Error while sending request:', errorMsg);
+            setLoginError('');
+            if (errorMsg.includes("User does not exist")|| errorMsg.includes("User not found")) {
+                setLoginError("User or password incorrect");
+            }
+        }
+    };
 
     return (
         <div className="login-container">
@@ -43,7 +63,7 @@ const Login = () => {
 
             <div className="general-error-message"></div>
 
-            <button className="login-button" onClick={handleLogin}>Login</button>
+            <button className="login-button" onClick={login}>Login</button>
             <Link to="/" className="Go-back-button">Go back</Link>
         </div>
     );

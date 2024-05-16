@@ -29,4 +29,17 @@ public class AdminController {
     response.type("application/json");
     return admin.asJson();
   }
+
+  public String loginAdmin(Request request, Response response) {
+    LoginDto loginDto = gson.fromJson(request.body(), LoginDto.class);
+    String username = loginDto.getUsername();
+    String password = loginDto.getPassword();
+    Admin admin = admins.findAdminByUsernameAndPassword(username, password);
+    if(admin == null){
+      response.status(400);
+      return "Invalid username or password";
+    }
+    response.type("application/json");
+    return admin.asJson();
+  }
 }

@@ -29,4 +29,12 @@ public class Admins {
     entityManager().getTransaction().commit();
   }
 
+  public Admin findAdminByUsernameAndPassword(String username, String password) {
+    TypedQuery<Admin> query = entityManager().createQuery("SELECT a " +
+      "FROM Admin a " +
+      "WHERE a.password LIKE :password AND a.username LIKE: username", Admin.class);
+    query.setParameter("username", username);
+    query.setParameter("password", password);
+    return query.getSingleResult();
+  }
 }
