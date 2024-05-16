@@ -10,9 +10,6 @@
 #include <PubSubClient.h>
 #include <ArduinoJson.h>
 
-#include <SPI.h> //NEW
-#include <SD.h>  //NEW
-
 // Keypad pins
 const byte rows = 4;     // Number of rows in the keypad
 const byte columns = 4;  // Number of columns in the keypad
@@ -27,7 +24,7 @@ byte colPins[columns] = { 4, 0, 2, 15 };  // Keypad column pins
 
 //RFID Pins
 #define SS_PIN 25
-#define RST_PIN 32
+#define RST_PIN 33
 
 //Led Pins
 #define redLedPin 13
@@ -37,7 +34,10 @@ byte colPins[columns] = { 4, 0, 2, 15 };  // Keypad column pins
 #define buttonPin 14
 
 //SD reader pin
-#define chipSelect 26
+#define NEW_SD_MOSI 32
+#define NEW_SD_MISO 34
+#define NEW_SD_SCLK 35
+#define NEW_SD_CS 26
 
 //Door relay pin
 #define doorRelayPin 36  //In case we want to add a door relay
@@ -61,7 +61,7 @@ String adminkey = "123456";                 //Deffault admin password
 const String encryptionKey = "SantosBogo";  //It is used for encrypt and decrypt system file
 
 //MQTT instance
-#define PUBLIC_IP "54.89.165.46"
+#define PUBLIC_IP "54.164.157.200"
 PubSubClient MQTT_CLIENT;
 
 //WIFI instance
@@ -82,6 +82,12 @@ void setup() {
   //Initialize RFID
   SPI.begin();
   mfrc522.PCD_Init();
+  // if (mfrc522.PCD_PerformSelfTest()) {
+  //   Serial.println("EXITO al inicializar el lector RFID!!!");
+  // }
+  // else{
+  //   Serial.println("Fallo al inicializar el lector RFID");
+  // }
 
   //Initialize Leds
   pinMode(greenLedPin, OUTPUT);
@@ -90,18 +96,24 @@ void setup() {
   //Initialize Button
   pinMode(buttonPin, INPUT_PULLUP);
 
+  // Configuración del lector SD con los nuevos pines
+  SPIClass spiSD(HSPI);
+  spiSD.begin(NEW_SD_SCLK, NEW_SD_MISO, NEW_SD_MOSI, NEW_SD_CS);
+
   //Initialize SD
-  if (!SD.begin(chipSelect)) {
+  if (!SD.begin(NEW_SD_CS, spiSD)) {
     delay(DELAY);
-    if (!SD.begin(chipSelect)) {
+    if (!SD.begin(NEW_SD_CS, spiSD)) {
       delay(DELAY);
-      if (!SD.begin(chipSelect)) {
+      if (!SD.begin(NEW_SD_CS, spiSD)) {
+        Serial.println("Fallo al inicializar el lector SD");
       }
     }
   }
 
-  connectWifi("UA-Alumnos", "41umn05WLC");
+  //connectWifi("UA-Alumnos", "41umn05WLC");
   // connectWifi("Flia Lando 2", "aabbccddeeff");
+  connectWifi("Fila Bogo 2.4", "244466666");
   //connectWifi(wifiSSIDFileRead(), wifiPasswordFileRead());
 
   //Set Time
@@ -113,8 +125,10 @@ void setup() {
   }
 
   //Connect to MQTT server
-  connectMQTT();
+  // connectMQTT();
 
+  admitedUsersFileRead();
+  codeFileRead();
   LCDinitialMessage();
 }
 
@@ -155,8 +169,6 @@ void loop() {
     accessControl(UID, true);
     LCDinitialMessage();
   }
-  admitedUsersFileRead();
-  codeFileRead();
 }
 
 
