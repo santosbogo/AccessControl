@@ -1,33 +1,36 @@
 package accesscontrol.dto;
 
-public class AttemptDto {
-    private final String uid;
-    private final String access;
-    private final String time;
-    private final String date;
+import java.time.*;
+import java.time.format.*;
 
-    // Constructor
-    public AttemptDto(String uid, String access, String time, String date) {
+public class AttemptDto {
+    private String uid;
+    private String date;
+    private String time;
+    private String status;
+
+    public AttemptDto(String uid, String date, String time, String status) {
         this.uid = uid;
-        this.access = access;
-        this.time = time;
         this.date = date;
+        this.time = time;
+        this.status = status;
     }
 
     public Long getUid() {
         return Long.parseLong(uid);
     }
-    public boolean getAccess() {
-        return Boolean.parseBoolean(access);
-    }
 
-    public String getTime() {
-        return time;
-    }
-
-    public String getDate() {
-        return date;
+    public LocalDate getDate() {
+        return LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
     }
 
 
+    public LocalTime getTime() {
+        return LocalTime.parse(time, DateTimeFormatter.ofPattern("HH:mm:ss"));
+    }
+
+    public Boolean getStatus() {
+        return Boolean.parseBoolean(status);
+    }
 }
+

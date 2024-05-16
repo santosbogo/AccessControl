@@ -3,6 +3,7 @@ package accesscontrol.model;
 import com.google.gson.Gson;
 
 import javax.persistence.*;
+import java.time.*;
 
 @Entity
 public class AccessAttempt {
@@ -31,24 +32,24 @@ public class AccessAttempt {
     }
 
     @Column(nullable = false)
-    private String attemptDate;
+    private LocalDate attemptDate;
 
-    public String getAttemptDate() {
+    public LocalDate getAttemptDate() {
         return attemptDate;
     }
 
-    public void setDate(String date) {
+    public void setDate(LocalDate date) {
         this.attemptDate = date;
     }
 
     @Column(nullable = false)
-    private String attemptHour;
+    private LocalTime attemptHour;
 
-    public String getAttemptHour() {
+    public LocalTime getAttemptHour() {
         return attemptHour;
     }
 
-    public void setHour(String hour) {
+    public void setHour(LocalTime hour) {
         this.attemptHour = hour;
     }
 
@@ -65,8 +66,7 @@ public class AccessAttempt {
     }
 
     // Constructor
-    public AccessAttempt(Long attemptId, Long uid, String attemptDate, String attemptHour, boolean attemptStatus) {
-        setAttemptId(attemptId);
+    public AccessAttempt(Long uid, LocalDate attemptDate, LocalTime attemptHour, boolean attemptStatus) {
         setUid(uid);
         setDate(attemptDate);
         setHour(attemptHour);

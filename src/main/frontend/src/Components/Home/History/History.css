@@ -1,0 +1,122 @@
+/* Main body and layout styling */
+body {
+    background-color: #121830; /* Dark navy blue background */
+    color: #d0e0ff; /* Light blue text color for readability */
+    font-family: 'Arial', sans-serif; /* Modern, sans-serif font */
+    margin: 0;
+    padding: 20px;
+
+}
+/* Estilos base para view-history */
+.view-history {
+    width: 80%; /* Hace que el ancho sea relativo al ancho del viewport */
+    max-width: 2500px;
+    margin: auto;
+    padding: 50px;
+    max-height: 90vh;
+    overflow-y: auto;
+    border-radius: 8px;
+    background-color: #1a1f2e;
+    box-shadow: 0 4px 8px rgba(0, 120, 255, 0.3);
+    background-image: url("../../../../public/accessControl.jpeg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    position: relative;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+    .view-history {
+        width: 95%; /* Aumenta el ancho en dispositivos más pequeños para usar más espacio */
+        padding: 20px; /* Reduce el padding para dispositivos más pequeños */
+    }
+
+    .header-container, .history-list-container {
+        padding: 10px;
+    }
+
+    input[type="date"], ul, p, li {
+        font-size: 14px; /* Reduce el tamaño de la fuente para mejorar la legibilidad en pantallas pequeñas */
+    }
+}
+
+@media (max-width: 480px) {
+    .view-history {
+        width: 100%; /* Utiliza todo el ancho disponible en dispositivos muy pequeños */
+    }
+
+    input[type="date"] {
+        padding: 10px 15px; /* Ajusta el padding para conservar espacio */
+    }
+}
+/* Styling for the headers */
+h1, h2 {
+    color: #1a1f2e; /* Bright blue color */
+    text-shadow: white 5px 0px 10px; /* White shadow for emphasis */
+}
+.header-container {
+    padding: 20px; /* Ajusta según necesidad */
+}
+
+.history-list-container {
+    max-height: 400px;
+    overflow-y: auto;
+    border: 2px solid #004880;
+    background-color: rgba(204, 204, 204, 0.5);
+    padding: 15px;
+    margin-top: 10px;
+    box-shadow: 0 2px 5px rgba(0, 120, 255, 0.4);
+    border-radius: 8px;
+}
+
+/* Input and button styling */
+input[type="date"] {
+    appearance: none; /* Remueve estilos predeterminados del navegador */
+    background-color: #cccccc; /* Dark blue background */
+    border: 2px solid #004880;
+    color: #051126;
+    padding: 12px 24px; /* Aumenta el padding para dar más espacio */
+    border-radius: 8px;
+    font-size: 16px;
+    position: relative; /* Preparación para ícono personalizado */
+    background-repeat: no-repeat;
+    background-position: right 10px center; /* Posiciona el ícono a la derecha, centrado verticalmente */
+    cursor: pointer;
+}
+
+p {
+    color: #8080a0; /* Greyish blue text for less emphasis */
+}
+
+/* Add some space around components */
+input, ul, p {
+    margin-top: 15px;
+}
+.history-list-container {
+    max-height: 400px; /* Ajusta la altura máxima según tus necesidades */
+    overflow-y: auto; /* Habilita el desplazamiento vertical */
+    border: 2px solid #004880; /* Borde azul para el marco */
+    background-color: rgba(204, 204, 204, 0.5);
+    padding: 15px;
+    margin-top: 10px;
+    box-shadow: 0 2px 5px rgba(0, 120, 255, 0.4); /* Sombra para efecto visual */
+    border-radius: 8px; /* Bordes redondeados */
+}
+
+ul {
+    padding: 0; /* Elimina el padding predeterminado */
+    margin: 0; /* Elimina el margen predeterminado */
+}
+
+li {
+    background-color: #242850; /* Fondo oscuro para cada elemento */
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 5px; /* Bordes redondeados para los elementos de la lista */
+    box-shadow: 0 2px 4px rgba(0, 120, 255, 0.5); /* Sombra ligera para cada elemento */
+}
+
+li:hover {
+    background-color: #303860; /* Cambio de color al pasar el ratón */
+}

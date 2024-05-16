@@ -8,7 +8,7 @@ public class ExitButtonDto {
     private String exitDate;
     private String exitTime;
 
-    public ExitButtonDto(String exitId, String exitDate, String exitTime){
+    public ExitButtonDto(String exitDate, String exitTime){
         this.exitTime = exitTime;
         this.exitDate = exitDate;
     }
@@ -22,4 +22,5 @@ public class ExitButtonDto {
         return LocalDate.parse(exitDate, DateTimeFormatter.ISO_LOCAL_DATE);
     }
 }
+
 

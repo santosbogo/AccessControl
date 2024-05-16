@@ -1,49 +1,114 @@
-.signup-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
-
-.signup-container img {
-    width: 100%;
-    height: auto;
-}
-
-.form-container {
-    flex: 1;
-}
-.form-container {
-    background-color: #819171; /* Aquí defines el color sage green */
-}
-
-.form-container form {
+.login-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-}
-
-.form-container input {
-    margin: 10px;
-    padding: 10px;
-    width: 80%;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-.form-container button {
-    margin: 10px;
-    padding: 10px 20px;
-    background: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.form-container.left {
-    flex: 1;
-    background-image: url('/Users/luzlaura/IdeaProjects/AccessControl/src/main/frontend/public/accessControl.jpeg');
+    justify-content: center; /* Para centrar verticalmente */
+    background-color: #1a1f2e; /* Dark navy blue background */
+    color: #003379; /* Light blue text color for readability */
+    font-family: 'Arial', sans-serif; /* Modern, sans-serif font */
+    width: 90%; /* Ajusta el ancho según tus necesidades */
+    max-width: 1000px; /* Establece un ancho máximo */
+    margin: auto; /* Auto para centrar horizontalmente */
+    padding: 50px;
+    max-height: 90vh;
+    overflow-y: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 120, 255, 0.3);
+    background-image: url("../../../public/accessControl.jpeg");
     background-size: cover;
+    background-repeat: no-repeat;
     background-position: center;
+    position: relative;
+}
+
+.login-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
+}
+
+.login-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+    margin-top: 30px;
+}
+
+.logo img {
+    width: 150px;
+    margin-right: 5px;
+}
+
+.title {
+    color: #004aad; /* Azul oscuro */
+    font-size: 24px; /* Tamaño de fuente ajustado */
+    font-weight: bold; /* Texto en negrita */
+    margin-bottom: 10px; /* Espaciado inferior */
+    padding: 10px 20px; /* Ajustar el espacio alrededor del texto */
+    background-color: white; /* Fondo blanco */
+    border-radius: 20px;
+}
+
+.login-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.login-input {
+    display: flex;
+    align-items: center;
+    margin: auto;
+    width: 480px;
+    height: 80px;
+    background: #eaeaea;
+    border-color: #004aad; /* Borde azul oscuro */
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 6px;
+}
+
+.login-input img {
+    margin: 0px 30px;
+}
+
+.login-input input {
+    height: 50px;
+    width: 400px;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 19px;
+    border-radius: 25px;
+}
+
+.login-button,
+.Go-back-button {
+    padding: 15px 30px;
+    border: none;
+    border-radius: 30px;
+    color: #fff;
+    font-size: 20px;
+    font-weight: 600;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    width: 50%;
+    font-family: 'Poppins', sans-serif;
+    background-image: linear-gradient(145deg, #007bff, #0056b3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    outline: none;
+    margin-top: 20px;
+    text-decoration: none; /* Remover subrayado */
+}
+
+.login-button:hover,
+.Go-back-button:hover {
+    background-image: linear-gradient(145deg, #004aad, #003379); /* Azul oscuro para el hover */
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }

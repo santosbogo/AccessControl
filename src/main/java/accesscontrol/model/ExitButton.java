@@ -14,12 +14,8 @@ public class ExitButton {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long exitId;
 
-    public Long getExitId() {
+    public Long getAttemptId() {
         return exitId;
-    }
-
-    public void setExitId(Long exitId) {
-        this.exitId = exitId;
     }
 
     @Column(nullable = false)
@@ -44,14 +40,14 @@ public class ExitButton {
         this.exitTime = exitTime;
     }
 
-    public ExitButton(Long exitId, LocalDate exitDate, LocalTime exitTime){
-        setExitId(exitId);
+    public ExitButton(LocalDate exitDate, LocalTime exitTime){
         setExitDate(exitDate);
         setExitTime(exitTime);
     }
 
     public ExitButton() {
     }
+
     public String asJson() {
         Gson gson = new Gson();
         return gson.toJson(this);
