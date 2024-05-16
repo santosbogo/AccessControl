@@ -98,7 +98,7 @@ public class Aplication {
                 }
 
                 public void deliveryComplete(IMqttDeliveryToken token) {
-                    // Not needed for a subscriber
+                    // Not needed for a subscriber, only publisher
                 }
             });
 

@@ -2,8 +2,6 @@ package accesscontrol.model;
 
 import com.google.gson.*;
 import javax.persistence.*;
-import com.google.gson.Gson;
-import javax.persistence.*;
 
 @Entity
 public class Admin {

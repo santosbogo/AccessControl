@@ -15,7 +15,6 @@ public class AdminDto {
 
     public AdminDto() {
     }
-
     public String getUsername() {
         return username;
     }

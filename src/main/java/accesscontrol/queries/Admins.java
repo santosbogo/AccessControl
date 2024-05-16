@@ -37,4 +37,5 @@ public class Admins {
     query.setParameter("password", password);
     return query.getSingleResult();
   }
+
 }

@@ -1,13 +1,12 @@
 import React from "react";
 import { Link, useNavigate } from 'react-router-dom';
-import './Login.css'; // Importa el archivo CSS
+import './Login.css';
 import axios from "axios";
 
 
 const Login = () => {
     const [username, setUsername] = React.useState("");
     const [password, setPassword] = React.useState("");
-
     const [loginError, setLoginError] = React.useState('');
     const navigate = useNavigate();
 

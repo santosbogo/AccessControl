@@ -20,6 +20,7 @@ public class AdminController {
     String lastName = adminDto.getLastName();
     String username = adminDto.getUsername();
     String password = adminDto.getPassword();
+
     if(admins.findAdminByUsernam(username)!=null){
       response.status(400);
       return "Username or email already registered";}
