@@ -2,8 +2,6 @@ package accesscontrol;
 
 import accesscontrol.controller.*;
 import accesscontrol.dto.*;
-import accesscontrol.model.*;
-import accesscontrol.queries.*;
 import com.google.gson.Gson;
 import org.eclipse.paho.client.mqttv3.*;
 import spark.*;
@@ -16,7 +14,7 @@ import static accesscontrol.EntityManagerController.*;
 import static spark.Spark.*;
 
 
-public class Aplication {
+public class Application {
     static Gson gson = new Gson();
     static String broker = "tcp://3.80.25.82:1883";
     static String clientId = "JavaClient";

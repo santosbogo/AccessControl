@@ -1,72 +1,83 @@
-#include <Arduino.h>
-#include <Keypad.h>
-#include <SPI.h>
-#include <MFRC522.h>
-#include <LiquidCrystal_I2C.h>
-#include <SD.h>
-#include <WiFi.h>
-#include "time.h"
-#include "sntp.h"
-#include <PubSubClient.h>
-#include <ArduinoJson.h>
+//Libraries
+  #include <Arduino.h>
+  #include <Keypad.h>
+  #include <SPI.h>
+  #include <MFRC522.h>
+  #include <LiquidCrystal_I2C.h>
+  #include <SD.h>
+  #include <WiFi.h>
+  #include "time.h"
+  #include "sntp.h"
+  #include <PubSubClient.h>
+  #include <ArduinoJson.h>
 
-// Keypad pins
-const byte rows = 4;     // Number of rows in the keypad
-const byte columns = 4;  // Number of columns in the keypad
-char keys[rows][columns] = {
+
+//Pins:
+  //RFID Pins
+  #define SS_PIN 25
+  #define RST_PIN 33
+
+  //Led Pins
+  #define redLedPin 13
+  #define greenLedPin 12
+
+  //Button pin
+  #define buttonPin 14
+
+  //SD reader pin
+  #define NEW_SD_MOSI 32
+  #define NEW_SD_MISO 34
+  #define NEW_SD_SCLK 35
+  #define NEW_SD_CS 26
+
+  //Door relay pin
+  #define doorRelayPin 36  //In case we want to add a door relay
+
+  //Keypad
+  byte rowPins[4] = { 27, 5, 17, 16 };   // Keypad row pins
+  byte colPins[4] = { 4, 0, 2, 15 };  // Keypad column pins
+
+
+//Instances
+  //Keypad
+  char keys[4][4] = {
   { '1', '2', '3', 'A' },
   { '4', '5', '6', 'B' },
   { '7', '8', '9', 'C' },
   { '*', '0', '#', 'D' }
-};
-byte rowPins[rows] = { 27, 5, 17, 16 };   // Keypad row pins
-byte colPins[columns] = { 4, 0, 2, 15 };  // Keypad column pins
+  };
+  Keypad keypad = Keypad(makeKeymap(keys), rowPins, colPins, 4, 4);
 
-//RFID Pins
-#define SS_PIN 25
-#define RST_PIN 33
+  //RFID
+  MFRC522 mfrc522(SS_PIN, RST_PIN);
 
-//Led Pins
-#define redLedPin 13
-#define greenLedPin 12
+  //LCD
+  LiquidCrystal_I2C lcd(0x27, 16, 2);
 
-//Button pin
-#define buttonPin 14
+  //WIFI instance
+  WiFiClient WIFI_CLIENT;
 
-//SD reader pin
-#define NEW_SD_MOSI 32
-#define NEW_SD_MISO 34
-#define NEW_SD_SCLK 35
-#define NEW_SD_CS 26
+  //MQTT
+  PubSubClient MQTT_CLIENT;
 
-//Door relay pin
-#define doorRelayPin 36  //In case we want to add a door relay
 
-Keypad keypad = Keypad(makeKeymap(keys), rowPins, colPins, rows, columns);
-MFRC522 mfrc522(SS_PIN, RST_PIN);
-LiquidCrystal_I2C lcd(0x27, 16, 2);
+//Constants and variables
+  //Constants
+  #define DELAY 1000        //For not important or short messages
+  #define THINK_DELAY 1500  //For important or long messages
+  #define maxUsers 1000     // Max capacity of users register
 
-//Constants
-#define DELAY 1000        //For not important or short messages
-#define THINK_DELAY 1500  //For important or long messages
-#define maxUsers 1000     // Max capacity of users register
-
-//Variables
-bool interruptFlag = false;
-bool correctKey = false;
-bool isDefinitiveOpen = false;
-String users[maxUsers];
-int numUsers = 0;                           // Actual number of users registred
-String adminkey = "123456";                 //Deffault admin password
-const String encryptionKey = "SantosBogo";  //It is used for encrypt and decrypt system file
+  //Variables
+  bool interruptFlag = false;
+  bool correctKey = false;
+  bool isDefinitiveOpen = false;
+  String users[maxUsers];
+  int numUsers = 0;                           // Actual number of users registred
+  String adminkey = "123456";                 //Deffault admin password
+  const String encryptionKey = "SantosBogo";  //It is used for encrypt and decrypt system file
 
 //MQTT instance
-#define PUBLIC_IP "54.164.157.200"
-PubSubClient MQTT_CLIENT;
-
-//WIFI instance
-WiFiClient WIFI_CLIENT;
-
+#define PUBLIC_IP "3.81.9.137"
 
 
 void setup() {
@@ -125,7 +136,7 @@ void setup() {
   }
 
   //Connect to MQTT server
-  // connectMQTT();
+  connectMQTT();
 
   admitedUsersFileRead();
   codeFileRead();
@@ -139,7 +150,7 @@ void loop() {
 
   buttonInterruption();
 
-  // checkMQTTConnection();
+  checkMQTTConnection();
 
   if (key) {
     if (key == '*') {
@@ -166,7 +177,7 @@ void loop() {
 
   if (RFIDReaderCondition) {
     UID = readUid(mfrc522.uid.uidByte);
-    accessControl(UID, true);
+    accessController(UID, true);
     LCDinitialMessage();
   }
 }
@@ -176,28 +187,36 @@ void loop() {
 
 
 void connectMQTT() {
+  const int maxAttempts = 16;
+  int attempts = 0;
   MQTT_CLIENT.setServer(PUBLIC_IP, 1883);
   MQTT_CLIENT.setClient(WIFI_CLIENT);
 
+  lcd.setCursor(0, 1);
+  lcd.print("                ");
+
+  MQTT_CLIENT.connect("AccessControl");  //AccessControl: MQTT identifier
+
   while (!MQTT_CLIENT.connected()) {
-    MQTT_CLIENT.connect("AccessControl");  //AccessControl: MQTT identifier
-    delay(3000);
+    delay(DELAY/6);
+    lcd.print(".");
+    attempts++;
+    if (attempts >= maxAttempts) {
+      lcd.clear();
+      lcd.setCursor(0, 0);
+      lcd.print("FAILED CONECTION");
+      delay(DELAY);
+    }
   }
 
-  Serial.println("\n CONECTADO A MQTT");
-}
-
-void testMQTT(){
-  String message = "Hola";
-  char msg[5];
-  message.toCharArray(msg, 5);
-  MQTT_CLIENT.publish("exit", msg);
-  delay(5000);
+  Serial.println("CONECTADO A MQTT");
 }
 
 void checkMQTTConnection() {
   if (!MQTT_CLIENT.connected()) {
+    LCDReconectMQTTMessage();
     connectMQTT();
+    LCDinitialMessage();
   }
 }
 
@@ -209,50 +228,34 @@ void publishJson(String message) {
   MQTT_CLIENT.publish("AccessControl/test", messageChar);
 }
 
+void accessRecordMQTTPublish(String UID, bool granted, bool fromOut){
+  String persUID = lookForUid(UID);
+  String personID = (granted) ? persUID.substring(0, 3) : "---";
+  String cardID = (granted) ? persUID.substring(4) : UID;
 
-//JSON methods
+  StaticJsonDocument<200> message;
 
-void sendOutsideJson(String personID, String cardID, boolean granted){
-  StaticJsonDocument<200> access;
-  if(granted){
-    access["state"] = 1;
+  if(fromOut){
+    if(granted){
+    message["state"] = 1;
+    }
+    else{
+      message["state"] = 0;
+    }
+    message["personID"] = personID;
+    message["cardID"] = cardID;
   }
-  else{
-    access["state"] = 0;
-  }
-  access["personID"] = personID;
-  access["cardID"] = cardID;
-  access["time"] = getTime();
-  access["date"] = getDate();
-  size_t neededSize = measureJson(access) + 1;
+    
+  message["time"] = getTime();
+  message["date"] = getDate();
+
+  size_t neededSize = measureJson(message) + 1;
   char jsonBuffer[neededSize];
-  serializeJson(access, jsonBuffer, sizeof(jsonBuffer));
-  MQTT_CLIENT.publish("AccessControl", jsonBuffer);
-  delay(5000);
-}
+  serializeJson(message, jsonBuffer, sizeof(jsonBuffer));
 
+  if(fromOut) MQTT_CLIENT.publish("access", jsonBuffer);
+  else MQTT_CLIENT.publish("exit", jsonBuffer);
 
-String createAttemptJson(String UID, bool granted){
-  StaticJsonDocument<200> doc;  // Adjust size based on the data structure
-  doc["uid"] = UID;
-  doc["attemptStatus"] = granted ? "Granted" : "Denied";
-  doc["time"] = getTime();
-  doc["date"] = getDate();
-
-  String output;
-  serializeJson(doc, output);
-  return output;
-}
-
-void sendInsideJson(){
-  StaticJsonDocument<200> exit;
-  exit["time"] = getTime();
-  exit["date"] = getDate();
-  size_t neededSize = measureJson(exit) + 1;
-  char jsonBuffer[neededSize];
-  serializeJson(exit, jsonBuffer, sizeof(jsonBuffer));
-  MQTT_CLIENT.publish("AccessControl", jsonBuffer);
-  delay(5000);
 }
 
 
@@ -301,9 +304,8 @@ void buttonInterruption() {
   int buttonStatus = digitalRead(buttonPin);
   if (buttonStatus == LOW) {
     accessOutput(true, false);
-    //accessRecordsFileWrite("Inside button", true, false);
-    //testMQTT();
-    sendInsideJson();
+    accessRecordsFileWrite("Inside button", true, false);
+    accessRecordMQTTPublish("Inside button", true, false);
   }
 }
 
@@ -312,7 +314,7 @@ void rfidScanInterruption() {
   bool RFIDReaderCondition = mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial();
   if (RFIDReaderCondition) {
     UID = readUid(mfrc522.uid.uidByte);
-    accessControl(UID, false);
+    accessController(UID, false);
   }
 }
 
@@ -674,14 +676,14 @@ String lookForUid(String UID) {
   return "-1";
 }
 
-void accessControl(String UID, bool message) {
+void accessController(String UID, bool message) {
   if (lookForUid(UID) != "-1") {
     accessOutput(true, message);
-    createAttemptJson(UID, true);
+    accessRecordMQTTPublish(UID, true, true);
     accessRecordsFileWrite(UID, true, true);
   } else {
     accessOutput(false, message);
-    createAttemptJson(UID, false);
+    accessRecordMQTTPublish(UID, false, true);
     accessRecordsFileWrite(UID, false, true);
   }
 }
@@ -779,8 +781,6 @@ void accessRecordsFileWrite(String UID, bool granted, bool fromOut) {
 
     file.println(access + "\t   " + persID + "\t\t" + cardID + "\t" + from + "\t\t" + getDate() + "\t" + getTime());
     file.close();
-
-    sendOutsideJson(persID, cardID, granted);
 
   } else {
     LCDCantOpenFileMessage();
@@ -1270,5 +1270,12 @@ void LCDIncorrectCodeMessage() {
   lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print("INCORRECT CODE!");
+  delay(THINK_DELAY);
+}
+
+void LCDReconectMQTTMessage() {
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("RECONECTING MQTT");
   delay(THINK_DELAY);
 }
