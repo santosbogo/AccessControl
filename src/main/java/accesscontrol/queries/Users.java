@@ -36,13 +36,6 @@ public class Users {
         return query.getResultList();
     }
 
-    public boolean existsByUsername(String username) {
-        TypedQuery<Long> query = entityManager.createQuery(
-            "SELECT COUNT(u) FROM User u WHERE u.username = :username", Long.class);
-        query.setParameter("username", username);
-        return query.getSingleResult() > 0;
-    }
-
     public void persist(User user) {
         entityManager.getTransaction().begin();
         if (user.getUid() == null) { // Nuevo usuario
