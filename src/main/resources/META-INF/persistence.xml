@@ -10,7 +10,7 @@
 
         <properties>
             <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
-            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://172.31.22.162:3306/accessControlDB"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://172.31.22.162:3306/AccessControlDB"/>
             <property name="javax.persistence.jdbc.user" value="Application"/>
             <property name="javax.persistence.jdbc.password" value="AccessControl2024!"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>

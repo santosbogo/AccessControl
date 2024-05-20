@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class Database {
 
-    private final String dbUrl = "jdbc:mysql://172.31.22.162:3306/accessControlDB";
+    private final String dbUrl = "jdbc:mysql://172.31.22.162:3306/AccessControlDB";
     private final String dbUser = "Application";
     private final String dbPassword = "AccessControl2024!";
     private Connection connection;
