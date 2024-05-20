@@ -67,6 +67,8 @@ const CreateUser = () => {
             <div className="general-error-message"></div>
 
             <button className="signup-button" onClick={handleSubmit}>Create User</button>
+            <Link to="/Home/manage-users" className="home-button">Go Back</Link>
+
         </div>
     );
 };

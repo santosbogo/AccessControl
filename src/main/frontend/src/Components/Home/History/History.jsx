@@ -60,7 +60,7 @@ const ViewHistory = () => {
                     <p>No history available for this date.</p>
                 )}
             </div>
-            <button onClick={handleGoBack}>Back to Home</button> {/* Botón de regreso a Home */}
+            <button onClick={handleGoBack} className={"home-button"}>Back Home</button> {/* Botón de regreso a Home */}
         </div>
     );
 };

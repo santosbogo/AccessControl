@@ -27,6 +27,7 @@ public class AttemptDto {
         return LocalDate.parse(date, dateFormatter);
     }
 
+
     public LocalTime getTime() {
         return LocalTime.parse(time, DateTimeFormatter.ofPattern("HH:mm"));
     }

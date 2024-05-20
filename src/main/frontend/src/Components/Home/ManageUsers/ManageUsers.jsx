@@ -52,7 +52,7 @@ const ManageUsers = () => {
                     value={searchTerm}
                     onChange={handleSearchChange}
                 />
-                <button type="submit">Search</button>
+                <button type="submit"> Search</button>
                 <Link to="/Home/" className="home-button">Home</Link>
             </form>
             <div>

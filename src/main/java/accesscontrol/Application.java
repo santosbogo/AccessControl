@@ -27,7 +27,6 @@ public class Application {
         AdminController adminController = new AdminController();
         PublisherMQTT publisher = new PublisherMQTT();
 
-
         Spark.port(3333);
 
         before((req, resp) -> {
@@ -46,7 +45,6 @@ public class Application {
         Spark.get("/attempt/:date/getAttempt", attemptController::getAttempts);
         Spark.post("/user/signup", adminController::createAdmin);
         Spark.post("/admin/login", adminController::loginAdmin);
-
 
         try {
             MqttClient client = new MqttClient(broker, clientId);
