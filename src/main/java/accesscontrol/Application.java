@@ -55,7 +55,6 @@ public class Application {
             client.connect(options);
             System.out.println("Connected");
 
-            publisher.publishUserCreation(client, "test1");
 
             client.setCallback(new MqttCallback() {
                 public void connectionLost(Throwable cause) {
