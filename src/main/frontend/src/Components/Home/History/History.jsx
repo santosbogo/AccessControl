@@ -37,8 +37,8 @@ const ViewHistory = () => {
     }, [selectedDate]);
 
     return (
-        <div className="view-history">
-            <div className="header-container">
+        <div className= "header-container">
+            <div className="main-title">
                 <h1>View History</h1>
                 <input
                     type="date"

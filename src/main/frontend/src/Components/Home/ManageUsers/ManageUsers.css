@@ -82,3 +82,14 @@
     margin-top: 20px;
     text-decoration: none; /* Remover subrayado */
 }
+
+.search-input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: 2px solid #004aad;
+    background-color: #eaeaea;
+    color: #333;
+    font-size: 16px;
+    margin-bottom: 20px;
+}

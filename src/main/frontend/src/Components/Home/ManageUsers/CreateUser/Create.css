@@ -1,68 +1,44 @@
-.create-user-form {
+.main-title {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center; /* Para centrar verticalmente */
-    background-color: #1a1f2e; /* Dark navy blue background */
-    color: #ffffff; /* Texto blanco */
-    font-family: 'Arial', sans-serif; /* Fuente moderna sans-serif */
-    width: 90%; /* Ajusta el ancho según tus necesidades */
-    max-width: 600px; /* Establece un ancho máximo */
-    margin: auto; /* Centrado horizontal */
-    padding: 50px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 120, 255, 0.3);
+    margin-top: 20px;
 }
 
-.create-user-form:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
-}
-
-.create-user-form h1 {
-    color: #004aad; /* Azul oscuro */
-    font-size: 24px;
-    font-weight: bold;
+.main-title h1 {
+    text-align: center;
     margin-bottom: 20px;
 }
 
-.create-user-form label {
-    margin-bottom: 15px;
-    font-size: 18px;
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
 }
 
-.create-user-form input {
+.form-group {
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.form-group input {
     width: 100%;
     padding: 10px;
-    border-radius: 6px;
-    border: 2px solid #004aad; /* Borde azul oscuro */
-    background-color: #eaeaea; /* Fondo gris claro */
-    color: #333; /* Texto oscuro */
     font-size: 16px;
 }
 
-.create-user-form input:focus {
-    outline: none;
-    border-color: #00d6d1; /* Borde azul claro al enfocar */
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 600px;
 }
 
-.create-user-form button {
-    padding: 15px 30px;
-    border: none;
-    border-radius: 30px;
-    color: #fff;
-    font-size: 20px;
-    font-weight: 600;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
-    width: 50%;
-    font-family: 'Poppins', sans-serif;
-    background-image: linear-gradient(145deg, #007bff, #0056b3);
-}
-
-.create-user-form button:hover {
-    background-image: linear-gradient(145deg, #004aad, #003379); /* Azul oscuro para el hover */
-    transform: scale(1.05);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+.home-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    margin-top: 10px;
 }

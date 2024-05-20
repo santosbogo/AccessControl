@@ -46,7 +46,7 @@ const ManageUsers = () => {
             <div className="main-title">Manage Users</div>
             <button onClick={handleCreateUser}>Create New User</button>
             <form onSubmit={handleSearchSubmit}>
-                <input
+                <input className={"search-input"}
                     type="text"
                     placeholder="Search users by name..."
                     value={searchTerm}
