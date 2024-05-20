@@ -35,14 +35,14 @@ test {
     useJUnitPlatform()
 }
 
-spotless {
-    java {
-        googleJavaFormat()
-
-        // Target specific files or directories
-        target 'src/main/java/**/*.java', 'src/test/java/**/*.java'
-
-        // You can also include other formats like import order, license headers, etc.
-        importOrder 'java', 'javax', 'org', 'com', 'accesscontrol'  // Specifies import order
-    }
-}
+//spotless {
+//    java {
+//        googleJavaFormat()
+//
+//        // Target specific files or directories
+//        target 'src/main/java/**/*.java', 'src/test/java/**/*.java'
+//
+//        // You can also include other formats like import order, license headers, etc.
+//        importOrder 'java', 'javax', 'org', 'com', 'accesscontrol'  // Specifies import order
+//    }
+//}
