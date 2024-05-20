@@ -19,7 +19,7 @@ public class AttemptController {
         this.accessAttempt = new AccessAttempts();
     }
 
-    public void addAttempt(Long uid, LocalDate date, LocalTime time, boolean success) {
+    public void addAttempt(String uid, LocalDate date, LocalTime time, boolean success) {
         AccessAttempt accessAttempt = new AccessAttempt(uid, date, time, success);
         this.accessAttempt.persist(accessAttempt);
     }
@@ -29,7 +29,7 @@ public class AttemptController {
         List<AccessAttempt> attempts = accessAttempt.findAttemptsByDate(date);
         List<AttemptDto> attemptDtos = new ArrayList<>();
         for(AccessAttempt attempt : attempts) {
-            attemptDtos.add(new AttemptDto(attempt.getUid().toString(), attempt.getAttemptDate().toString(), attempt.getAttemptHour().toString(), String.valueOf(attempt.getAttemptStatus())));
+            attemptDtos.add(new AttemptDto(String.valueOf(attempt.getAttemptStatus()), "0", attempt.getUid().toString(), attempt.getAttemptHour().toString(), attempt.getAttemptDate().toString()));
         }
         response.type("application/json");
         return gson.toJson(attemptDtos);

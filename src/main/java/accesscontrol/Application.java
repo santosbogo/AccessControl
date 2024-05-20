@@ -16,7 +16,7 @@ import static spark.Spark.*;
 
 public class Application {
     static Gson gson = new Gson();
-    static String broker = "tcp://3.80.25.82:1883";
+    static String broker = "tcp://18.234.56.90:1883";
     static String clientId = "JavaClient";
     public static void main(String[] args) {
         final EntityManagerFactory factory = Persistence.createEntityManagerFactory("accessControlDB");
@@ -69,8 +69,8 @@ public class Application {
                     if (topic.equals("exit")) {
                         DateTimeMessage dateTimeMessage = gson.fromJson(messageString, DateTimeMessage.class);
 
-                        LocalDate date = LocalDate.parse(dateTimeMessage.getDate());
-                        LocalTime time = LocalTime.parse(dateTimeMessage.getTime());
+                        LocalDate date = dateTimeMessage.getDate();
+                        LocalTime time = dateTimeMessage.getTime();
 
                         System.out.println("Date: " + date);
                         System.out.println("Time: " + time);
@@ -80,15 +80,16 @@ public class Application {
                     }
                     else if(topic.equals("access")) {
                         AttemptDto accessEvent = gson.fromJson(messageString, AttemptDto.class);
-                        Long uid = accessEvent.getUid();
+
+                        String uid = accessEvent.getCardId();
                         LocalDate date = accessEvent.getDate();
                         LocalTime time = accessEvent.getTime();
-                        Boolean status = accessEvent.getStatus();
+                        Boolean status = accessEvent.getState();
 
-                        System.out.println("UID: " + accessEvent.getUid());
-                        System.out.println("Date: " + accessEvent.getDate());
-                        System.out.println("Time: " + accessEvent.getTime());
-                        System.out.println("Status: " + accessEvent.getStatus());
+                        System.out.println("UID: " + uid);
+                        System.out.println("Date: " + date);
+                        System.out.println("Time: " + time);
+                        System.out.println("Status: " + status);
 
                         attemptController.addAttempt(uid, date, time, status);
                     }

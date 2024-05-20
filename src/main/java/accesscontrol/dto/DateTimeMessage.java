@@ -1,22 +1,26 @@
 package accesscontrol.dto;
 import com.google.gson.annotations.SerializedName;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+
 public class DateTimeMessage {
     @SerializedName("date")
     private String date;
+
     @SerializedName("time")
     private String time;
 
-    // Getters
-    public String getDate() {
-        return date;
+    public LocalDate getDate() {
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        return LocalDate.parse(date, dateFormatter);
     }
 
-    public String getTime() {
-        return time;
+    public LocalTime getTime() {
+        return LocalTime.parse(time, DateTimeFormatter.ofPattern("HH:mm"));
     }
 
-    // Setters
     public void setDate(String date) {
         this.date = date;
     }

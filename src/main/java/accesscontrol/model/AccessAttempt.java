@@ -21,13 +21,13 @@ public class AccessAttempt {
     }
 
     @Column(nullable = false)
-    private Long uid;
+    private String uid;
 
-    public Long getUid() {
+    public String getUid() {
         return uid;
     }
 
-    public void setUid(Long cardId) {
+    public void setUid(String cardId) {
         this.uid = cardId;
     }
 
@@ -66,7 +66,7 @@ public class AccessAttempt {
     }
 
     // Constructor
-    public AccessAttempt(Long uid, LocalDate attemptDate, LocalTime attemptHour, boolean attemptStatus) {
+    public AccessAttempt(String uid, LocalDate attemptDate, LocalTime attemptHour, boolean attemptStatus) {
         setUid(uid);
         setDate(attemptDate);
         setHour(attemptHour);
