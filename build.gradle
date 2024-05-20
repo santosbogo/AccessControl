@@ -17,7 +17,6 @@ dependencies {
     testImplementation platform('org.junit:junit-bom:5.9.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'
     implementation 'org.hibernate:hibernate-core:5.6.5.Final'
-    implementation 'org.hsqldb:hsqldb:2.7.2'
 
     // Implementation of the Spark Java framework
     implementation 'com.sparkjava:spark-core:2.9.3'
@@ -26,6 +25,10 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.9.0'
 
     implementation 'com.auth0:java-jwt:3.18.2'
+
+    // MySQL drivers
+    implementation 'mysql:mysql-connector-java:8.0.28'
+
 }
 
 test {

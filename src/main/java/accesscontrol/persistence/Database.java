@@ -1,28 +1,44 @@
 package accesscontrol.persistence;
 
-import org.hsqldb.persist.HsqlProperties;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public class Database {
 
-    final String dbLocation = "../hsqldb-2.7.2/hsqldb/db/";
-    org.hsqldb.server.Server server;
+    private final String dbUrl = "jdbc:mysql://172.31.22.162:3306/AccessControlDB";
+    private final String dbUser = "Application";
+    private final String dbPassword = "AccessControl2024!";
+    private Connection connection;
 
     public void startDBServer() {
-        HsqlProperties props = new HsqlProperties();
-        props.setProperty("server.database.0", "file:" + dbLocation + "AccessControlDB;");
-        props.setProperty("server.dbname.0", "AccessControlDB");
-        server = new org.hsqldb.Server();
         try {
-            server.setProperties(props);
-        } catch (Exception e) {
-            return;
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            connection = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
+            System.out.println("Connected to the MySQL database successfully!");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Failed to connect to the MySQL database.");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
-        server.start();
     }
 
     public void stopDBServer() {
-        server.shutdown();
+        if (connection != null) {
+            try {
+                connection.close();
+                System.out.println("Disconnected from the MySQL database successfully!");
+            } catch (SQLException e) {
+                e.printStackTrace();
+                System.out.println("Failed to disconnect from the MySQL database.");
+            }
+        }
     }
 
+    public Connection getConnection() {
+        return connection;
+    }
 }
+
 

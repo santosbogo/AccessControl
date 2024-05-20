@@ -9,22 +9,14 @@
         <class>accesscontrol.model.Admin</class>
 
         <properties>
-            <property name="javax.persistence.jdbc.driver" value="org.hsqldb.jdbc.JDBCDriver"/>
-            <property name="javax.persistence.jdbc.url" value="jdbc:hsqldb:hsql://localhost/accessControlDB;shutdown=true"/>
-            <property name="javax.persistence.jdbc.user" value="sa"/>
-            <property name="javax.persistence.jdbc.password" value=""/>
-            <property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect"/>
+            <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://172.31.22.162:3306/AccessControlDB"/>
+            <property name="javax.persistence.jdbc.user" value="Application"/>
+            <property name="javax.persistence.jdbc.password" value="AccessControl2024!"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
 
             <property name="hibernate.show_sql" value="true"/>
-
-            <!--            <property name="hibernate.hbm2ddl.auto" value="create"/>-->
-
-            <!-- Si se quiere actualizar la base de datos, descomentar la siguiente línea -->
             <property name="hibernate.hbm2ddl.auto" value="update"/>
-
-
         </properties>
-
     </persistence-unit>
-
 </persistence>
