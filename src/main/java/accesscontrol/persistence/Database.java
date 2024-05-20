@@ -13,7 +13,7 @@ public class Database {
 
     public void startDBServer() {
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
             System.out.println("Connected to the MySQL database successfully!");
         } catch (SQLException e) {

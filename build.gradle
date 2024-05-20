@@ -28,6 +28,7 @@ dependencies {
 
     // MySQL drivers
     implementation 'mysql:mysql-connector-java:8.0.28'
+
 }
 
 test {
