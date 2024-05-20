@@ -27,6 +27,7 @@ public class UserController{
         AttemptDto attemptDto = gson.fromJson(req.body(), AttemptDto.class);
         String attemptUID = attemptDto.getCardId();
 
+
         if(!uniqueUsername){
             User user = new User(attemptUID, name, lastName, username);
             users.persist(user);
