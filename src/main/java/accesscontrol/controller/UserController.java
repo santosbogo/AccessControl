@@ -21,12 +21,18 @@ public class UserController{
         UserDto userDto = gson.fromJson(req.body(), UserDto.class);
         String name = userDto.getName();
         String lastName = userDto.getLastName();
+        String username = userDto.getUsername();
+        boolean uniqueUsername = users.existsByUsername(username);
 
         AttemptDto attemptDto = gson.fromJson(req.body(), AttemptDto.class);
-        long attemptUID = attemptDto.getUid();
-        User user = new User(attemptUID, name, lastName);
-        users.persist(user);
-        res.type("application/json");
+        String attemptUID = attemptDto.getCardId();
+
+
+        if(!uniqueUsername){
+            User user = new User(attemptUID, name, lastName, username);
+            users.persist(user);
+            res.type("application/json");
+        }
 
     }
 }
