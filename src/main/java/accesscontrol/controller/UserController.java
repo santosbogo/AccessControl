@@ -25,7 +25,7 @@ public class UserController{
         boolean uniqueUsername = users.existsByUsername(username);
 
         AttemptDto attemptDto = gson.fromJson(req.body(), AttemptDto.class);
-        long attemptUID = attemptDto.getUid();
+        String attemptUID = attemptDto.getCardId();
 
         if(!uniqueUsername){
             User user = new User(attemptUID, name, lastName, username);

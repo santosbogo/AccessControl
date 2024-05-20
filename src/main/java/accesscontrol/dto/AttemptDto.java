@@ -4,33 +4,39 @@ import java.time.*;
 import java.time.format.*;
 
 public class AttemptDto {
-    private String uid;
+    private String cardID;
     private String date;
     private String time;
-    private String status;
+    private String state;
+    private String personID;
 
-    public AttemptDto(String uid, String date, String time, String status) {
-        this.uid = uid;
+    public AttemptDto(String state, String personID, String cardID, String time, String date) {
+        this.cardID = cardID;
         this.date = date;
         this.time = time;
-        this.status = status;
+        this.state = state;
+        this.personID = personID;
     }
 
-    public Long getUid() {
-        return Long.parseLong(uid);
+    public String getCardId() {
+        return cardID;
     }
 
     public LocalDate getDate() {
-        return LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        return LocalDate.parse(date, dateFormatter);
     }
-
 
     public LocalTime getTime() {
-        return LocalTime.parse(time, DateTimeFormatter.ofPattern("HH:mm:ss"));
+        return LocalTime.parse(time, DateTimeFormatter.ofPattern("HH:mm"));
     }
 
-    public Boolean getStatus() {
-        return Boolean.parseBoolean(status);
+    public Boolean getState() {
+        return Boolean.parseBoolean(state);
+    }
+
+    public String getPersonId() {
+        return personID;
     }
 }
 
