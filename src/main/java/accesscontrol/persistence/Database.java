@@ -13,11 +13,14 @@ public class Database {
 
     public void startDBServer() {
         try {
+            Class.forName("com.mysql.jdbc.Driver");
             connection = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
             System.out.println("Connected to the MySQL database successfully!");
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("Failed to connect to the MySQL database.");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 

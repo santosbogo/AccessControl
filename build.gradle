@@ -26,6 +26,7 @@ dependencies {
 
     implementation 'com.auth0:java-jwt:3.18.2'
 
+    // MySQL drivers
     implementation 'mysql:mysql-connector-java:8.0.28'
 }
 
