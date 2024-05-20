@@ -64,7 +64,6 @@ const Login = () => {
             <div className="general-error-message"></div>
 
             <button className="login-button" onClick={login}>Login</button>
-            <Link to="/" className="Go-back-button">Go back</Link>
         </div>
     );
 }
