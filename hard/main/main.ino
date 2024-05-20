@@ -77,7 +77,7 @@
   const String encryptionKey = "SantosBogo";  //It is used for encrypt and decrypt system file
 
 //MQTT instance
-#define PUBLIC_IP "3.81.9.137"
+#define PUBLIC_IP "18.234.56.90"
 
 
 void setup() {
@@ -122,9 +122,9 @@ void setup() {
     }
   }
 
-  //connectWifi("UA-Alumnos", "41umn05WLC");
+  connectWifi("UA-Alumnos", "41umn05WLC");
   // connectWifi("Flia Lando 2", "aabbccddeeff");
-  connectWifi("Fila Bogo 2.4", "244466666");
+  // connectWifi("Fila Bogo 2.4", "244466666");
   //connectWifi(wifiSSIDFileRead(), wifiPasswordFileRead());
 
   //Set Time
@@ -393,6 +393,13 @@ void addUser() {
             return;
           }
         }
+
+        Serial.print("\n");
+        Serial.print("Added UID:");
+        Serial.print("\"");
+        Serial.print(UID);
+        Serial.print("\"");
+
         users[numUsers] = personalID + '|' + UID;
         numUsers++;
         admitedUsersFileWrite();

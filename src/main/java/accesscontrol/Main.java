@@ -1,6 +1,7 @@
 package accesscontrol;
 
 import accesscontrol.model.Admin;
+import accesscontrol.model.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -25,6 +26,20 @@ public class Main {
         Admin adminUser = new Admin("Fernando", "Lichtschein", "taylor", "swift");
         entityManager.getTransaction().begin();
         entityManager.persist(adminUser);
+        entityManager.getTransaction().commit();
+    }
+
+    public static void createUsers(EntityManager entityManager){
+        List<User> users = new ArrayList<>();
+        users.add(new User("ea 85 b6 b2 ", "Santos", "Bogo", "swift"));
+
+        //a3 53 e8 f4
+
+
+        entityManager.getTransaction().begin();
+        for (User user : users) {
+            entityManager.persist(user);
+        }
         entityManager.getTransaction().commit();
     }
 

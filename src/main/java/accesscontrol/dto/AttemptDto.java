@@ -16,8 +16,8 @@ public class AttemptDto {
         this.status = status;
     }
 
-    public Long getUid() {
-        return Long.parseLong(uid);
+    public String getUid() {
+        return uid;
     }
 
     public LocalDate getDate() {

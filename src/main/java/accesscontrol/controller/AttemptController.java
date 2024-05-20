@@ -19,7 +19,7 @@ public class AttemptController {
         this.accessAttempt = new AccessAttempts();
     }
 
-    public void addAttempt(Long uid, LocalDate date, LocalTime time, boolean success) {
+    public void addAttempt(String uid, LocalDate date, LocalTime time, boolean success) {
         AccessAttempt accessAttempt = new AccessAttempt(uid, date, time, success);
         this.accessAttempt.persist(accessAttempt);
     }

@@ -80,7 +80,7 @@ public class Application {
                     }
                     else if(topic.equals("access")) {
                         AttemptDto accessEvent = gson.fromJson(messageString, AttemptDto.class);
-                        Long uid = accessEvent.getUid();
+                        String uid = accessEvent.getUid();
                         LocalDate date = accessEvent.getDate();
                         LocalTime time = accessEvent.getTime();
                         Boolean status = accessEvent.getStatus();
