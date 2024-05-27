@@ -8,7 +8,7 @@ public class UidController {
   private final Object uidLock = new Object();
   public UidController() {
     try {
-      this.client = new MqttClient("tcp://broker-address:1883", MqttClient.generateClientId());
+      this.client = new MqttClient("tcp://54.145.204.191:1883", MqttClient.generateClientId());
       MqttConnectOptions options = new MqttConnectOptions();
       options.setCleanSession(true);
       options.setAutomaticReconnect(true);
