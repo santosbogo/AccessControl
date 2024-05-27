@@ -38,9 +38,17 @@ const CreateUser = () => {
 
     const handleRequestUid = async () => {
         setShowUidField(true);
-        const response = await axios.get(`http://localhost:3333/uid/getUid)` )
-        setUid(response.data.uid);
-        console.log(response.data);
+        try {
+            const response = await axios.get(`http://localhost:3333/uid/getUid`);
+            if (response.data && response.data.uid) {
+                setUid(response.data.uid);
+                console.log("UID received:", response.data.uid);
+            } else {
+                console.log("No UID received", response.data);
+            }
+        } catch (error) {
+            console.error('Error fetching UID:', error);
+        }
     };
 
         return (
