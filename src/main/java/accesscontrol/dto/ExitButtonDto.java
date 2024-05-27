@@ -13,7 +13,6 @@ public class ExitButtonDto {
         this.exitDate = exitDate;
     }
 
-
     public LocalTime getTime(){
         return LocalTime.parse(exitTime, DateTimeFormatter.ISO_LOCAL_TIME);
     }

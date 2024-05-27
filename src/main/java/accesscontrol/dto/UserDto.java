@@ -1,13 +1,20 @@
 package accesscontrol.dto;
 public class UserDto {
-  String name;
+  String uid;
+  String firstName;
   String lastName;
-  public UserDto(String name, String lastName, String username){
-    this.name = name;
+  public UserDto(String uid, String firstName, String lastName){
+    this.uid = uid;
+    this.firstName = firstName;
     this.lastName = lastName;
   }
+
+  public String getUid(){
+    return uid;
+  }
+
   public String getName(){
-    return name;
+    return firstName;
   }
 
   public String getLastName(){
