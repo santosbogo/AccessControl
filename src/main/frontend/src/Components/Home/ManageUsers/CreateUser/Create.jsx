@@ -31,10 +31,8 @@ const CreateUser = () => {
                 lastName: lastName,
             });
             console.log(response.data);
-            navigate('/AdministratorHome'); // Redirect on success
         } catch (error) {
             console.error('Error sending request:', error);
-            setErrorMessage(error.response?.data || 'An unexpected error occurred');
         }
     };
 
