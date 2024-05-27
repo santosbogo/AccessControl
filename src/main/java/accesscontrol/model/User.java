@@ -43,21 +43,10 @@ public class User{
         this.lastName = lastName;
     }
 
-    @Column(nullable = false, unique = true)
-    private String username;
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public User(String uid, String firstName, String lastName, String username){
+    public User(String uid, String firstName, String lastName){
         setUid(uid);
         setLastName(lastName);
         setFirstName(firstName);
-        setUsername(username);
     }
 
     public User(){
