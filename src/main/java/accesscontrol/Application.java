@@ -45,7 +45,6 @@ public class Application {
         });
 
         Spark.get("/attempt/:date/getAttempt", attemptController::getAttempts);
-        Spark.post("/user/signup", adminController::createAdmin);
         Spark.post("/admin/login", adminController::loginAdmin);
         Spark.get("/uid/getUid", uidController::requestUid);
         Spark.post("/user/add", userController::addUser);
@@ -54,6 +53,8 @@ public class Application {
             MqttClient client = new MqttClient(broker, clientId);
             MqttConnectOptions options = new MqttConnectOptions();
             options.setCleanSession(true);
+
+            CollectController collectController = new CollectController(client);
 
             System.out.println("Connecting to MQTT broker: " + broker);
             client.connect(options);
