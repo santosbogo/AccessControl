@@ -1,13 +1,22 @@
 package accesscontrol.model;
 
-import com.google.gson.Gson;
+import com.google.gson.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class User{
+    @Id
+    @GeneratedValue(generator = "userGen", strategy = GenerationType.SEQUENCE)
+    private Long userId;
+
+    public Long getId() {
+        return userId;
+    }
+
+    public void setId(Long id) {
+        this.userId = id;
+    }
 
     @Id
     @Column(nullable = false, unique = true)
@@ -43,10 +52,29 @@ public class User{
         this.lastName = lastName;
     }
 
+    @Column(nullable = false)
+    private String Username;
+
+    @Column()
+    private boolean state;
+
+    public void activate(){
+        this.state = true;
+    }
+
+    public void deactivate(){
+        this.state = false;
+    }
+
+    public boolean state(){
+        return state;
+    }
+
     public User(String uid, String firstName, String lastName){
         setUid(uid);
         setLastName(lastName);
         setFirstName(firstName);
+        activate();
     }
 
     public User(){
@@ -54,8 +82,11 @@ public class User{
     }
 
     public String asJson() {
-        Gson gson = new Gson();
-        return gson.toJson(this);
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("id", this.uid);
+        jsonObject.addProperty("firstName", this.firstName);
+        jsonObject.addProperty("lastName", this.lastName);
+        return jsonObject.toString();
     }
 
 }
