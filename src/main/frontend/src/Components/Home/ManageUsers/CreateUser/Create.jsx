@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Link } from 'react-router-dom';
+
 import axios from "axios";
 
 const CreateUser = () => {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
-    const [username, setUsername] = useState("");
     const [uid, setUid] = useState("");
     const [showUidField, setShowUidField] = useState(false);
     const [showCreateButton, setShowCreateButton] = useState(false);
@@ -16,23 +16,32 @@ const CreateUser = () => {
             setFirstName(value);
         } else if (name === "lastName") {
             setLastName(value);
-        } else if (name === "username") {
-            setUsername(value);
         } else if (name === "uid") {
             setUid(value);
             setShowCreateButton(true); // Muestra el botón "Create User" cuando el campo UID está lleno
         }
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("Creating user:", { firstName, lastName, username, uid });
-        // Aquí enviarías la información al servidor o a la lógica de manejo de datos
+        try {
+            const response = await axios.post('http://localhost:3333/user/add', {
+                uid : uid,
+                firstName: firstName,
+                lastName: lastName,
+            });
+            console.log(response.data);
+            navigate('/AdministratorHome'); // Redirect on success
+        } catch (error) {
+            console.error('Error sending request:', error);
+            setErrorMessage(error.response?.data || 'An unexpected error occurred');
+        }
     };
 
     const handleRequestUid = async () => {
         setShowUidField(true);
         const response = await axios.get(`http://localhost:3333/admin/uid/getUid)` )
+        setUid(response.data.uid);
     };
 
         return (
@@ -59,16 +68,6 @@ const CreateUser = () => {
                             placeholder="Last name"
                         />
                     </div>
-                    <div className="search-input">
-                        <input
-                            type="text"
-                            name="username"
-                            value={username}
-                            onChange={handleInputChange}
-                            placeholder="Username"
-                        />
-                    </div>
-
                     {showUidField && (
                         <div className="search-input">
                             <input

@@ -1,6 +1,6 @@
 package accesscontrol.model;
 
-import com.google.gson.Gson;
+import com.google.gson.*;
 
 import javax.persistence.*;
 
@@ -82,8 +82,11 @@ public class User{
     }
 
     public String asJson() {
-        Gson gson = new Gson();
-        return gson.toJson(this);
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("id", this.uid);
+        jsonObject.addProperty("firstName", this.firstName);
+        jsonObject.addProperty("lastName", this.lastName);
+        return jsonObject.toString();
     }
 
 }
