@@ -15,6 +15,11 @@ const HomePage = () => {
         navigate('/home/view-history')
     }
 
+    const handleLockDoors = () => {
+
+        // Implementar la lógica para bloquear las puertas
+    }
+
     return(
         <div className="home-page">
             <div className="main-title"> Welcome to the Access Control System</div>
@@ -23,6 +28,9 @@ const HomePage = () => {
             </div>
             <div className="button-container">
                 <button onClick={handleViewHistory}>View History</button>
+            </div>
+            <div className={"lock-doors"}>
+                <button onClick={handleLockDoors}>Lock Doors</button>
             </div>
         </div>
     );
