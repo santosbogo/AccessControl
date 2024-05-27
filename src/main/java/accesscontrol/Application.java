@@ -27,6 +27,7 @@ public class Application {
         AdminController adminController = new AdminController();
         UidController uidController = new UidController();
         UserController userController = new UserController();
+        LockController LockController = new LockController();
         PublisherMQTT publisher = new PublisherMQTT();
 
         Spark.port(3333);
@@ -48,6 +49,7 @@ public class Application {
         Spark.post("/admin/login", adminController::loginAdmin);
         Spark.get("/uid/getUid", uidController::requestUid);
         Spark.post("/user/add", userController::addUser);
+        Spark.post("/admin/lock", LockController::lockDoors);
 
         try {
             MqttClient client = new MqttClient(broker, clientId);
