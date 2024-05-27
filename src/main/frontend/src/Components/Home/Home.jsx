@@ -24,8 +24,15 @@ const HomePage = () => {
 
     const handleConfirmLockDoors = async () => {
         console.log('Locking doors');
-        const response = await axios.post('http://localhost:3333/admin/lock-doors');
-        setShowModal(false);
+        try{
+            const response = await axios.post('http://localhost:3333/admin/lock');
+            console.log(response.data);
+            setShowModal(false);
+        }
+        catch(error){
+            console.error('Error sending request:', error);
+        }
+
     };
 
     const handleCancelLockDoors = () => {

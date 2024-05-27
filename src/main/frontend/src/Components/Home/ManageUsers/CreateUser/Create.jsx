@@ -38,8 +38,9 @@ const CreateUser = () => {
 
     const handleRequestUid = async () => {
         setShowUidField(true);
-        const response = await axios.get(`http://localhost:3333/admin/uid/getUid)` )
+        const response = await axios.get(`http://localhost:3333/uid/getUid)` )
         setUid(response.data.uid);
+        console.log(response.data);
     };
 
         return (

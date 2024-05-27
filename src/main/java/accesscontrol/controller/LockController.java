@@ -23,13 +23,13 @@ public class LockController {
 
   public String lockDoors(Request req, Response res) {
     try {
-      client.publish("lockDoors", new MqttMessage("true".getBytes()));
-      return "{\"status\":\"success\", \"message\":\"Doors locked successfully.\"}";
+      client.publish("Status", new MqttMessage("1".getBytes()));
+      return "success";
     } catch (MqttException e) {
       System.out.println("Error al publicar el mensaje: " + e.getMessage());
       e.printStackTrace();
       res.status(500); // HTTP Internal Server Error
-      return "{\"status\":\"error\", \"message\":\"Failed to lock doors.\"}";
+      return "fail";
     }
   }
 }
