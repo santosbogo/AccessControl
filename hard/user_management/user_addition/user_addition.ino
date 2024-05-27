@@ -118,15 +118,8 @@ void connectMQTT() {
 }
 
 void publishUid(String uid) {
-  // Create JSON payload
-  DynamicJsonDocument doc(1024);
-  doc["card_uid"] = uid;
-
-  String output;
-  serializeJson(doc, output);
-
   // Publish to new_user topic
-  if (MQTT_CLIENT.publish(NEW_USER_TOPIC, output.c_str())) {
+  if (MQTT_CLIENT.publish(NEW_USER_TOPIC, uid.c_str())) {
     Serial.println("UID published successfully");
   } else {
     Serial.println("Failed to publish UID");

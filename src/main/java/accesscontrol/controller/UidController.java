@@ -19,9 +19,9 @@ public class UidController {
         }
 
         public void messageArrived(String topic, MqttMessage message) throws Exception {
-          if (topic.equals("uid")) {
+          if (topic.equals("new_user")) {
             final String uid = new String(message.getPayload());
-
+            System.out.println("Received new user: " + uid);
             synchronized (uidLock) {
               receivedUid = uid;
               uidLock.notify();
@@ -42,9 +42,7 @@ public class UidController {
     synchronized (uidLock) {
       try {
         receivedUid = null;
-        client.publish("requestUid", new MqttMessage("Request UID".getBytes()));
 
-        // Espera a recibir el UID
         while (receivedUid == null) {
           uidLock.wait(10000); // Espera hasta 10 segundos
         }
@@ -62,11 +60,7 @@ public class UidController {
         Thread.currentThread().interrupt();
         res.status(500);
         return "{}";
-      } catch (MqttException e) {
-        res.status(500);
-        return "{}";
       }
     }
   }
-
 }
