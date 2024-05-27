@@ -31,7 +31,7 @@ public class Main {
 
     public static void createUsers(EntityManager entityManager){
         List<User> users = new ArrayList<>();
-        users.add(new User("ea 85 b6 b2 ", "Santos", "Bogo", "swift"));
+        users.add(new User("ea 85 b6 b2 ", "Santos", "Bogo"));
 
         //a3 53 e8 f4
 

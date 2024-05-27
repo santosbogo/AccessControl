@@ -11,13 +11,13 @@ public class User{
 
     @Id
     @Column(nullable = false, unique = true)
-    private Long uid;
+    private String uid;
 
-    public Long getUid() {
+    public String getUid() {
         return uid;
     }
 
-    public void setUid(Long cardId) {
+    public void setUid(String cardId) {
         this.uid = cardId;
     }
 
@@ -43,7 +43,7 @@ public class User{
         this.lastName = lastName;
     }
 
-    public User(Long uid, String firstName, String lastName){
+    public User(String uid, String firstName, String lastName){
         setUid(uid);
         setLastName(lastName);
         setFirstName(firstName);
