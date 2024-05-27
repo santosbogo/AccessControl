@@ -24,7 +24,7 @@ const HomePage = () => {
 
     const handleConfirmLockDoors = async () => {
         console.log('Locking doors');
-        const response = await axios.post('http://localhost:3333/admin/lock-doors');
+        const response = await axios.post('http://localhost:3333/admin/lock');
         setShowModal(false);
     };
 
