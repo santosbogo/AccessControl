@@ -28,7 +28,7 @@ public class Application {
         UidController uidController = new UidController();
         UserController userController = new UserController();
         LockController LockController = new LockController();
-        //PublisherMQTT publisher = new PublisherMQTT();
+        PublisherMQTT publisher = new PublisherMQTT();
 
         Spark.port(3333);
 
