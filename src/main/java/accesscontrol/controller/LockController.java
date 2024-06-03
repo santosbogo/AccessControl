@@ -12,6 +12,7 @@ public class LockController {
   private final MqttClient client;
   private final MqttPublisher publisherMQTT;
 
+
   public LockController(MqttClient client) {
     this.client = client;
     this.publisherMQTT = new MqttPublisher();
