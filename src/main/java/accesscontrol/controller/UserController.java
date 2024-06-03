@@ -46,11 +46,12 @@ public class UserController{
 
 
     public String deactivateUser(Request req, Response res) {
-        Long userId = Long.parseLong(req.params("id"));
+        String userId = req.params("id");
         User user = users.findUserByUid(userId);
         if (user != null) {
             user.deactivate();
             users.persist(user); // Actualizar el usuario en la base de datos
+            publisherMQTT.publishUsersList(users.findAllUsers(), client);
             res.status(200);
             return "User deactivated successfully.";
         } else {

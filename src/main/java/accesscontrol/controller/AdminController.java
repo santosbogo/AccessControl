@@ -14,4 +14,8 @@ public class AdminController {
     this.admins = new Admins();
   }
 
+  public void addAdmin(Admin admin) {
+    admins.persist(admin);
+  }
+
 }

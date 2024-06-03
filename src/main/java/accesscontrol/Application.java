@@ -2,6 +2,7 @@ package accesscontrol;
 
 import accesscontrol.controller.*;
 import accesscontrol.dto.*;
+import accesscontrol.model.Admin;
 import com.google.gson.Gson;
 import org.eclipse.paho.client.mqttv3.*;
 import spark.*;
@@ -43,6 +44,9 @@ public class Application {
             LockController LockController = new LockController(client);
             PublisherMQTT publisher = new PublisherMQTT();
 
+            Admin adminUser = new Admin("Fernando", "Lichtschein", "taylor", "swift");
+            adminController.addAdmin(adminUser);
+
             Spark.port(3333);
 
             before((req, resp) -> {
@@ -64,14 +68,16 @@ public class Application {
             Spark.post("/admin/lock", LockController::lockDoors);
             Spark.post("/admin/unlock", LockController::unlockDoors);
             Spark.post("/admin/normal-state", LockController::returnToNormal);
-          Spark.get("/attempt/:date/getAttempt", attemptController::getAttempts);
-          Spark.post("/admin/login", autController::createAuthentication);
-          Spark.post("/user/login", autController::createAuthentication);
-          Spark.post("/user/logout", autController::deleteAuthentication);
-          Spark.get("/user/verify", autController::getCurrentUser);
-          Spark.get("/uid/getUid", uidController::requestUid);
-          Spark.post("/user/add", userController::addUser);
-        //Spark.post("/admin/lock", LockController::lockDoors);
+            Spark.get("/attempt/:date/getAttempt", attemptController::getAttempts);
+            Spark.post("/admin/login", autController::createAuthentication);
+            Spark.post("/user/login", autController::createAuthentication);
+            Spark.post("/user/logout", autController::deleteAuthentication);
+            Spark.get("/user/verify", autController::getCurrentUser);
+            Spark.get("/uid/getUid", uidController::requestUid);
+            Spark.post("/user/add", userController::addUser);
+            Spark.get("/users/findAll", userController::searchUsers);
+            Spark.post("/user/deactivate/:id", userController::deactivateUser);
+
 
 
             client.setCallback(new MqttCallback() {
