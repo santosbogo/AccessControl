@@ -39,7 +39,7 @@ public class MqttPublisher {
     private List<String> convertUsersListToJson(List<User> users) {
         ArrayList<String> usersJson = new ArrayList<>();
         for (User user : users) {
-            usersJson.add(user.asJson());
+            usersJson.add(user.getUid());
         }
         return usersJson;
     }
