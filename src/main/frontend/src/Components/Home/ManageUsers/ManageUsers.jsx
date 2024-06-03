@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import "./ManageUsers.css"; // Importar los estilos CSS
+import "../Home.css"
 import authentication from "../../Hoc/Hoc"; // Importar el HOC de autenticación
 import { Link } from 'react-router-dom'; // Importar Link si es necesario
 
@@ -45,10 +45,10 @@ const ManageUsers = () => {
 
 
     return (
-        <div className="manage-users">
+        <div className="home-page">
             <div className="main-title">Manage Users</div>
             <button onClick={handleCreateUser}>Create New User</button>
-            <Link to="/Home/" className="home-button">Home</Link>
+            <Link to="/Home/" className="button">Home</Link>
             <div className="user-list">
                 {users.length > 0 ? (
                     <ul>

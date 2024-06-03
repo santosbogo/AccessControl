@@ -78,6 +78,14 @@ public class Application {
             Spark.get("/users/findAll", userController::searchUsers);
             Spark.post("/user/deactivate/:id", userController::deactivateUser);
 
+            Spark.get("/attempt/:date/getAttempt", attemptController::getAttempts);
+            Spark.post("/admin/login", autController::createAuthentication);
+            Spark.post("/user/login", autController::createAuthentication);
+            Spark.post("/user/logout", autController::deleteAuthentication);
+            Spark.get("/user/verify", autController::getCurrentUser);
+            Spark.get("/uid/getUid", uidController::requestUid);
+            Spark.post("/user/add", userController::addUser);
+            //Spark.post("/admin/lock", LockController::lockDoors);
 
 
             client.setCallback(new MqttCallback() {
