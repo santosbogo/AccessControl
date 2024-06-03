@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./ManageUsers.css"; // Importar los estilos CSS
+import authentication from "../../Hoc/Hoc"; // Importar el HOC de autenticación
 import { Link } from 'react-router-dom'; // Importar Link si es necesario
 
 
@@ -63,4 +64,4 @@ const ManageUsers = () => {
     );
 };
 
-export default ManageUsers;
+export default authentication(ManageUsers);

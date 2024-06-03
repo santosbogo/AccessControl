@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./History.css";
 import axios from "axios";
+import authentication from "../../Hoc/Hoc";
 
 const ViewHistory = () => {
     const [selectedDate, setSelectedDate] = useState("");
@@ -65,4 +66,4 @@ const ViewHistory = () => {
     );
 };
 
-export default ViewHistory;
+export default authentication(ViewHistory);

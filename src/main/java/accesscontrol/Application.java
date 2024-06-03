@@ -22,6 +22,7 @@ public class Application {
         final EntityManagerFactory factory = Persistence.createEntityManagerFactory("accessControlDB");
         setFactory(factory);
 
+        AuthenticationController autController = new AuthenticationController();
         ExitController exitController = new ExitController();
         AttemptController attemptController = new AttemptController();
         AdminController adminController = new AdminController();
@@ -46,7 +47,10 @@ public class Application {
         });
 
         Spark.get("/attempt/:date/getAttempt", attemptController::getAttempts);
-        Spark.post("/admin/login", adminController::loginAdmin);
+        Spark.post("/admin/login", autController::createAuthentication);
+        Spark.post("/user/login", autController::createAuthentication);
+        Spark.post("/user/logout", autController::deleteAuthentication);
+        Spark.get("/user/verify", autController::getCurrentUser);
         Spark.get("/uid/getUid", uidController::requestUid);
         Spark.post("/user/add", userController::addUser);
         //Spark.post("/admin/lock", LockController::lockDoors);

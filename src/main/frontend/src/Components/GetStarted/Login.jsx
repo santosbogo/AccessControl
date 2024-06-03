@@ -17,6 +17,7 @@ const Login = () => {
                 password: password
             });
 
+            localStorage.setItem('token', response.data.token);
             console.log(response.data);
             navigate('/home')
 
@@ -25,7 +26,7 @@ const Login = () => {
             console.error('Error while sending request:', errorMsg);
             setLoginError('');
             if (errorMsg.includes("User does not exist")|| errorMsg.includes("User not found")) {
-                setLoginError("User or password incorrect");
+                setLoginError("Invalid username or password");
             }
         }
     };
