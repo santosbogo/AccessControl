@@ -34,9 +34,10 @@ const ManageUsers = () => {
 
 
     const handleDeactivateUser = async (userId) => {
+        console.log(userId);
         try {
             await axios.post(`http://localhost:3333/user/deactivate/${userId}`);
-            setUsers(users.filter(user => user.id !== userId));
+            setUsers(users.filter(user => user.uid !== userId));
         } catch (error) {
             console.error('Error deactivating user:', error);
         }
@@ -54,7 +55,7 @@ const ManageUsers = () => {
                         {users.map(user => (
                             <li key={user.id}>
                                 {user.firstName} {user.lastName}
-                                <button onClick={() => handleDeactivateUser(user.id)}>Deactivate User</button>
+                                <button onClick={() => handleDeactivateUser(user.uid)}>Deactivate User</button>
                             </li>
                         ))}
                     </ul>
