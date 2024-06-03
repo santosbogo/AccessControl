@@ -77,7 +77,7 @@
   const String encryptionKey = "SantosBogo";  //It is used for encrypt and decrypt system file
 
 //MQTT instance
-#define PUBLIC_IP "18.234.56.90"
+#define PUBLIC_IP "54.89.103.143"
 
 
 void setup() {
@@ -93,12 +93,6 @@ void setup() {
   //Initialize RFID
   SPI.begin();
   mfrc522.PCD_Init();
-  // if (mfrc522.PCD_PerformSelfTest()) {
-  //   Serial.println("EXITO al inicializar el lector RFID!!!");
-  // }
-  // else{
-  //   Serial.println("Fallo al inicializar el lector RFID");
-  // }
 
   //Initialize Leds
   pinMode(greenLedPin, OUTPUT);
@@ -150,7 +144,7 @@ void loop() {
 
   buttonInterruption();
 
-  checkMQTTConnection();
+  checkMQTT();
 
   if (key) {
     if (key == '*') {
@@ -190,15 +184,20 @@ void connectMQTT() {
   const int maxAttempts = 16;
   int attempts = 0;
   MQTT_CLIENT.setServer(PUBLIC_IP, 1883);
+  MQTT_CLIENT.setCallback(callback);
   MQTT_CLIENT.setClient(WIFI_CLIENT);
 
   lcd.setCursor(0, 1);
   lcd.print("                ");
 
-  MQTT_CLIENT.connect("AccessControl");  //AccessControl: MQTT identifier
-
   while (!MQTT_CLIENT.connected()) {
-    delay(DELAY/6);
+    if (MQTT_CLIENT.connect("ESP32Client")) {
+      Serial.println("conectado");
+      MQTT_CLIENT.subscribe("users"); //Subscribe to all topics
+      MQTT_CLIENT.subscribe("state");
+      MQTT_CLIENT.subscribe("#");
+    }
+    delay(DELAY*6);
     lcd.print(".");
     attempts++;
     if (attempts >= maxAttempts) {
@@ -212,12 +211,13 @@ void connectMQTT() {
   Serial.println("CONECTADO A MQTT");
 }
 
-void checkMQTTConnection() {
+void checkMQTT() {
   if (!MQTT_CLIENT.connected()) {
     LCDReconectMQTTMessage();
     connectMQTT();
     LCDinitialMessage();
   }
+  MQTT_CLIENT.loop();
 }
 
 void publishJson(String message) {
@@ -256,6 +256,65 @@ void accessRecordMQTTPublish(String UID, bool granted, bool fromOut){
   if(fromOut) MQTT_CLIENT.publish("access", jsonBuffer);
   else MQTT_CLIENT.publish("exit", jsonBuffer);
 
+}
+
+void callback(char* topic, byte* payload, unsigned int length) {
+  Serial.print("Mensaje recibido en el topic: ");
+  Serial.print(topic);
+  Serial.print(". Mensaje: ");
+  for (int i = 0; i < length; i++) {
+    Serial.print((char)payload[i]);
+  }
+  Serial.println();
+
+  if (strcmp(topic, "state") == 0){
+    Serial.println("state");
+  }
+  else if (strcmp(topic, "users") == 0){
+    updateUsersList(payload);
+  }
+}
+
+void updateUsersList(byte* payload){
+  int payloadMaxSize = 1000;
+  // Convierte el payload a una cadena de caracteres
+  char json[payloadMaxSize];
+  int i;
+  for (i = 0; i < payloadMaxSize && payload[i] != '\0'; i++) {
+    json[i] = (char)payload[i];
+  }
+  json[i] = '\0';  // Termina la cadena con un caracter nulo
+
+  // Utiliza ArduinoJson para parsear la cadena JSON
+  DynamicJsonDocument doc(payloadMaxSize);
+  DeserializationError error = deserializeJson(doc, json);
+
+  if (error) {
+    Serial.print("Error deserializando JSON: ");
+    Serial.println(error.c_str());
+    return;
+  }
+
+  // Limpia el array de usuarios actual
+  for (int j = 0; j < 100; j++) {
+    users[j] = "";
+  }
+
+  // Extrae la lista de usuarios del documento JSON
+  JsonArray usersArray = doc.as<JsonArray>();
+  int index = 0;
+  for (JsonVariant v : usersArray) {
+    if (index < 100) {
+      users[index] = "111|" + String(v.as<const char*>());
+      index++;
+    }
+  }
+
+  // Imprime los usuarios actualizados
+  Serial.println("Usuarios actualizados:");
+  for (int j = 0; j < index; j++) {
+    Serial.println(users[j] + users[j].length());
+  }
 }
 
 
@@ -415,6 +474,10 @@ void addUser() {
         break;
       }
     }
+  }
+  Serial.println("Usuarios actualizados:");
+  for (int j = 0; j < sizeof(users); j++) {
+      Serial.println(users[j]); //Tir
   }
 }
 
