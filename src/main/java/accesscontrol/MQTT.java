@@ -3,8 +3,6 @@ package accesscontrol;
 import accesscontrol.controller.ExitController;
 import accesscontrol.dto.DateTimeMessage;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import org.eclipse.paho.client.mqttv3.*;
 
 import javax.persistence.*;
 import java.time.*;

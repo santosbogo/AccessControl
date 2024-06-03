@@ -16,9 +16,6 @@ const CreateUser = () => {
             setFirstName(value);
         } else if (name === "lastName") {
             setLastName(value);
-        } else if (name === "uid") {
-            setUid(value);
-            setShowCreateButton(true); // Muestra el botón "Create User" cuando el campo UID está lleno
         }
     };
 
@@ -37,11 +34,12 @@ const CreateUser = () => {
     };
 
     const handleRequestUid = async () => {
-        setShowUidField(true);
         try {
             const response = await axios.get(`http://localhost:3333/uid/getUid`);
             if (response.data && response.data.uid) {
                 setUid(response.data.uid);
+                setShowUidField(true);
+                setShowCreateButton(true);
                 console.log("UID received:", response.data.uid);
             } else {
                 console.log("No UID received", response.data);
@@ -76,15 +74,7 @@ const CreateUser = () => {
                         />
                     </div>
                     {showUidField && (
-                        <div className="search-input">
-                            <input
-                                type="text"
-                                name="uid"
-                                value={uid}
-                                onChange={handleInputChange}
-                                placeholder="UID"
-                            />
-                        </div>
+                        <h3>UID Detected: {uid}</h3>
                     )}
 
                     <div className="button-group">
