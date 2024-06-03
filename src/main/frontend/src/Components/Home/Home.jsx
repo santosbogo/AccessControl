@@ -6,7 +6,11 @@ import axios from "axios";
 
 const HomePage = () => {
     const navigate = useNavigate();
-    const [showModal, setShowModal] = useState(false);
+    const [showLockDoors, setLockAllDoorsModal] = useState(false);
+    const [showUnlockDoors, setUnlockAllDoorsModal] = useState(false);
+    const [showReturnToNormal, setReturnToNormal] = useState(false);
+
+
 
     const handleManageUsers = () => {
         console.log('Redirect to manage users page');
@@ -19,17 +23,66 @@ const HomePage = () => {
     };
 
     const handleLockDoors = () => {
-        setShowModal(true);
+        setLockAllDoorsModal(true);
+    };
+
+    const handleUnlockDoors = () => {
+        setUnlockAllDoorsModal(true);
+    };
+
+    const handleReturnNormal = () => {
+        setReturnToNormal(true);
     };
 
     const handleConfirmLockDoors = async () => {
         console.log('Locking doors');
-        const response = await axios.post('http://localhost:3333/admin/lock');
-        setShowModal(false);
+        try{
+            const response = await axios.post('http://localhost:3333/admin/lock');
+            console.log(response.data);
+            setLockAllDoorsModal(false);
+        }
+        catch(error){
+            console.error('Error sending request:', error);
+        }
+
+    };
+
+    const handleConfirmUnlockDoors = async () => {
+        console.log('Locking doors');
+        try{
+            const response = await axios.post('http://localhost:3333/admin/unlock');
+            console.log(response.data);
+            setUnlockAllDoorsModal(false);
+        }
+        catch(error){
+            console.error('Error sending request:', error);
+        }
+
+    };
+
+    const handleReturnToNormalState = async () => {
+        console.log('Locking doors');
+        try{
+            const response = await axios.post('http://localhost:3333/admin/normal-state');
+            console.log(response.data);
+            setReturnToNormal(false);
+        }
+        catch(error){
+            console.error('Error sending request:', error);
+        }
+
     };
 
     const handleCancelLockDoors = () => {
-        setShowModal(false);
+        setLockAllDoorsModal(false);
+    };
+
+    const handleCancelUnlockDoors = () => {
+        setUnlockAllDoorsModal(false);
+    };
+
+    const handleCancelReturnToNormal = () => {
+        setReturnToNormal(false);
     };
 
 
@@ -44,15 +97,41 @@ const HomePage = () => {
             </div>
             <div>
                 <button className="lock-doors" onClick={handleLockDoors}>Lock Doors</button>
+                <button className="lock-doors" onClick={handleUnlockDoors}>Unlock Doors</button>
+                <button className="lock-doors" onClick={handleReturnNormal}>Return to normal state</button>
             </div>
 
-            {showModal && (
+            {showLockDoors && (
                 <div className="modal">
                     <div className="modal-content">
                         <h2>Are you sure you want to lock all doors?</h2>
                         <div className="modal-buttons">
                             <button onClick={handleConfirmLockDoors} className="confirm-button">Yes</button>
                             <button onClick={handleCancelLockDoors} className="cancel-button">No</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {showUnlockDoors && (
+                <div className="modal">
+                    <div className="modal-content">
+                        <h2>Are you sure you want to unlock all doors?</h2>
+                        <div className="modal-buttons">
+                            <button onClick={handleConfirmUnlockDoors} className="confirm-button">Yes</button>
+                            <button onClick={handleCancelUnlockDoors} className="cancel-button">No</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {showReturnToNormal && (
+                <div className="modal">
+                    <div className="modal-content">
+                        <h2>Are you sure you want to return to normal state of security?</h2>
+                        <div className="modal-buttons">
+                            <button onClick={handleReturnToNormalState} className="confirm-button">Yes</button>
+                            <button onClick={handleCancelReturnToNormal} className="cancel-button">No</button>
                         </div>
                     </div>
                 </div>

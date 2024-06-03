@@ -79,7 +79,7 @@ public class User{
 
     public String asJson() {
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("id", this.uid);
+        jsonObject.addProperty("uid", this.uid);
         jsonObject.addProperty("firstName", this.firstName);
         jsonObject.addProperty("lastName", this.lastName);
         return jsonObject.toString();
