@@ -4,6 +4,7 @@ import './Home.css'; // Importa los estilos CSS
 import axios from "axios";
 
 
+
 const HomePage = () => {
     const navigate = useNavigate();
     const [showLockDoors, setLockAllDoorsModal] = useState(false);
