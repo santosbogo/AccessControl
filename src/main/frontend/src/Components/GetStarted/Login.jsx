@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import './Login.css';
 import axios from "axios";
 
-
 const Login = () => {
     const [username, setUsername] = React.useState("");
     const [password, setPassword] = React.useState("");
@@ -36,9 +35,6 @@ const Login = () => {
             <div className="login-header">
                 <div className="login-title">
                     <div className="title"> Login </div>
-                </div>
-                <div className="logo">
-                    {/* Agrega tu logo aquí */}
                 </div>
             </div>
             <div className="login-inputs">

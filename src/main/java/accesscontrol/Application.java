@@ -77,6 +77,8 @@ public class Application {
             Spark.post("/user/add", userController::addUser);
             Spark.get("/users/findAll", userController::searchUsers);
             Spark.post("/user/deactivate/:id", userController::deactivateUser);
+            Spark.post("/user/activate/:id", userController::activateUser);
+
 
             Spark.get("/attempt/:date/getAttempt", attemptController::getAttempts);
             Spark.post("/admin/login", autController::createAuthentication);

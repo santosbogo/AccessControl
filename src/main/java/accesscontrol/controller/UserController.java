@@ -35,7 +35,7 @@ public class UserController{
     }
 
     public String searchUsers(Request req, Response res) {
-        List<User> foundUsers = users.findAllActive();
+        List<User> foundUsers = users.findAllUsers();
         List<UserDto> userDtos = new ArrayList<>();
         for (User user : foundUsers) {
             userDtos.add(new UserDto(user.getUid(), user.getFirstName(), user.getLastName()));
@@ -54,6 +54,21 @@ public class UserController{
             publisherMQTT.publishUsersList(users.findAllUsers(), client);
             res.status(200);
             return "User deactivated successfully.";
+        } else {
+            res.status(404);
+            return "User not found.";
+        }
+    }
+
+    public String activateUser(Request req, Response res) {
+        String userId = req.params("id");
+        User user = users.findUserByUid(userId);
+        if (user != null) {
+            user.activate();
+            users.persist(user); // Actualizar el usuario en la base de datos
+            publisherMQTT.publishUsersList(users.findAllUsers(), client);
+            res.status(200);
+            return "User activated successfully.";
         } else {
             res.status(404);
             return "User not found.";

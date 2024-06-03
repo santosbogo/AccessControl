@@ -9,7 +9,7 @@ const ManageUsers = () => {
     const [users, setUsers] = useState([]);
     const navigate = useNavigate();
     useEffect(() => {
-        const fetchActiveUsers = async () => {
+        const fetchAllUsers = async () => {
             try {
                 const response = await axios.get('http://localhost:3333/users/findAll');
                 setUsers(response.data);
@@ -18,7 +18,7 @@ const ManageUsers = () => {
             }
         };
 
-        fetchActiveUsers();
+        fetchAllUsers();
     }, []);
 
 
@@ -43,6 +43,15 @@ const ManageUsers = () => {
         }
     };
 
+    const handleActivateUser = async (userId) => {
+        console.log(userId);
+        try {
+            await axios.post(`http://localhost:3333/user/activate/${userId}`);
+            setUsers(users.filter(user => user.uid !== userId));
+        } catch (error) {
+            console.error('Error activating user:', error);
+        }
+    }
 
     return (
         <div className="home-page">
@@ -53,14 +62,18 @@ const ManageUsers = () => {
                 {users.length > 0 ? (
                     <ul>
                         {users.map(user => (
-                            <li key={user.id}>
+                            <li key={user.uid}>
                                 {user.firstName} {user.lastName}
-                                <button onClick={() => handleDeactivateUser(user.uid)}>Deactivate User</button>
+                                {user.state ? (
+                                    <button onClick={() => handleDeactivateUser(user.uid)}>Deactivate User</button>
+                                ) : (
+                                    <button onClick={() => handleActivateUser(user.uid)}>Activate User</button>
+                                )}
                             </li>
                         ))}
                     </ul>
                 ) : (
-                    <p>No active users found.</p>
+                    <p>No users found.</p>
                 )}
             </div>
         </div>
