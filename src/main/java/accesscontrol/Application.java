@@ -64,14 +64,14 @@ public class Application {
             Spark.post("/admin/lock", LockController::lockDoors);
             Spark.post("/admin/unlock", LockController::unlockDoors);
             Spark.post("/admin/normal-state", LockController::returnToNormal);
-          Spark.get("/attempt/:date/getAttempt", attemptController::getAttempts);
-          Spark.post("/admin/login", autController::createAuthentication);
-          Spark.post("/user/login", autController::createAuthentication);
-          Spark.post("/user/logout", autController::deleteAuthentication);
-          Spark.get("/user/verify", autController::getCurrentUser);
-          Spark.get("/uid/getUid", uidController::requestUid);
-          Spark.post("/user/add", userController::addUser);
-        //Spark.post("/admin/lock", LockController::lockDoors);
+            Spark.get("/attempt/:date/getAttempt", attemptController::getAttempts);
+            Spark.post("/admin/login", autController::createAuthentication);
+            Spark.post("/user/login", autController::createAuthentication);
+            Spark.post("/user/logout", autController::deleteAuthentication);
+            Spark.get("/user/verify", autController::getCurrentUser);
+            Spark.get("/uid/getUid", uidController::requestUid);
+            Spark.post("/user/add", userController::addUser);
+            //Spark.post("/admin/lock", LockController::lockDoors);
 
 
             client.setCallback(new MqttCallback() {
