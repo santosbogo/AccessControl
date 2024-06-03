@@ -114,10 +114,16 @@ const HomePage = () => {
             <div className="button-container">
                 <button onClick={handleViewHistory}>View History</button>
             </div>
-            <div className="button-container">
-                <button className="lock-doors" onClick={handleLockDoors}>Lock Doors</button>
-                <button className="lock-doors" onClick={handleUnlockDoors}>Unlock Doors</button>
-                <button className="lock-doors" onClick={handleReturnNormal}>Return to normal state</button>
+            <div className="button-group">
+                <div className="button-container">
+                    <button className="button-spacing" onClick={handleLockDoors}>Lock Doors</button>
+                </div>
+                <div className="button-container">
+                    <button className="button-spacing" onClick={handleUnlockDoors}>Unlock Doors</button>
+                </div>
+                <div className="button-container">
+                    <button className="button-spacing" onClick={handleReturnNormal}>Return to normal state</button>
+                </div>
             </div>
             <div className='button-container'>
                 <button onClick={handleLogout}>Log Out</button>

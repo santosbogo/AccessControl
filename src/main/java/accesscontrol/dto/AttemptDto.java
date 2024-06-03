@@ -33,7 +33,7 @@ public class AttemptDto {
     }
 
     public Boolean getState() {
-        return Boolean.parseBoolean(state);
+        return "1".equals(state);
     }
 
     public String getPersonId() {

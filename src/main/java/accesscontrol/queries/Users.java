@@ -14,8 +14,10 @@ public class Users {
 
     }
 
-    public User findUserByUid(Long uid) {
-        return entityManager().find(User.class, uid);
+    public User findUserByUid(String uid) {
+        TypedQuery<User> query = entityManager().createQuery("SELECT u FROM User u WHERE u.uid = :uid", User.class);
+        query.setParameter("uid", uid);
+        return query.getSingleResult();
     }
 
     public List<User> findAllUsers() {
