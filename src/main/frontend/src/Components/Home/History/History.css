@@ -1,15 +1,14 @@
-/* Main body and layout styling */
+
 body {
-    background-color: #121830; /* Dark navy blue background */
-    color: #d0e0ff; /* Light blue text color for readability */
-    font-family: 'Arial', sans-serif; /* Modern, sans-serif font */
+    background-color: #121830;
+    color: #d0e0ff;
+    font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 20px;
 
 }
-/* Estilos base para view-history */
 .view-history {
-    width: 80%; /* Hace que el ancho sea relativo al ancho del viewport */
+    width: 80%;
     max-width: 2500px;
     margin: auto;
     padding: 50px;
@@ -25,11 +24,10 @@ body {
     position: relative;
 }
 
-/* Media Queries */
 @media (max-width: 768px) {
     .view-history {
-        width: 95%; /* Aumenta el ancho en dispositivos más pequeños para usar más espacio */
-        padding: 20px; /* Reduce el padding para dispositivos más pequeños */
+        width: 95%;
+        padding: 20px;
     }
 
     .header-container, .history-list-container {
@@ -37,26 +35,26 @@ body {
     }
 
     input[type="date"], ul, p, li {
-        font-size: 14px; /* Reduce el tamaño de la fuente para mejorar la legibilidad en pantallas pequeñas */
+        font-size: 14px;
     }
 }
 
 @media (max-width: 480px) {
     .view-history {
-        width: 100%; /* Utiliza todo el ancho disponible en dispositivos muy pequeños */
+        width: 100%;
     }
 
     input[type="date"] {
-        padding: 10px 15px; /* Ajusta el padding para conservar espacio */
+        padding: 10px 15px;
     }
 }
-/* Styling for the headers */
+
 h1, h2 {
-    color: #1a1f2e; /* Bright blue color */
-    text-shadow: white 5px 0px 10px; /* White shadow for emphasis */
+    color: #1a1f2e;
+    text-shadow: white 5px 0px 10px;
 }
 .header-container {
-    padding: 20px; /* Ajusta según necesidad */
+    padding: 20px;
 }
 
 .history-list-container {
@@ -70,7 +68,6 @@ h1, h2 {
     border-radius: 8px;
 }
 
-/* Input and button styling */
 input[type="date"] {
     appearance: none; /* Remueve estilos predeterminados del navegador */
     background-color: #cccccc; /* Dark blue background */
@@ -86,10 +83,9 @@ input[type="date"] {
 }
 
 p {
-    color: #8080a0; /* Greyish blue text for less emphasis */
+    color: #ececf3; /* Greyish blue text for less emphasis */
 }
 
-/* Add some space around components */
 input, ul, p {
     margin-top: 15px;
 }
@@ -97,7 +93,7 @@ input, ul, p {
     max-height: 400px; /* Ajusta la altura máxima según tus necesidades */
     overflow-y: auto; /* Habilita el desplazamiento vertical */
     border: 2px solid #004880; /* Borde azul para el marco */
-    background-color: rgba(204, 204, 204, 0.5);
+    background-color: rgba(255, 255, 255, 0.5);
     padding: 15px;
     margin-top: 10px;
     box-shadow: 0 2px 5px rgba(0, 120, 255, 0.4); /* Sombra para efecto visual */
@@ -105,12 +101,12 @@ input, ul, p {
 }
 
 ul {
-    padding: 0; /* Elimina el padding predeterminado */
-    margin: 0; /* Elimina el margen predeterminado */
+    padding: 0;
+    margin: 0;
 }
 
 li {
-    background-color: #242850; /* Fondo oscuro para cada elemento */
+    background-color: #242850;
     padding: 10px;
     margin-top: 5px;
     border-radius: 5px; /* Bordes redondeados para los elementos de la lista */

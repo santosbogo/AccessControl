@@ -1,19 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "./ManageUsers.css"; // Importar los estilos CSS
 import { Link } from 'react-router-dom'; // Importar Link si es necesario
 
-
 const ManageUsers = () => {
-    const [searchTerm, setSearchTerm] = useState("");
+    const [users, setUsers] = useState([]);
     const navigate = useNavigate();
-    const [users, setUsers] = useState([
-        { id: 1, name: "John Doe", email: "john@example.com" },
-        { id: 2, name: "Jane Smith", email: "jane@example.com" },
-        { id: 3, name: "Alice Johnson", email: "alice@example.com" },
-        { id: 4, name: "Bob Brown", email: "bob@example.com" },
-        { id: 5, name: "Emma Davis", email: "emma@example.com" }
-    ]);
+    useEffect(() => {
+        const fetchActiveUsers = async () => {
+            try {
+                const response = await axios.get('http://localhost:3333/users/findAll');
+                setUsers(response.data);
+            } catch (error) {
+                console.error('Error fetching active users:', error);
+            }
+        };
+
+        fetchActiveUsers();
+    }, []);
+
+
     const handleCreateUser = () => {
         console.log("Redirect to create new user page");
         navigate("/Home/manage-users/create");
@@ -24,40 +31,35 @@ const ManageUsers = () => {
         navigate(`/home/manage-users/edit/${userId}`);
     };
 
-    const handleDeleteUser = (userId) => {
-        console.log(`Delete user with ID ${userId}`);
-        // Aquí añadir lógica para confirmar y eliminar usuario
+
+    const handleDeactivateUser = async (userId) => {
+        try {
+            await axios.post(`http://localhost:3333/user/deactivate/${userId}`);
+            setUsers(users.filter(user => user.id !== userId));
+        } catch (error) {
+            console.error('Error deactivating user:', error);
+        }
     };
 
-    const handleSearchChange = (event) => {
-        setSearchTerm(event.target.value);
-    };
-
-    const handleSearchSubmit = (event) => {
-        event.preventDefault();
-        console.log(`Searching for users with term: ${searchTerm}`);
-
-        // Aquí implementar lógica para enviar la búsqueda a la base de datos
-        // Por ejemplo, una llamada a API para obtener los usuarios filtrados
-    };
 
     return (
         <div className="manage-users">
             <div className="main-title">Manage Users</div>
             <button onClick={handleCreateUser}>Create New User</button>
-            <form onSubmit={handleSearchSubmit}>
-                <input className={"search-input"}
-                    type="text"
-                    placeholder="Search users by name..."
-                    value={searchTerm}
-                    onChange={handleSearchChange}
-                />
-                <button type="submit"> Search</button>
-                <Link to="/Home/" className="home-button">Home</Link>
-            </form>
-            <div>
-                {/* Aquí se debería renderizar la lista de usuarios buscados */}
-                {/* Por ejemplo, después de la búsqueda, los usuarios podrían estar en un estado y mapeados aquí */}
+            <Link to="/Home/" className="home-button">Home</Link>
+            <div className="user-list">
+                {users.length > 0 ? (
+                    <ul>
+                        {users.map(user => (
+                            <li key={user.id}>
+                                {user.firstName} {user.lastName}
+                                <button onClick={() => handleDeactivateUser(user.id)}>Deactivate User</button>
+                            </li>
+                        ))}
+                    </ul>
+                ) : (
+                    <p>No active users found.</p>
+                )}
             </div>
         </div>
     );

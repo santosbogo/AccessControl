@@ -34,4 +34,28 @@ public class UserController{
         return user.asJson();
     }
 
+    public String searchUsers(Request req, Response res) {
+        List<User> foundUsers = users.findAllActive();
+        List<UserDto> userDtos = new ArrayList<>();
+        for (User user : foundUsers) {
+            userDtos.add(new UserDto(user.getUid(), user.getFirstName(), user.getLastName()));
+        }
+        res.type("application/json");
+        return gson.toJson(userDtos);
+    }
+
+
+    public String deactivateUser(Request req, Response res) {
+        Long userId = Long.parseLong(req.params("id"));
+        User user = users.findUserByUid(userId);
+        if (user != null) {
+            user.deactivate();
+            users.persist(user); // Actualizar el usuario en la base de datos
+            res.status(200);
+            return "User deactivated successfully.";
+        } else {
+            res.status(404);
+            return "User not found.";
+        }
+    }
 }
