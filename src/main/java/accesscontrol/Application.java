@@ -16,7 +16,7 @@ import static spark.Spark.*;
 
 public class Application {
     static Gson gson = new Gson();
-    static String broker = "tcp://18.234.56.90:1883";
+    static String broker = "tcp://54.89.103.143:1883";
     static String clientId = "JavaClient";
     public static void main(String[] args) {
         final EntityManagerFactory factory = Persistence.createEntityManagerFactory("accessControlDB");
@@ -28,7 +28,7 @@ public class Application {
         UidController uidController = new UidController();
         UserController userController = new UserController();
         LockController LockController = new LockController();
-        PublisherMQTT publisher = new PublisherMQTT();
+        //PublisherMQTT publisher = new PublisherMQTT();
 
         Spark.port(3333);
 
@@ -49,20 +49,20 @@ public class Application {
         Spark.post("/admin/login", adminController::loginAdmin);
         Spark.get("/uid/getUid", uidController::requestUid);
         Spark.post("/user/add", userController::addUser);
-        Spark.post("/admin/lock", LockController::lockDoors);
+        //Spark.post("/admin/lock", LockController::lockDoors);
 
         try {
             MqttClient client = new MqttClient(broker, clientId);
             MqttConnectOptions options = new MqttConnectOptions();
             options.setCleanSession(true);
 
-            CollectController collectController = new CollectController(client);
+            //CollectController collectController = new CollectController(client);
 
             System.out.println("Connecting to MQTT broker: " + broker);
             client.connect(options);
             System.out.println("Connected");
 
-            publisher.publishUserCreation(client, "test1");
+            //publisher.publishUserCreation(client, "test1");
 
             client.setCallback(new MqttCallback() {
                 public void connectionLost(Throwable cause) {
@@ -123,6 +123,5 @@ public class Application {
             Thread.currentThread().interrupt();
             System.out.println("Thread interrupted");
         }
-
     }
 }

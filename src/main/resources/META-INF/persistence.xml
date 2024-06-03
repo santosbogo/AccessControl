@@ -2,23 +2,23 @@
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
              version="2.0">
-    <persistence-unit name="accessControlDB">
-        <class>accesscontrol.model.User</class>
-        <class>accesscontrol.model.AccessAttempt</class>
-        <class>accesscontrol.model.ExitButton</class>
-        <class>accesscontrol.model.Admin</class>
+<persistence-unit name="accessControlDB">
+    <class>accesscontrol.model.User</class>
+    <class>accesscontrol.model.AccessAttempt</class>
+    <class>accesscontrol.model.ExitButton</class>
+    <class>accesscontrol.model.Admin</class>
 
-        <properties>
-            <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
-            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://172.31.22.162:3306/AccessControlDB"/>
-            <property name="javax.persistence.jdbc.user" value="Application"/>
-            <property name="javax.persistence.jdbc.password" value="AccessControl2024!"/>
-            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
+    <properties>
+        <property name="javax.persistence.jdbc.driver" value="org.hsqldb.jdbc.JDBCDriver"/>
+        <property name="javax.persistence.jdbc.url" value="jdbc:hsqldb:hsql://localhost/accessControlDB;shutdown=true"/>
+        <property name="javax.persistence.jdbc.user" value="sa"/>
+        <property name="javax.persistence.jdbc.password" value=""/>
+        <property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect"/>
 
-            <property name="hibernate.show_sql" value="true"/>
-            <property name="hibernate.hbm2ddl.auto" value="update"/>
-        </properties>
+        <property name="hibernate.show_sql" value="true"/>
+        <property name="hibernate.hbm2ddl.auto" value="create"/>
+    </properties>
 
-    </persistence-unit>
-
+</persistence-unit>
 </persistence>
+

@@ -18,7 +18,6 @@ public class User{
         this.userId = id;
     }
 
-    @Id
     @Column(nullable = false, unique = true)
     private String uid;
 
@@ -51,9 +50,6 @@ public class User{
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
-
-    @Column(nullable = false)
-    private String Username;
 
     @Column()
     private boolean state;

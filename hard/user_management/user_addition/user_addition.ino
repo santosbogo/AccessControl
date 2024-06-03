@@ -20,7 +20,7 @@ WiFiClient WIFI_CLIENT;
 PubSubClient MQTT_CLIENT(WIFI_CLIENT);
 
 // MQTT instance
-#define PUBLIC_IP "54.145.204.191"
+#define PUBLIC_IP "54.89.103.143"
 
 // Topic name
 #define NEW_USER_TOPIC "new_user"

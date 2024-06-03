@@ -1,11 +1,11 @@
 package accesscontrol.controller;
 
 import com.google.gson.*;
-import org.eclipse.paho.client.mqttv3.*;
 import spark.Request;
 import spark.Response;
 
 public class LockController {
+  /*
   private final Gson gson = new Gson();
   private MqttClient client;
 
@@ -32,4 +32,6 @@ public class LockController {
       return "{\"status\":\"error\", \"message\":\"Failed to lock doors.\"}";
     }
   }
+
+   */
 }

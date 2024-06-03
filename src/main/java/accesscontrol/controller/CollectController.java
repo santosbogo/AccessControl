@@ -4,11 +4,13 @@ import accesscontrol.dto.*;
 import accesscontrol.model.*;
 import accesscontrol.queries.*;
 import com.google.gson.*;
-import org.eclipse.paho.client.mqttv3.*;
 
 import java.util.*;
 
+
 public class CollectController {
+  /*
+
   private final Users users;
   private final Gson gson = new Gson();
   private MqttClient client;
@@ -30,4 +32,6 @@ public class CollectController {
       e.printStackTrace();
     }
   }
+
+ */
 }
