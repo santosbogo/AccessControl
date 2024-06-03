@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import './Home.css'; // Importa los estilos CSS
+import authentication from '../Hoc/Hoc';
 import axios from "axios";
 
 
@@ -87,6 +88,23 @@ const HomePage = () => {
     };
 
 
+    const handleLogout = async () => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            try {
+                await axios.post('http://localhost:3333/user/logout', {}, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                localStorage.removeItem('token');
+                navigate('/login');
+            } catch (error) {
+                console.error('Failed to invalidate the token on the server:', error);
+            }
+        }
+    };
+
     return (
         <div className="home-page">
             <div className="main-title">Welcome to the Access Control System</div>
@@ -96,12 +114,14 @@ const HomePage = () => {
             <div className="button-container">
                 <button onClick={handleViewHistory}>View History</button>
             </div>
-            <div>
+            <div className="button-container">
                 <button className="lock-doors" onClick={handleLockDoors}>Lock Doors</button>
                 <button className="lock-doors" onClick={handleUnlockDoors}>Unlock Doors</button>
                 <button className="lock-doors" onClick={handleReturnNormal}>Return to normal state</button>
             </div>
-
+            <div className='button-container'>
+                <button onClick={handleLogout}>Log Out</button>
+            </div>
             {showLockDoors && (
                 <div className="modal">
                     <div className="modal-content">
@@ -141,4 +161,4 @@ const HomePage = () => {
     );
 };
 
-export default HomePage;
+export default authentication(HomePage);

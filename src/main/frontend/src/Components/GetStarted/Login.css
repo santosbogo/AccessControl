@@ -57,6 +57,24 @@
     gap: 25px;
 }
 
+.button, .logout {
+    padding: 15px 30px;
+    border: none;
+    border-radius: 30px;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 600;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: linear-gradient(to right, #007bff, #0056b3);
+    font-family: 'Poppins', sans-serif;
+}
+
 .login-input {
     display: flex;
     align-items: center;

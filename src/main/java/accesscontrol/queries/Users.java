@@ -58,4 +58,5 @@ public class Users {
         entityManager().remove(user);
         entityManager().getTransaction().commit();
     }
+
 }

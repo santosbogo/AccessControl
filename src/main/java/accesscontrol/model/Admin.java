@@ -18,6 +18,14 @@ public class Admin {
   @Column(nullable = false)
   private String password;
 
+  public String getUsername() {
+    return username;
+  }
+  public String getPassword() {
+    return password;
+  }
+
+
   public Admin(String firstName, String lastName, String username,  String password) {
     this.username = username;
     this.firstName = firstName;

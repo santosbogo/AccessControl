@@ -12,7 +12,7 @@ public class Admins {
 
   }
 
-  public Admin findAdminByUsernam(String username) {
+  public Admin findAdminByUsername(String username) {
     TypedQuery<Admin> query = entityManager().createQuery("SELECT a " +
       "FROM Admin a " +
       "WHERE a.username LIKE :username", Admin.class);
