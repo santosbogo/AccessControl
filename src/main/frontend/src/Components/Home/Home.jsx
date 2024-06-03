@@ -32,6 +32,7 @@ const HomePage = () => {
         setShowModal(false);
     };
 
+
     return (
         <div className="home-page">
             <div className="main-title">Welcome to the Access Control System</div>
