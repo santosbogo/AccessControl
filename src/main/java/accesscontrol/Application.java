@@ -24,32 +24,6 @@ public class Application {
 
         ExitController exitController = new ExitController();
         AttemptController attemptController = new AttemptController();
-        AdminController adminController = new AdminController();
-        UidController uidController = new UidController();
-        UserController userController = new UserController();
-        LockController LockController = new LockController();
-        PublisherMQTT publisher = new PublisherMQTT();
-
-        Spark.port(3333);
-
-        before((req, resp) -> {
-            resp.header("Access-Control-Allow-Origin", "*");
-            resp.header("Access-Control-Allow-Headers", "*");
-            resp.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT, PATCH, OPTIONS");
-            resp.header("Access-Control-Allow-Credentials", "true");
-
-        });
-
-        options("/*", (req, resp) -> {
-            resp.status(200);
-            return "ok";
-        });
-
-        Spark.get("/attempt/:date/getAttempt", attemptController::getAttempts);
-        Spark.post("/admin/login", adminController::loginAdmin);
-        Spark.get("/uid/getUid", uidController::requestUid);
-        Spark.post("/user/add", userController::addUser);
-        //Spark.post("/admin/lock", LockController::lockDoors);
 
         try {
             MqttClient client = new MqttClient(broker, clientId);
@@ -62,7 +36,35 @@ public class Application {
             client.connect(options);
             System.out.println("Connected");
 
-            //publisher.publishUserCreation(client, "test1");
+            AdminController adminController = new AdminController();
+            UidController uidController = new UidController();
+            UserController userController = new UserController(client);
+            LockController LockController = new LockController(client);
+            PublisherMQTT publisher = new PublisherMQTT();
+
+            Spark.port(3333);
+
+            before((req, resp) -> {
+                resp.header("Access-Control-Allow-Origin", "*");
+                resp.header("Access-Control-Allow-Headers", "*");
+                resp.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT, PATCH, OPTIONS");
+                resp.header("Access-Control-Allow-Credentials", "true");
+
+            });
+
+            options("/*", (req, resp) -> {
+                resp.status(200);
+                return "ok";
+            });
+
+            Spark.get("/attempt/:date/getAttempt", attemptController::getAttempts);
+            Spark.post("/admin/login", adminController::loginAdmin);
+            Spark.get("/uid/getUid", uidController::requestUid);
+            Spark.post("/user/add", userController::addUser);
+            Spark.post("/admin/lock", LockController::lockDoors);
+            Spark.post("/admin/unlock", LockController::unlockDoors);
+            Spark.post("/admin/normal-state", LockController::returnToNormal);
+
 
             client.setCallback(new MqttCallback() {
                 public void connectionLost(Throwable cause) {
@@ -123,5 +125,7 @@ public class Application {
             Thread.currentThread().interrupt();
             System.out.println("Thread interrupted");
         }
+
+
     }
 }

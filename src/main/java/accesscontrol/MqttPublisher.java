@@ -1,8 +1,10 @@
 package accesscontrol;
 
+import accesscontrol.model.User;
 import com.google.gson.Gson;
 import org.eclipse.paho.client.mqttv3.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -13,15 +15,33 @@ public class MqttPublisher {
         return gson.toJson(users);
     }
 
-    public void publishUsersList(List<String> users, MqttClient client) {
-        String jsonUsers = convertListToJson(users);
-        MqttMessage message = new MqttMessage(jsonUsers.getBytes());
-        message.setQos(2);
+    public void publishNewState(MqttMessage state, MqttClient client) {
+        state.setQos(2);
         try {
-            client.publish("users/topic", message);
+            client.publish("state", state);
         } catch (MqttException e) {
             e.printStackTrace();
         }
+    }
+
+    public void publishUsersList(List<User> users, MqttClient client) {
+        List<String> usersJson = convertUsersListToJson(users);
+        String jsonUsers = convertListToJson(usersJson);
+        MqttMessage message = new MqttMessage(jsonUsers.getBytes());
+        message.setQos(2);
+        try {
+            client.publish("users", message);
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private List<String> convertUsersListToJson(List<User> users) {
+        ArrayList<String> usersJson = new ArrayList<>();
+        for (User user : users) {
+            usersJson.add(user.asJson());
+        }
+        return usersJson;
     }
 
 

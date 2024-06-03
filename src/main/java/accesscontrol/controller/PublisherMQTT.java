@@ -3,7 +3,7 @@ import org.eclipse.paho.client.mqttv3.*;
 
 public class PublisherMQTT {
 
-    public static void publishUserCreation(MqttClient client, String username) {
+    public void publishUserCreation(MqttClient client, String username) {
         try {
             MqttMessage message = new MqttMessage(username.getBytes());
             client.publish("user", message);
