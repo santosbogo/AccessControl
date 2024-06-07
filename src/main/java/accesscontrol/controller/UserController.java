@@ -38,7 +38,7 @@ public class UserController{
         List<User> foundUsers = users.findAllUsers();
         List<StateUserDto> stateUserDtos = new ArrayList<>();
         for (User user : foundUsers) {
-            stateUserDtos.add(new StateUserDto(user.getUid(), user.getFirstName(), user.getLastName(), user.state()));
+            stateUserDtos.add(new StateUserDto(user.getUid(), user.getFirstName(), user.getLastName(), String.valueOf(user.state())));
         }
         res.type("application/json");
         return gson.toJson(stateUserDtos);

@@ -3,8 +3,8 @@ public class StateUserDto {
   String uid;
   String firstName;
   String lastName;
-  Boolean state;
-  public StateUserDto(String uid, String firstName, String lastName, Boolean state){
+  String state;
+  public StateUserDto(String uid, String firstName, String lastName, String state){
     this.uid = uid;
     this.firstName = firstName;
     this.lastName = lastName;
@@ -23,7 +23,7 @@ public class StateUserDto {
     return lastName;
   }
 
-    public boolean getState(){
-        return state;
+  public boolean getState(){
+        return Boolean.valueOf(state);
     }
 }
