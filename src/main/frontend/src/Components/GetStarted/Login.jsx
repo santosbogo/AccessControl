@@ -58,9 +58,8 @@ const Login = () => {
                 </div>
             </div>
 
-            <div className="general-error-message"></div>
-
-            <button className="login-button" onClick={login}>Login</button>
+            {loginError &&
+                <div className="error-message" style={{color: 'red', textAlign: 'center'}}>{loginError}</div>}            <button className="login-button" onClick={login}>Login</button>
         </div>
     );
 }
