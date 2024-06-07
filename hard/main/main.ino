@@ -70,7 +70,7 @@ int numUsers = 0;            // Actual number of users registred
 String adminkey = "123456";  //Deffault admin password
 
 //MQTT instance
-#define PUBLIC_IP "54.236.15.136"
+#define PUBLIC_IP "107.22.141.233"
 
 
 void setup() {

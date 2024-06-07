@@ -1,15 +1,12 @@
 package accesscontrol;
 
 import accesscontrol.controller.*;
-import accesscontrol.dto.*;
 import accesscontrol.model.Admin;
 import com.google.gson.Gson;
-import org.eclipse.paho.client.mqttv3.*;
 import spark.*;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import java.time.*;
 
 import static accesscontrol.EntityManagerController.*;
 import static spark.Spark.*;
@@ -17,133 +14,67 @@ import static spark.Spark.*;
 
 public class Application {
     static Gson gson = new Gson();
-    static String broker = "tcp://54.236.15.136";
-    static String clientId = "JavaClient";
+    private static final String broker = "tcp://107.22.141.233:1883";
+
     public static void main(String[] args) {
         final EntityManagerFactory factory = Persistence.createEntityManagerFactory("accessControlDB");
         setFactory(factory);
 
+        MQTTPublisher mqttPublisher = new MQTTPublisher(broker);
+
         AuthenticationController autController = new AuthenticationController();
         ExitController exitController = new ExitController();
+        AdminController adminController = new AdminController();
         AttemptController attemptController = new AttemptController();
+        UidController uidController = new UidController();
+
+        UserController userController = new UserController(mqttPublisher);
+        LockController LockController = new LockController(mqttPublisher);
+
+        MQTTListener mqttListener = new MQTTListener(broker, exitController, attemptController, uidController);
+
+        Admin adminUser = new Admin("Fernando", "Lichtschein", "taylor", "swift");
+        adminController.addAdmin(adminUser);
+
+        Spark.port(3333);
+
+        before((req, resp) -> {
+            resp.header("Access-Control-Allow-Origin", "*");
+            resp.header("Access-Control-Allow-Headers", "*");
+            resp.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT, PATCH, OPTIONS");
+            resp.header("Access-Control-Allow-Credentials", "true");
+
+        });
+
+        options("/*", (req, resp) -> {
+            resp.status(200);
+            return "ok";
+        });
+
+        //attempts & exits
+        Spark.get("/attempt/getAttempt", attemptController::getAttempts);
+        Spark.get("/exit/getExits", exitController::getExits);
+        Spark.get("/uid/getUid", uidController::requestUid);
+        //admin
+        Spark.post("/admin/login", autController::createAuthentication);
+        Spark.post("/admin/normal-state", LockController::returnToNormal);
+        Spark.post("/admin/lock", LockController::lockDoors);
+        Spark.post("/admin/unlock", LockController::unlockDoors);
+        //authentication
+        Spark.get("/user/verify", autController::getCurrentUser);
+        Spark.post("/user/login", autController::createAuthentication);
+        Spark.post("/user/logout", autController::deleteAuthentication);
+        //user
+        Spark.post("/user/add", userController::addUser);
+        Spark.get("/user/verify", autController::getCurrentUser);
+        Spark.get("/users/findAll", userController::searchUsers);
+        Spark.post("/user/deactivate/:id", userController::deactivateUser);
+        Spark.post("/user/activate/:id", userController::activateUser);
 
         try {
-            MqttClient client = new MqttClient(broker, clientId);
-            MqttConnectOptions options = new MqttConnectOptions();
-            options.setCleanSession(true);
-
-            //CollectController collectController = new CollectController(client);
-
-            System.out.println("Connecting to MQTT broker: " + broker);
-            client.connect(options);
-            System.out.println("Connected");
-
-            AdminController adminController = new AdminController();
-            UidController uidController = new UidController();
-            UserController userController = new UserController(client);
-            LockController LockController = new LockController(client);
-            PublisherMQTT publisher = new PublisherMQTT();
-
-            Admin adminUser = new Admin("Fernando", "Lichtschein", "taylor", "swift");
-            adminController.addAdmin(adminUser);
-
-            Spark.port(3333);
-
-            before((req, resp) -> {
-                resp.header("Access-Control-Allow-Origin", "*");
-                resp.header("Access-Control-Allow-Headers", "*");
-                resp.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT, PATCH, OPTIONS");
-                resp.header("Access-Control-Allow-Credentials", "true");
-
-            });
-
-            options("/*", (req, resp) -> {
-                resp.status(200);
-                return "ok";
-            });
-
-            //attempts & exits
-            Spark.get("/attempt/getAttempt", attemptController::getAttempts);
-            Spark.get("/exit/getExits", exitController::getExits);
-            Spark.get("/uid/getUid", uidController::requestUid);
-            //admin
-            Spark.post("/admin/login", autController::createAuthentication);
-            Spark.post("/admin/normal-state", LockController::returnToNormal);
-            Spark.post("/admin/lock", LockController::lockDoors);
-            Spark.post("/admin/unlock", LockController::unlockDoors);
-            //authentication
-            Spark.get("/user/verify", autController::getCurrentUser);
-            Spark.post("/user/login", autController::createAuthentication);
-            Spark.post("/user/logout", autController::deleteAuthentication);
-            //user
-            Spark.post("/user/add", userController::addUser);
-            Spark.get("/user/verify", autController::getCurrentUser);
-            Spark.get("/users/findAll", userController::searchUsers);
-            Spark.post("/user/deactivate/:id", userController::deactivateUser);
-            Spark.post("/user/activate/:id", userController::activateUser);
-            //Spark.post("/admin/lock", LockController::lockDoors);
-
-
-            client.setCallback(new MqttCallback() {
-                public void connectionLost(Throwable cause) {
-                    System.out.println("Connection to MQTT broker lost!");
-                }
-
-                public void messageArrived(String topic, MqttMessage message) throws Exception {
-                    String messageString = new String(message.getPayload());
-                    System.out.println("Message received:\n\tTopic: " + topic + "\n\tMessage: " + messageString);
-
-                    if (topic.equals("exit")) {
-                        DateTimeMessage dateTimeMessage = gson.fromJson(messageString, DateTimeMessage.class);
-
-                        LocalDate date = dateTimeMessage.getDate();
-                        LocalTime time = dateTimeMessage.getTime();
-
-                        System.out.println("Date: " + date);
-                        System.out.println("Time: " + time);
-
-                        exitController.addExit(date, time);
-
-                    }
-                    else if(topic.equals("access")) {
-                        AttemptDto accessEvent = gson.fromJson(messageString, AttemptDto.class);
-
-                        String uid = accessEvent.getCardId();
-                        LocalDate date = accessEvent.getDate();
-                        LocalTime time = accessEvent.getTime();
-                        Boolean status = accessEvent.getState();
-
-                        System.out.println("UID: " + uid);
-                        System.out.println("Date: " + date);
-                        System.out.println("Time: " + time);
-                        System.out.println("Status: " + status);
-
-                        attemptController.addAttempt(uid, date, time, status);
-                    }
-
-                }
-
-                public void deliveryComplete(IMqttDeliveryToken token) {
-                    // Not needed for a subscriber, only publisher
-                }
-            });
-
-            client.subscribe("#");
-            Thread.sleep(60000);
-            client.disconnect();
-            System.out.println("Disconnected");
-        } catch (MqttException me) {
-            System.out.println("Reason " + me.getReasonCode());
-            System.out.println("Msg " + me.getMessage());
-            System.out.println("Loc " + me.getLocalizedMessage());
-            System.out.println("Cause " + me.getCause());
-            System.out.println("Excep " + me);
-            me.printStackTrace();
-        } catch (InterruptedException ie) {
-            Thread.currentThread().interrupt();
-            System.out.println("Thread interrupted");
+            Thread.currentThread().join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
-
-
     }
 }
