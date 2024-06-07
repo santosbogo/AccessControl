@@ -39,6 +39,7 @@ public class Main {
         users.add(new User("hougiyf", "Maria", "Gomez"));
         users.add(new User("jugkyey54", "Pedro", "Rodriguez"));
         users.add(new User("srw654hiuth9", "Ana", "Martinez"));
+        users.add(new User("a3 53 e8 f4", "Carlos", "Lopez"));
 
         //a3 53 e8 f4
 
@@ -66,6 +67,10 @@ public class Main {
         AccessAttempt accessAttempt3 = new AccessAttempt("srw654hiuth9", java.time.LocalDate.now(), LocalTime.now(), true);
         entityManager.getTransaction().begin();
         entityManager.persist(accessAttempt3);
+        entityManager.getTransaction().commit();
+        AccessAttempt accessAttempt4 = new AccessAttempt("a3 53 e8 f4", java.time.LocalDate.of(2024, 06, 05), LocalTime.now(), true);
+        entityManager.getTransaction().begin();
+        entityManager.persist(accessAttempt4);
         entityManager.getTransaction().commit();
     }
 

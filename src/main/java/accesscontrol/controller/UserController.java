@@ -33,12 +33,12 @@ public class UserController{
 
     public String searchUsers(Request req, Response res) {
         List<User> foundUsers = users.findAllUsers();
-        List<UserDto> userDtos = new ArrayList<>();
+        List<StateUserDto> stateUserDtos = new ArrayList<>();
         for (User user : foundUsers) {
-            userDtos.add(new UserDto(user.getUid(), user.getFirstName(), user.getLastName()));
+            stateUserDtos.add(new StateUserDto(user.getUid(), user.getFirstName(), user.getLastName(), String.valueOf(user.state())));
         }
         res.type("application/json");
-        return gson.toJson(userDtos);
+        return gson.toJson(stateUserDtos);
     }
 
 
