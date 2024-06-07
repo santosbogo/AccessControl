@@ -17,7 +17,7 @@ import static spark.Spark.*;
 
 public class Application {
     static Gson gson = new Gson();
-    static String broker = "tcp://54.89.103.143:1883";
+    static String broker = "tcp://54.236.15.136";
     static String clientId = "JavaClient";
     public static void main(String[] args) {
         final EntityManagerFactory factory = Persistence.createEntityManagerFactory("accessControlDB");
