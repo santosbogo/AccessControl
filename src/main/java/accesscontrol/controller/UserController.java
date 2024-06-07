@@ -1,5 +1,5 @@
 package accesscontrol.controller;
-import accesscontrol.MqttPublisher;
+import accesscontrol.MQTTPublisher;
 import accesscontrol.dto.*;
 import accesscontrol.model.*;
 import com.google.gson.Gson;
@@ -12,15 +12,12 @@ import java.util.*;
 
 public class UserController{
     private final Users users;
-    private final MqttClient client;
-    private final MqttPublisher publisherMQTT;
+    private final MQTTPublisher mqttPublisher;
 
     private final Gson gson = new Gson();
-    public UserController(MqttClient client) {
-        this.client = client;
+    public UserController(MQTTPublisher mqttPublisher) {
+        this.mqttPublisher = mqttPublisher;
         this.users = new Users();
-        this.publisherMQTT = new MqttPublisher();
-
     }
     public String addUser(Request req, Response res){
         UserDto userDto = gson.fromJson(req.body(), UserDto.class);
@@ -29,7 +26,7 @@ public class UserController{
         String lastName = userDto.getLastName();
         User user = new User(uid, name, lastName);
         users.persist(user);
-        publisherMQTT.publishUsersList(users.findAllUsers(), client);
+        mqttPublisher.publishUsersList(users.findAllUsers());
         res.type("application/json");
         return user.asJson();
     }
@@ -51,7 +48,7 @@ public class UserController{
         if (user != null) {
             user.deactivate();
             users.persist(user); // Actualizar el usuario en la base de datos
-            publisherMQTT.publishUsersList(users.findAllUsers(), client);
+            mqttPublisher.publishUsersList(users.findAllUsers());
             res.status(200);
             return "User deactivated successfully.";
         } else {
@@ -66,7 +63,7 @@ public class UserController{
         if (user != null) {
             user.activate();
             users.persist(user); // Actualizar el usuario en la base de datos
-            publisherMQTT.publishUsersList(users.findAllUsers(), client);
+            mqttPublisher.publishUsersList(users.findAllUsers());
             res.status(200);
             return "User activated successfully.";
         } else {
