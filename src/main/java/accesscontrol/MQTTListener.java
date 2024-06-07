@@ -61,7 +61,7 @@ public class MQTTListener {
     private MqttCallback defineCallback(){
         return new MqttCallback() {
             public void connectionLost(Throwable cause) {
-                System.out.println("Connection to MQTT broker lost!");
+                connectMQTT();
             }
 
             public void messageArrived(String topic, MqttMessage message) throws Exception {

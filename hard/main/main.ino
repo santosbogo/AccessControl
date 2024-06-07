@@ -1,77 +1,76 @@
 //Libraries
-#include <Arduino.h>
-#include <Keypad.h>
-#include <SPI.h>
-#include <MFRC522.h>
-#include <LiquidCrystal_I2C.h>
-#include <WiFi.h>
-#include "time.h"
-#include "sntp.h"
-#include <PubSubClient.h>
-#include <ArduinoJson.h>
+  #include <Arduino.h>
+  #include <Keypad.h>
+  #include <SPI.h>
+  #include <MFRC522.h>
+  #include <LiquidCrystal_I2C.h>
+  #include <WiFi.h>
+  #include "time.h"
+  #include "sntp.h"
+  #include <PubSubClient.h>
+  #include <ArduinoJson.h>
 
 
 //Pins:
-//RFID Pins
-#define SS_PIN 25
-#define RST_PIN 33
+  //RFID Pins
+  #define SS_PIN 25
+  #define RST_PIN 33
 
-//Led Pins
-#define redLedPin 13
-#define greenLedPin 12
+  //Led Pins
+  #define redLedPin 13
+  #define greenLedPin 12
 
-//Button pin
-#define buttonPin 14
+  //Button pin
+  #define buttonPin 14
 
-//Door relay pin
-#define doorRelayPin 36  //In case we want to add a door relay
+  //Door relay pin
+  #define doorRelayPin 36  //In case we want to add a door relay
 
-//Keypad
-byte rowPins[4] = { 27, 5, 17, 16 };  // Keypad row pins
-byte colPins[4] = { 4, 0, 2, 15 };    // Keypad column pins
+  //Keypad
+  byte rowPins[4] = { 27, 5, 17, 16 };  // Keypad row pins
+  byte colPins[4] = { 4, 0, 2, 15 };    // Keypad column pins
 
 
 //Instances
-//Keypad
-char keys[4][4] = {
-  { '1', '2', '3', 'A' },
-  { '4', '5', '6', 'B' },
-  { '7', '8', '9', 'C' },
-  { '*', '0', '#', 'D' }
-};
-Keypad keypad = Keypad(makeKeymap(keys), rowPins, colPins, 4, 4);
+  //Keypad
+  char keys[4][4] = {
+    { '1', '2', '3', 'A' },
+    { '4', '5', '6', 'B' },
+    { '7', '8', '9', 'C' },
+    { '*', '0', '#', 'D' }
+  };
+  Keypad keypad = Keypad(makeKeymap(keys), rowPins, colPins, 4, 4);
 
-//RFID
-MFRC522 mfrc522(SS_PIN, RST_PIN);
+  //RFID
+  MFRC522 mfrc522(SS_PIN, RST_PIN);
 
-//LCD
-LiquidCrystal_I2C lcd(0x27, 16, 2);
+  //LCD
+  LiquidCrystal_I2C lcd(0x27, 16, 2);
 
-//WIFI instance
-WiFiClient WIFI_CLIENT;
+  //WIFI instance
+  WiFiClient WIFI_CLIENT;
 
-//MQTT
-PubSubClient MQTT_CLIENT;
+  //MQTT
+  PubSubClient MQTT_CLIENT;
 
 
 //Constants and variables
-//Constants
-#define DELAY 1000        //For not important or short messages
-#define THINK_DELAY 1500  //For important or long messages
-#define maxUsers 10       // Max capacity of users register
+  //Constants
+  #define DELAY 1000        //For not important or short messages
+  #define THINK_DELAY 1500  //For important or long messages
+  #define maxUsers 10       // Max capacity of users register
 
-//Variables
-bool interruptFlag = false;
-bool correctKey = false;
-bool isDefinitiveState = false;
-int state = 0;  //States: 0=Normal 1=Definitive Locked 2=Definitive Unlocked
-String users[maxUsers];
-int numUsers = 0;            // Actual number of users registred
-String adminkey = "123456";  //Deffault admin password
+  //Variables
+  bool interruptFlag = false;
+  bool correctKey = false;
+  bool isDefinitiveState = false;
+  int state = 0;  //States: 0=Normal 1=Definitive Locked 2=Definitive Unlocked
+  String users[maxUsers];
+  int numUsers = 0;            // Actual number of users registred
+  String adminkey = "123456";  //Deffault admin password
 
 //MQTT instance
-#define PUBLIC_IP "107.22.141.233"
-
+#define PUBLIC_IP "3.84.203.19"
 
 void setup() {
   Serial.begin(9600);
@@ -284,8 +283,10 @@ void updateUsersList(byte* payload) {  //TESTEAR
     Serial.print("User ");
     Serial.print(j);
     Serial.print(": ");
-    Serial.println(users[j]);
+    Serial.print(users[j]);
+    Serial.println("|");
   }
+
 }
 
 void updateStatus() {
@@ -411,14 +412,12 @@ void addUser() {
       lcd.setCursor(0, 0);
 
       if (lookForUid(UID) == "-1") {
-
-        Serial.print("\n");
-        Serial.print("Added UID:");
-        Serial.print("\"");
-        Serial.print(UID);
-        Serial.print("\"");
-
         users[numUsers] = UID;
+
+        Serial.print("\nUID AGREGADO:\n|");
+        Serial.print(UID);
+        Serial.print("|\n\n");
+
         numUsers++;
         lcd.clear();
         lcd.setCursor(0, 0);
@@ -626,7 +625,8 @@ String readUid(byte* uid) {
 }
 
 String lookForUid(String UID) {
-  for (int i = 0; i < numUsers; i++) {
+  for (int i = 0; i < maxUsers; i++) {
+
     if (users[i] == UID) {
       return users[i];
     }
