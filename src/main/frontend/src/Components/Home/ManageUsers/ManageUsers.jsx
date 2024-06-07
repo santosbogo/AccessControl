@@ -8,17 +8,19 @@ import { Link } from 'react-router-dom'; // Importar Link si es necesario
 const ManageUsers = () => {
     const [users, setUsers] = useState([]);
     const navigate = useNavigate();
+
     useEffect(() => {
         const fetchAllUsers = async () => {
             try {
                 const response = await axios.get('http://localhost:3333/users/findAll');
                 setUsers(response.data);
+                console.log('Fetched users:', response.data);
             } catch (error) {
-                console.error('Error fetching active users:', error);
+                console.error('Error fetching users:', error);
             }
         };
-
         fetchAllUsers();
+
     }, []);
 
 
@@ -27,27 +29,29 @@ const ManageUsers = () => {
         navigate("/Home/manage-users/create");
     };
 
-    const handleEditUser = (userId) => {
-        console.log(`Redirect to edit user page for user ${userId}`);
-        navigate(`/home/manage-users/edit/${userId}`);
+    const updateUserState = (userId, newState) => {
+        const updatedUsers = users.map(user =>
+            user.uid === userId ? { ...user, state: newState } : user
+        );
+        console.log('Updated users:', updatedUsers); // Mostrar la lista actualizada
+        setUsers(updatedUsers);
     };
 
-
     const handleDeactivateUser = async (userId) => {
-        console.log(userId);
+        console.log("Deactivating user with id:", userId);
         try {
             await axios.post(`http://localhost:3333/user/deactivate/${userId}`);
-            setUsers(users.filter(user => user.uid !== userId));
+            updateUserState(userId, false)
         } catch (error) {
             console.error('Error deactivating user:', error);
         }
     };
 
     const handleActivateUser = async (userId) => {
-        console.log(userId);
+        console.log("Activating user with id:", userId);
         try {
             await axios.post(`http://localhost:3333/user/activate/${userId}`);
-            setUsers(users.filter(user => user.uid !== userId));
+            updateUserState(userId, true)
         } catch (error) {
             console.error('Error activating user:', error);
         }
@@ -71,11 +75,11 @@ const ManageUsers = () => {
                                 )}
                             </li>
                         ))}
-                    </ul>
-                ) : (
-                    <p>No users found.</p>
-                )}
-            </div>
+                            </ul>
+                        ) : (
+                            <p>No users found.</p>
+                            )}
+                    </div>
         </div>
     );
 };

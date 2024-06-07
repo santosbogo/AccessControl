@@ -1,83 +1,76 @@
 //Libraries
-  #include <Arduino.h>
-  #include <Keypad.h>
-  #include <SPI.h>
-  #include <MFRC522.h>
-  #include <LiquidCrystal_I2C.h>
-  #include <SD.h>
-  #include <WiFi.h>
-  #include "time.h"
-  #include "sntp.h"
-  #include <PubSubClient.h>
-  #include <ArduinoJson.h>
+#include <Arduino.h>
+#include <Keypad.h>
+#include <SPI.h>
+#include <MFRC522.h>
+#include <LiquidCrystal_I2C.h>
+#include <WiFi.h>
+#include "time.h"
+#include "sntp.h"
+#include <PubSubClient.h>
+#include <ArduinoJson.h>
 
 
 //Pins:
-  //RFID Pins
-  #define SS_PIN 25
-  #define RST_PIN 33
+//RFID Pins
+#define SS_PIN 25
+#define RST_PIN 33
 
-  //Led Pins
-  #define redLedPin 13
-  #define greenLedPin 12
+//Led Pins
+#define redLedPin 13
+#define greenLedPin 12
 
-  //Button pin
-  #define buttonPin 14
+//Button pin
+#define buttonPin 14
 
-  //SD reader pin
-  #define NEW_SD_MOSI 32
-  #define NEW_SD_MISO 34
-  #define NEW_SD_SCLK 35
-  #define NEW_SD_CS 26
+//Door relay pin
+#define doorRelayPin 36  //In case we want to add a door relay
 
-  //Door relay pin
-  #define doorRelayPin 36  //In case we want to add a door relay
-
-  //Keypad
-  byte rowPins[4] = { 27, 5, 17, 16 };   // Keypad row pins
-  byte colPins[4] = { 4, 0, 2, 15 };  // Keypad column pins
+//Keypad
+byte rowPins[4] = { 27, 5, 17, 16 };  // Keypad row pins
+byte colPins[4] = { 4, 0, 2, 15 };    // Keypad column pins
 
 
 //Instances
-  //Keypad
-  char keys[4][4] = {
+//Keypad
+char keys[4][4] = {
   { '1', '2', '3', 'A' },
   { '4', '5', '6', 'B' },
   { '7', '8', '9', 'C' },
   { '*', '0', '#', 'D' }
-  };
-  Keypad keypad = Keypad(makeKeymap(keys), rowPins, colPins, 4, 4);
+};
+Keypad keypad = Keypad(makeKeymap(keys), rowPins, colPins, 4, 4);
 
-  //RFID
-  MFRC522 mfrc522(SS_PIN, RST_PIN);
+//RFID
+MFRC522 mfrc522(SS_PIN, RST_PIN);
 
-  //LCD
-  LiquidCrystal_I2C lcd(0x27, 16, 2);
+//LCD
+LiquidCrystal_I2C lcd(0x27, 16, 2);
 
-  //WIFI instance
-  WiFiClient WIFI_CLIENT;
+//WIFI instance
+WiFiClient WIFI_CLIENT;
 
-  //MQTT
-  PubSubClient MQTT_CLIENT;
+//MQTT
+PubSubClient MQTT_CLIENT;
 
 
 //Constants and variables
-  //Constants
-  #define DELAY 1000        //For not important or short messages
-  #define THINK_DELAY 1500  //For important or long messages
-  #define maxUsers 1000     // Max capacity of users register
+//Constants
+#define DELAY 1000        //For not important or short messages
+#define THINK_DELAY 1500  //For important or long messages
+#define maxUsers 10       // Max capacity of users register
 
-  //Variables
-  bool interruptFlag = false;
-  bool correctKey = false;
-  bool isDefinitiveOpen = false;
-  String users[maxUsers];
-  int numUsers = 0;                           // Actual number of users registred
-  String adminkey = "123456";                 //Deffault admin password
-  const String encryptionKey = "SantosBogo";  //It is used for encrypt and decrypt system file
+//Variables
+bool interruptFlag = false;
+bool correctKey = false;
+bool isDefinitiveState = false;
+int state = 0;  //States: 0=Normal 1=Definitive Locked 2=Definitive Unlocked
+String users[maxUsers];
+int numUsers = 0;            // Actual number of users registred
+String adminkey = "123456";  //Deffault admin password
 
 //MQTT instance
-#define PUBLIC_IP "54.89.103.143"
+#define PUBLIC_IP "54.236.15.136"
 
 
 void setup() {
@@ -101,39 +94,20 @@ void setup() {
   //Initialize Button
   pinMode(buttonPin, INPUT_PULLUP);
 
-  // Configuración del lector SD con los nuevos pines
-  SPIClass spiSD(HSPI);
-  spiSD.begin(NEW_SD_SCLK, NEW_SD_MISO, NEW_SD_MOSI, NEW_SD_CS);
-
-  //Initialize SD
-  if (!SD.begin(NEW_SD_CS, spiSD)) {
-    delay(DELAY);
-    if (!SD.begin(NEW_SD_CS, spiSD)) {
-      delay(DELAY);
-      if (!SD.begin(NEW_SD_CS, spiSD)) {
-        Serial.println("Fallo al inicializar el lector SD");
-      }
-    }
-  }
-
-  connectWifi("UA-Alumnos", "41umn05WLC");
-  // connectWifi("Flia Lando 2", "aabbccddeeff");
+  // connectWifi("UA-Alumnos", "41umn05WLC");
+  connectWifi("Flia Lando 2", "aabbccddeeff");
   // connectWifi("Fila Bogo 2.4", "244466666");
-  //connectWifi(wifiSSIDFileRead(), wifiPasswordFileRead());
 
   //Set Time
-  if(WiFi.status() == WL_CONNECTED){
+  if (WiFi.status() == WL_CONNECTED) {
     getTimeFromWifi();
-  }
-  else{
+  } else {
     manualTimeConfiguration();
   }
 
   //Connect to MQTT server
   connectMQTT();
 
-  admitedUsersFileRead();
-  codeFileRead();
   LCDinitialMessage();
 }
 
@@ -192,12 +166,11 @@ void connectMQTT() {
 
   while (!MQTT_CLIENT.connected()) {
     if (MQTT_CLIENT.connect("ESP32Client")) {
-      Serial.println("conectado");
-      MQTT_CLIENT.subscribe("users"); //Subscribe to all topics
+      MQTT_CLIENT.subscribe("users");  //Subscribe to all topics
       MQTT_CLIENT.subscribe("state");
       MQTT_CLIENT.subscribe("#");
     }
-    delay(DELAY*6);
+    delay(DELAY * 6);
     lcd.print(".");
     attempts++;
     if (attempts >= maxAttempts) {
@@ -223,29 +196,25 @@ void checkMQTT() {
 void publishJson(String message) {
   int length = message.length();
 
-  char messageChar[length + 1]; // +1 for null terminator
+  char messageChar[length + 1];  // +1 for null terminator
   message.toCharArray(messageChar, length + 1);
   MQTT_CLIENT.publish("AccessControl/test", messageChar);
 }
 
-void accessRecordMQTTPublish(String UID, bool granted, bool fromOut){
-  String persUID = lookForUid(UID);
-  String personID = (granted) ? persUID.substring(0, 3) : "---";
-  String cardID = (granted) ? persUID.substring(4) : UID;
+void accessRecordMQTTPublish(String UID, bool granted, bool fromOut) {
+  String cardID = UID;
 
   StaticJsonDocument<200> message;
 
-  if(fromOut){
-    if(granted){
-    message["state"] = 1;
-    }
-    else{
+  if (fromOut) {
+    if (granted) {
+      message["state"] = 1;
+    } else {
       message["state"] = 0;
     }
-    message["personID"] = personID;
     message["cardID"] = cardID;
   }
-    
+
   message["time"] = getTime();
   message["date"] = getDate();
 
@@ -253,9 +222,8 @@ void accessRecordMQTTPublish(String UID, bool granted, bool fromOut){
   char jsonBuffer[neededSize];
   serializeJson(message, jsonBuffer, sizeof(jsonBuffer));
 
-  if(fromOut) MQTT_CLIENT.publish("access", jsonBuffer);
+  if (fromOut) MQTT_CLIENT.publish("access", jsonBuffer);
   else MQTT_CLIENT.publish("exit", jsonBuffer);
-
 }
 
 void callback(char* topic, byte* payload, unsigned int length) {
@@ -267,17 +235,17 @@ void callback(char* topic, byte* payload, unsigned int length) {
   }
   Serial.println();
 
-  if (strcmp(topic, "state") == 0){
+  if (strcmp(topic, "state") == 0) {
     Serial.println("state");
-  }
-  else if (strcmp(topic, "users") == 0){
+  } else if (strcmp(topic, "users") == 0) {
     updateUsersList(payload);
   }
 }
 
-void updateUsersList(byte* payload){
+void updateUsersList(byte* payload) {  //TESTEAR
   int payloadMaxSize = 1000;
-  // Convierte el payload a una cadena de caracteres
+
+  // Payload to string
   char json[payloadMaxSize];
   int i;
   for (i = 0; i < payloadMaxSize && payload[i] != '\0'; i++) {
@@ -285,7 +253,7 @@ void updateUsersList(byte* payload){
   }
   json[i] = '\0';  // Termina la cadena con un caracter nulo
 
-  // Utiliza ArduinoJson para parsear la cadena JSON
+  // ArduinoJson to parse JSON String
   DynamicJsonDocument doc(payloadMaxSize);
   DeserializationError error = deserializeJson(doc, json);
 
@@ -296,27 +264,32 @@ void updateUsersList(byte* payload){
   }
 
   // Limpia el array de usuarios actual
-  for (int j = 0; j < 100; j++) {
+  for (int j = 0; j < maxUsers; j++) {
     users[j] = "";
   }
 
-  // Extrae la lista de usuarios del documento JSON
-  JsonArray usersArray = doc.as<JsonArray>();
+  // Itera sobre el documento JSON y almacena los usuarios en el arreglo
   int index = 0;
-  for (JsonVariant v : usersArray) {
-    if (index < 100) {
-      users[index] = "111|" + String(v.as<const char*>());
+  for (JsonVariant value : doc.as<JsonArray>()) {
+    if (index < maxUsers) {
+      users[index] = value.as<String>();
       index++;
+    } else {
+      break;  // Sal del bucle si se alcanza el máximo de usuarios
     }
   }
 
-  // Imprime los usuarios actualizados
-  Serial.println("Usuarios actualizados:");
-  for (int j = 0; j < index; j++) {
-    Serial.println(users[j] + users[j].length());
+  // Imprime los usuarios actualizados para verificar
+  for (int j = 0; j < maxUsers; j++) {
+    Serial.print("User ");
+    Serial.print(j);
+    Serial.print(": ");
+    Serial.println(users[j]);
   }
 }
 
+void updateStatus() {
+}
 
 //Functional methods
 
@@ -363,7 +336,6 @@ void buttonInterruption() {
   int buttonStatus = digitalRead(buttonPin);
   if (buttonStatus == LOW) {
     accessOutput(true, false);
-    accessRecordsFileWrite("Inside button", true, false);
     accessRecordMQTTPublish("Inside button", true, false);
   }
 }
@@ -393,13 +365,13 @@ void adminMenu() {
           addUser();
           break;
         case 'B':
-          deleteMenu();
+          deleteUserWithRFID();
           break;
         case 'C':
           changePassword();
           break;
         case 'D':
-          definitiveChange();
+          definitiveChangeMenu();
           break;
         case '*':
           LCDCanceledMessage();
@@ -439,19 +411,6 @@ void addUser() {
       lcd.setCursor(0, 0);
 
       if (lookForUid(UID) == "-1") {
-        String personalID = inputPersonalID();
-        if (personalID == "CANCELED") return;
-        for (int i = 0; i < numUsers; i++) {
-          if (users[i].substring(0, 3) == personalID) {
-            lcd.clear();
-            lcd.setCursor(0, 0);
-            lcd.print("PERSONAL ID");
-            lcd.setCursor(0, 1);
-            lcd.print("ALREADY REG");
-            delay(THINK_DELAY);
-            return;
-          }
-        }
 
         Serial.print("\n");
         Serial.print("Added UID:");
@@ -459,10 +418,8 @@ void addUser() {
         Serial.print(UID);
         Serial.print("\"");
 
-        users[numUsers] = personalID + '|' + UID;
+        users[numUsers] = UID;
         numUsers++;
-        admitedUsersFileWrite();
-        addedUsersFileWrite(personalID, UID);
         lcd.clear();
         lcd.setCursor(0, 0);
         lcd.print("USER ADDED!");
@@ -473,73 +430,6 @@ void addUser() {
         delay(DELAY);
         break;
       }
-    }
-  }
-  Serial.println("Usuarios actualizados:");
-  for (int j = 0; j < sizeof(users); j++) {
-      Serial.println(users[j]); //Tir
-  }
-}
-
-String inputPersonalID() {
-  String personalID = "";
-  int digitsEntered = 0;
-
-  lcd.print("PERSONAL ID:");
-
-  while (digitsEntered < 3) {
-    buttonInterruption();
-    rfidScanInterruption();
-
-    char key = keypad.getKey();
-    lcd.blink_on();
-    if (key) {
-      if (key >= '0' && key <= '9') {
-        lcd.print(key);
-        personalID += key;
-        digitsEntered++;
-      } else if (key == '*') {
-        LCDCanceledMessage();
-        lcd.blink_off();
-        return ("CANCELED");
-      } else {
-        lcd.setCursor(0, 1);
-        lcd.blink_off();
-        lcd.print("JUST NUMBERS ID");
-        delay(DELAY);
-        lcd.setCursor(0, 1);
-        lcd.print("                ");
-        lcd.setCursor(digitsEntered + 12, 0);
-      }
-    }
-  }
-  lcd.blink_off();
-  return personalID;
-}
-
-void deleteMenu() {
-  LCDDeleteMenuMessage();
-  while (true) {
-    buttonInterruption();
-    rfidScanInterruption();
-
-    char key2 = keypad.getKey();
-    if (key2) {
-      switch (key2) {
-        case 'A':
-          deleteUserWithRFID();
-          break;
-        case 'B':
-          deleteUserWithPersonalID();
-          break;
-        case '*':
-          LCDCanceledMessage();
-          break;
-        default:
-          LCDInvalidOptionMessage();
-          deleteMenu();
-      }
-      break;
     }
   }
 }
@@ -572,14 +462,13 @@ void deleteUserWithRFID() {
 
       if (lookForUid(UID) != "-1") {
         for (int i = 0; i < numUsers; i++) {
-          if (users[i].substring(4) == UID) {
-            deletedUsersFileWrite(users[i].substring(0, 3), UID);
+          if (users[i] == UID) {
+            //Se podria reemplazar el ultimo por el que se elimino (menos costoso)
             //Move elements to left to clean empty spaces
             for (int j = i; j < numUsers - 1; j++) {
               users[j] = users[j + 1];
             }
             numUsers--;
-            admitedUsersFileWrite();
             lcd.print("USER DELETED!");
           }
         }
@@ -590,48 +479,6 @@ void deleteUserWithRFID() {
       }
     }
   }
-  delay(DELAY);
-}
-
-void deleteUserWithPersonalID() {
-  lcd.clear();
-  lcd.setCursor(0, 0);
-
-  if (numUsers == 0) {
-    lcd.print("NO USERS ADDED!");
-    delay(DELAY);
-    return;
-  }
-
-  String personalID = inputPersonalID();
-  if (personalID == "CANCELED") return;
-
-  bool userDeleted = false;
-
-  for (int i = 0; i < numUsers; i++) {
-    String storedPersonalID = users[i].substring(0, 3);
-    if (storedPersonalID == personalID) {
-      deletedUsersFileWrite(personalID, users[i].substring(4));
-      // Move elements to the left to clean empty spaces
-      for (int j = i; j < numUsers - 1; j++) {
-        users[j] = users[j + 1];
-      }
-      numUsers--;
-      admitedUsersFileWrite();
-      userDeleted = true;
-      break;
-    }
-  }
-
-  lcd.clear();
-  lcd.setCursor(0, 0);
-
-  if (userDeleted) {
-    lcd.print("USER DELETED");
-  } else {
-    lcd.print("USER NOT FOUND");
-  }
-
   delay(DELAY);
 }
 
@@ -687,7 +534,6 @@ void changePassword() {
           }
         }
         lcd.blink_off();
-        changedCodesFileWrite(adminkey, newKey);
         adminkey = newKey;
         delay(DELAY);
         LCDSavedMessage();
@@ -704,24 +550,66 @@ void changePassword() {
   lcd.blink_off();
 }
 
-void definitiveChange() {
-  if (isDefinitiveOpen) {
-    doorStatusChangesFileWrite(true);
-    isDefinitiveOpen = false;
-    lcd.clear();
-    lcd.setCursor(0, 0);
-    digitalWrite(greenLedPin, LOW);
-    lcd.print("DOOR SECURED");
-    delay(DELAY);
-  } else {
-    doorStatusChangesFileWrite(false);
-    isDefinitiveOpen = true;
-    lcd.clear();
-    lcd.setCursor(0, 0);
-    digitalWrite(greenLedPin, HIGH);
-    lcd.print("DOOR UNLOCKED");
-    delay(DELAY);
+void definitiveChangeMenu() {
+  LCDDefinitiveChangeMenu();
+  while (true) {
+    buttonInterruption();
+    rfidScanInterruption();
+    char key = keypad.getKey();
+    if (key) {
+      switch (key) {
+        case 'A':
+          switch (state) {
+            case 0:  //Normal
+              definitiveLockStatus();
+              break;
+            default:  //Locked or Unlocked
+              returnToNormalStatus();
+              break;
+          }
+          break;
+        case 'B':
+          switch (state) {
+            case 0:  //Normal
+              definitiveUnlockStatus();
+              break;
+            case 1:  //Locked
+              definitiveUnlockStatus();
+              break;
+            default:  //Unlocked
+              definitiveLockStatus();
+              break;
+          }
+          break;
+        default:
+          LCDInvalidOptionMessage();
+          definitiveChangeMenu();
+          break;
+      }
+      break;
+    }
   }
+}
+
+void returnToNormalStatus() {
+  isDefinitiveState = false;
+  state = 0;
+  digitalWrite(greenLedPin, LOW);
+  digitalWrite(redLedPin, LOW);
+}
+
+void definitiveLockStatus() {
+  isDefinitiveState = true;
+  state = 1;
+  digitalWrite(greenLedPin, LOW);
+  digitalWrite(redLedPin, HIGH);
+}
+
+void definitiveUnlockStatus() {
+  isDefinitiveState = true;
+  state = 2;
+  digitalWrite(redLedPin, LOW);
+  digitalWrite(greenLedPin, HIGH);
 }
 
 String readUid(byte* uid) {
@@ -739,7 +627,7 @@ String readUid(byte* uid) {
 
 String lookForUid(String UID) {
   for (int i = 0; i < numUsers; i++) {
-    if (users[i].substring(4) == UID) {
+    if (users[i] == UID) {
       return users[i];
     }
   }
@@ -750,16 +638,14 @@ void accessController(String UID, bool message) {
   if (lookForUid(UID) != "-1") {
     accessOutput(true, message);
     accessRecordMQTTPublish(UID, true, true);
-    accessRecordsFileWrite(UID, true, true);
   } else {
     accessOutput(false, message);
     accessRecordMQTTPublish(UID, false, true);
-    accessRecordsFileWrite(UID, false, true);
   }
 }
 
 void accessOutput(bool condition, bool message) {
-  if (isDefinitiveOpen) return;
+  if (isDefinitiveState) return;
   if (condition) {
     if (message) {
       LCDAccessGrantedMessage();
@@ -790,207 +676,6 @@ void deniedAccessLight() {
   digitalWrite(redLedPin, HIGH);
   delay(DELAY * 2);
   digitalWrite(redLedPin, LOW);
-}
-
-
-//Encryption methods
-
-
-String encrypt(String message, String key) {
-  String encryptedMessage = "";
-  int keyIndex = 0;
-  int messageLength = message.length();
-  int keyLength = key.length();
-
-  for (int i = 0; i < messageLength; i++) {
-    char encryptedChar = message[i] ^ key[keyIndex];
-    encryptedMessage += encryptedChar;
-
-    keyIndex++;
-    if (keyIndex >= keyLength) {
-      keyIndex = 0;
-    }
-  }
-
-  return encryptedMessage;
-}
-
-String decrypt(String message, String key) {
-  String decryptedMessage = "";
-  int keyIndex = 0;
-  int messageLength = message.length();
-  int keyLength = key.length();
-
-  for (int i = 0; i < messageLength; i++) {
-    char decryptedChar = message[i] ^ key[keyIndex];
-    decryptedMessage += decryptedChar;
-
-    keyIndex++;
-    if (keyIndex >= keyLength) {
-      keyIndex = 0;
-    }
-  }
-
-  return decryptedMessage;
-}
-
-
-//File methods
-
-
-void accessRecordsFileWrite(String UID, bool granted, bool fromOut) {
-  String persUID;
-  if (UID == "Inside button") persUID = "--- Inside button";
-  else persUID = lookForUid(UID);
-  File file = SD.open("/access_records.txt", FILE_APPEND);
-  if (file) {
-    String access = (granted) ? "Granted" : "Denied";
-    String persID = (granted) ? persUID.substring(0, 3) : "---";
-    String cardID = (granted) ? persUID.substring(4) : UID;
-    String from = (fromOut) ? "Outside" : "Inside";
-
-    file.println(access + "\t   " + persID + "\t\t" + cardID + "\t" + from + "\t\t" + getDate() + "\t" + getTime());
-    file.close();
-
-  } else {
-    LCDCantOpenFileMessage();
-  }
-}
-
-void systemFileWrite(String code) {
-  code = encrypt(code, encryptionKey);
-  File file = SD.open("/system_files/system.txt", FILE_WRITE);
-  if (file) {
-    file.print(code);
-    file.close();
-  } else {
-    LCDCantOpenFileMessage();
-  }
-}
-
-void changedCodesFileWrite(String oldCode, String newCode) {
-  File file = SD.open("/admin_records/changed_codes.txt", FILE_APPEND);
-  if (file) {
-    file.println(oldCode + "\t\t" + getDate() + "\t" + getTime());
-    file.close();
-  } else {
-    LCDCantOpenFileMessage();
-  }
-  systemFileWrite(newCode);
-}
-
-void addedUsersFileWrite(String personalID, String UID) {
-  File file = SD.open("/admin_records/added_users.txt", FILE_APPEND);
-  if (file) {
-    file.println("   " + personalID + "\t\t" + UID + "\t" + getDate() + "\t" + getTime());
-    file.close();
-  } else {
-    LCDCantOpenFileMessage();
-  }
-}
-
-void deletedUsersFileWrite(String personalID, String UID) {
-  File file = SD.open("/admin_records/deleted_users.txt", FILE_APPEND);
-  if (file) {
-    file.println("   " + personalID + "\t\t" + UID + "\t" + getDate() + "\t" + getTime());
-    file.close();
-  } else {
-    LCDCantOpenFileMessage();
-  }
-}
-
-void doorStatusChangesFileWrite(bool secured) {
-  String doorStatus = (secured) ? "Secured\t" : "Unlocked";
-  File file = SD.open("/admin_records/door_status_changes.txt", FILE_APPEND);
-  if (file) {
-    file.println(doorStatus + "\t" + getDate() + "\t" + getTime());
-    file.close();
-  } else {
-    LCDCantOpenFileMessage();
-  }
-}
-
-void admitedUsersFileWrite() {
-  File file = SD.open("/admited_users.txt", FILE_WRITE);
-  if (file) {
-    file.seek(0);
-    file.print("ID | Card ID\n");
-    for (int i = 0; i < numUsers; i++) {
-      file.print(users[i]);
-      file.print("\n");
-    }
-    file.print("Total = " + String(numUsers));
-    file.close();
-  } else {
-    LCDCantOpenFileMessage();
-  }
-}
-
-void admitedUsersFileRead() {
-  File file = SD.open("/admited_users.txt", FILE_READ);
-  if (file) {
-    int lineCount = 0;
-    String persUID;
-    file.readStringUntil('\n');
-    while (file.available()) {
-      persUID = file.readStringUntil('\n');
-      if (persUID.substring(0, 5) == "Total") {
-        numUsers = persUID.substring(8).toInt();
-        break;
-      }
-      users[lineCount] = persUID;
-      lineCount++;
-    }
-    file.close();
-    numUsers = lineCount;
-  } else {
-    LCDCantOpenFileMessage();
-  }
-}
-
-void codeFileRead() {
-  File file = SD.open("/system_files/system.txt", FILE_READ);
-  if (file) {
-    String code = decrypt(file.readStringUntil('\n'), encryptionKey);
-    file.close();
-    adminkey = (code.length() == 6) ? code : "123456";
-  } else Serial.println("Codigo NO asignado");
-}
-
-String wifiSSIDFileRead() {
-  File file = SD.open("/wifi_credentials.txt", FILE_READ);
-  String ssid;
-  if (file) {
-    while (file.available()) {
-      ssid = file.readStringUntil('\n');
-      if (ssid.substring(0, 5) == "SSID:") {
-        ssid = ssid.substring(6);
-        break;
-      }
-    }
-    file.close();
-  } else {
-    LCDCantOpenFileMessage();
-  }
-  return ssid;
-}
-
-String wifiPasswordFileRead() {
-  File file = SD.open("/wifi_credentials.txt", FILE_READ);
-  String password;
-  if (file) {
-    while (file.available()) {
-      password = file.readStringUntil('\n');
-      if (password.substring(0, 9) == "Password:") {
-        password = password.substring(10);
-        break;
-      }
-    }
-    file.close();
-  } else {
-    LCDCantOpenFileMessage();
-  }
-  return password;
 }
 
 
@@ -1228,13 +913,45 @@ String getDate() {
 }
 
 
+
 // LCD display methods
 
 
+
 void LCDinitialMessage() {
+  switch (state) {
+    case 0:
+      LCDNormalStateMessage();
+      break;
+    case 1:
+      LCDSecuredDoorMessage();
+      break;
+    default:
+      LCDUnsecuredDoorMessage();
+      break;
+  }
+}
+
+void LCDNormalStateMessage(){
   lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print("SCAN RFID OR");
+  lcd.setCursor(0, 1);
+  lcd.print("PRESS *");
+}
+
+void LCDUnsecuredDoorMessage() {
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("DOOR UNLOCKED");
+  lcd.setCursor(0, 1);
+  lcd.print("PRESS *");
+}
+
+void LCDSecuredDoorMessage() {
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("DOOR LOCKED");
   lcd.setCursor(0, 1);
   lcd.print("PRESS *");
 }
@@ -1272,11 +989,7 @@ void LCDAdminMenuMessage() {
   lcd.setCursor(0, 0);
   lcd.print("C: CHANGE CODE");
   lcd.setCursor(0, 1);
-  if (isDefinitiveOpen) {
-    lcd.print("D: LOCK DOOR");
-  } else {
-    lcd.print("D: UNLOCK DOOR");
-  }
+  lcd.print("D: CHANGE STATUS");
   delay(THINK_DELAY);
 
   lcd.clear();
@@ -1287,12 +1000,27 @@ void LCDAdminMenuMessage() {
   lcd.blink_on();
 }
 
-void LCDDeleteMenuMessage() {
+void LCDDefinitiveChangeMenu() {
   lcd.clear();
   lcd.setCursor(0, 0);
-  lcd.print("A: WITH RFID");
-  lcd.setCursor(0, 1);
-  lcd.print("B: WITH ID");
+
+  switch (state) {
+    case 0:
+      lcd.print("A: LOCK");
+      lcd.setCursor(0, 1);
+      lcd.print("B: UNLOCK");
+      break;
+    case 1:
+      lcd.print("A: NORMAL STATE");
+      lcd.setCursor(0, 1);
+      lcd.print("B: UNLOCK DOOR");
+      break;
+    default:
+      lcd.print("A: NORMAL STATE");
+      lcd.setCursor(0, 1);
+      lcd.print("B: LOCK DOOR");
+      break;
+  }
 }
 
 void LCDCanceledMessage() {
@@ -1316,15 +1044,6 @@ void LCDSavedMessage() {
   lcd.setCursor(0, 0);
   lcd.print("SAVED!");
   delay(DELAY);
-}
-
-void LCDCantOpenFileMessage() {
-  lcd.clear();
-  lcd.setCursor(0, 0);
-  lcd.print("CAN'T OPEN FILE");
-  lcd.setCursor(0, 1);
-  lcd.print("CONTACT SUPPORT");
-  delay(THINK_DELAY);
 }
 
 void LCDIncorrectTimeMessage(String time) {
