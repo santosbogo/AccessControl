@@ -24,7 +24,7 @@ public class AccessAttempts {
 
     public List<AccessAttempt> findAttemptsByDate(LocalDate date) {
         TypedQuery<AccessAttempt> query = entityManager().createQuery(
-            "SELECT a FROM AccessAttempt a WHERE a.attemptDate = :date", AccessAttempt.class);
+            "SELECT a FROM AccessAttempt a WHERE a.attemptDate = :date ORDER BY a.attemptHour", AccessAttempt.class);
         query.setParameter("date", date);
         return query.getResultList();
     }

@@ -10,7 +10,7 @@ public class UidController {
 
   public UidController() {
     try {
-      this.client = new MqttClient("tcp://54.89.103.143:1883", MqttClient.generateClientId());
+      this.client = new MqttClient("tcp://54.236.15.136", MqttClient.generateClientId());
       MqttConnectOptions options = new MqttConnectOptions();
       options.setCleanSession(true);
       options.setAutomaticReconnect(true);

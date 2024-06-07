@@ -62,31 +62,25 @@ public class Application {
                 return "ok";
             });
 
-            Spark.get("/attempt/:date/getAttempt", attemptController::getAttempts);
+            //attempts & exits
+            Spark.get("/attempt/getAttempt", attemptController::getAttempts);
+            Spark.get("/exit/getExits", exitController::getExits);
             Spark.get("/uid/getUid", uidController::requestUid);
-            Spark.post("/user/add", userController::addUser);
+            //admin
+            Spark.post("/admin/login", autController::createAuthentication);
+            Spark.post("/admin/normal-state", LockController::returnToNormal);
             Spark.post("/admin/lock", LockController::lockDoors);
             Spark.post("/admin/unlock", LockController::unlockDoors);
-            Spark.post("/admin/normal-state", LockController::returnToNormal);
-            Spark.get("/attempt/:date/getAttempt", attemptController::getAttempts);
-            Spark.post("/admin/login", autController::createAuthentication);
+            //authentication
+            Spark.get("/user/verify", autController::getCurrentUser);
             Spark.post("/user/login", autController::createAuthentication);
             Spark.post("/user/logout", autController::deleteAuthentication);
-            Spark.get("/user/verify", autController::getCurrentUser);
-            Spark.get("/uid/getUid", uidController::requestUid);
+            //user
             Spark.post("/user/add", userController::addUser);
+            Spark.get("/user/verify", autController::getCurrentUser);
             Spark.get("/users/findAll", userController::searchUsers);
             Spark.post("/user/deactivate/:id", userController::deactivateUser);
             Spark.post("/user/activate/:id", userController::activateUser);
-
-
-            Spark.get("/attempt/:date/getAttempt", attemptController::getAttempts);
-            Spark.post("/admin/login", autController::createAuthentication);
-            Spark.post("/user/login", autController::createAuthentication);
-            Spark.post("/user/logout", autController::deleteAuthentication);
-            Spark.get("/user/verify", autController::getCurrentUser);
-            Spark.get("/uid/getUid", uidController::requestUid);
-            Spark.post("/user/add", userController::addUser);
             //Spark.post("/admin/lock", LockController::lockDoors);
 
 

@@ -76,7 +76,6 @@ public class User{
     public User(){
 
     }
-
     public String asJson() {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("uid", this.uid);

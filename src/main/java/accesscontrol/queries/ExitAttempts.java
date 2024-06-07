@@ -4,6 +4,7 @@ import accesscontrol.model.AccessAttempt;
 import accesscontrol.model.ExitButton;
 
 import javax.persistence.TypedQuery;
+import java.time.*;
 import java.util.List;
 import static accesscontrol.EntityManagerController.entityManager;
 
@@ -15,9 +16,9 @@ public class ExitAttempts {
 
     }
 
-    public List<ExitButton> findExitsByDate(String date) {
+    public List<ExitButton> findExitsByDate(LocalDate date) {
         TypedQuery<ExitButton> query = entityManager().createQuery(
-                "SELECT a FROM ExitButton a WHERE a.exitDate = :date", ExitButton.class);
+                "SELECT a FROM ExitButton a WHERE a.exitDate = :date ORDER BY a.exitTime", ExitButton.class);
         query.setParameter("date", date);
         return query.getResultList();
     }

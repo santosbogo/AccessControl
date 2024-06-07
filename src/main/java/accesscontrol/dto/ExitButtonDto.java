@@ -6,15 +6,15 @@ import java.time.format.DateTimeFormatter;
 
 public class ExitButtonDto {
     private String exitDate;
-    private String exitTime;
+    private String time;
 
-    public ExitButtonDto(String exitDate, String exitTime){
-        this.exitTime = exitTime;
+    public ExitButtonDto(String exitDate, String time){
+        this.time = time;
         this.exitDate = exitDate;
     }
 
     public LocalTime getTime(){
-        return LocalTime.parse(exitTime, DateTimeFormatter.ISO_LOCAL_TIME);
+        return LocalTime.parse(time, DateTimeFormatter.ISO_LOCAL_TIME);
     }
 
     public LocalDate getDate(){
