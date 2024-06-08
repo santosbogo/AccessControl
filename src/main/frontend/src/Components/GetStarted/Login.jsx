@@ -11,12 +11,10 @@ const Login = () => {
 
     const login = async () => {
         try {
-            const response = await axios.post(`http://localhost:3333/admin/login`, {
+            const response = await axios.post(`http://18.209.66.97:3333/admin/login`, {
                 username: username,
                 password: password
             });
-
-            localStorage.setItem('token', response.data.token);
             console.log(response.data);
             navigate('/home')
 

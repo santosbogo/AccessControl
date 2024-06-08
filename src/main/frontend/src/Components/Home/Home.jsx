@@ -165,4 +165,4 @@ const HomePage = () => {
     );
 };
 
-export default authentication(HomePage);
+export default HomePage;
