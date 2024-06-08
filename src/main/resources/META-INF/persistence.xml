@@ -9,8 +9,8 @@
         <class>accesscontrol.model.Admin</class>
         <class>accesscontrol.model.ExitButton</class>
         <properties>
-            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://172.31.22.181:3306/UserDB"/>
-            <property name="javax.persistence.jdbc.user" value="dbuser"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://172.31.22.162:3306/AccessControlDB"/>
+            <property name="javax.persistence.jdbc.user" value="Application"/>
             <property name="javax.persistence.jdbc.password" value="AccessControl2024!"/>
             <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
             <property name="hibernate.hbm2ddl.auto" value="update"/>
