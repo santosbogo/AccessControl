@@ -33,8 +33,6 @@ public class Application {
 
         MQTTListener mqttListener = new MQTTListener(broker, exitController, attemptController, uidController, userController, lockController);
 
-        adminController.addAdmin(new Admin("Fernando", "Lichtchestein", "Taylor", "Swift"));
-
         Spark.port(3333);
 
         before((req, resp) -> {
