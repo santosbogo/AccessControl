@@ -58,7 +58,7 @@
   //Constants
   #define DELAY 1000        //For not important or short messages
   #define THINK_DELAY 1500  //For important or long messages
-  #define maxUsers 10       // Max capacity of users register
+  #define maxUsers 1000       // Max capacity of users register
 
   //Variables
   bool interruptFlag = false;
@@ -150,7 +150,9 @@ void loop() {
 }
 
 
+
 //MQTT Methods
+
 
 
 void connectMQTT() {
@@ -192,14 +194,6 @@ void checkMQTT() {
   MQTT_CLIENT.loop();
 }
 
-void publishJson(String message) {
-  int length = message.length();
-
-  char messageChar[length + 1];  // +1 for null terminator
-  message.toCharArray(messageChar, length + 1);
-  MQTT_CLIENT.publish("AccessControl/test", messageChar);
-}
-
 void accessRecordMQTTPublish(String UID, bool granted, bool fromOut) {
   String cardID = UID;
 
@@ -225,6 +219,36 @@ void accessRecordMQTTPublish(String UID, bool granted, bool fromOut) {
   else MQTT_CLIENT.publish("exit", jsonBuffer);
 }
 
+void userDeletionMQTTPublish(String UID){
+  StaticJsonDocument<200> message;
+
+  message["UID"] = UID;
+
+  size_t neededSize = measureJson(message) + 1;
+  char jsonBuffer[neededSize];
+  serializeJson(message, jsonBuffer, sizeof(jsonBuffer));
+
+  MQTT_CLIENT.publish("hardware_user_deactivate", jsonBuffer);
+
+  Serial.print("Usuario eliminado publicado por MQTT: ");
+  Serial.println(jsonBuffer);
+}
+
+void stateChangeMQTTPublish(int state){
+  StaticJsonDocument<200> message;
+
+  message["state"] = state;
+
+  size_t neededSize = measureJson(message) + 1;
+  char jsonBuffer[neededSize];
+  serializeJson(message, jsonBuffer, sizeof(jsonBuffer));
+
+  MQTT_CLIENT.publish("system/state", jsonBuffer);
+
+  Serial.print("Estado publicado por MQTT: ");
+  Serial.println(jsonBuffer);
+}
+
 void callback(char* topic, byte* payload, unsigned int length) {
   Serial.print("Mensaje recibido en el topic: ");
   Serial.print(topic);
@@ -241,7 +265,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
   }
 }
 
-void updateUsersList(byte* payload) {  //TESTEAR
+void updateUsersList(byte* payload) {
   int payloadMaxSize = 1000;
 
   // Payload to string
@@ -262,24 +286,24 @@ void updateUsersList(byte* payload) {  //TESTEAR
     return;
   }
 
-  // Limpia el array de usuarios actual
   for (int j = 0; j < maxUsers; j++) {
     users[j] = "";
   }
 
-  // Itera sobre el documento JSON y almacena los usuarios en el arreglo
   int index = 0;
   for (JsonVariant value : doc.as<JsonArray>()) {
     if (index < maxUsers) {
       users[index] = value.as<String>();
       index++;
     } else {
-      break;  // Sal del bucle si se alcanza el máximo de usuarios
+      break;
     }
   }
 
+  numUsers = index;
+
   // Imprime los usuarios actualizados para verificar
-  for (int j = 0; j < maxUsers; j++) {
+  for (int j = 0; j < numUsers; j++) {
     Serial.print("User ");
     Serial.print(j);
     Serial.print(": ");
@@ -307,7 +331,10 @@ void updateState(byte* payload) {
   LCDinitialMessage();
 }
 
+
+
 //Functional methods
+
 
 
 bool requestKey() {
@@ -378,15 +405,12 @@ void adminMenu() {
       delay(DELAY);
       switch (key) {
         case 'A':
-          addUser();
-          break;
-        case 'B':
           deleteUserWithRFID();
           break;
-        case 'C':
+        case 'B':
           changePassword();
           break;
-        case 'D':
+        case 'C':
           definitiveChangeMenu();
           break;
         case '*':
@@ -398,52 +422,6 @@ void adminMenu() {
           break;
       }
       break;
-    }
-  }
-}
-
-void addUser() {
-  lcd.clear();
-  lcd.setCursor(0, 0);
-
-  if (numUsers >= maxUsers) {
-    lcd.println("LIMIT REACHED");
-    delay(DELAY);
-    return;
-  }
-
-  lcd.print("SCAN RFID DEVICE");
-
-  while (true) {
-    buttonInterruption();
-    if (keypad.getKey() == '*') {
-      LCDCanceledMessage();
-      return;
-    }
-    if (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial()) {
-      String UID = readUid(mfrc522.uid.uidByte);
-
-      lcd.clear();
-      lcd.setCursor(0, 0);
-
-      if (lookForUid(UID) == "-1") {
-        users[numUsers] = UID;
-
-        Serial.print("\nUID AGREGADO:\n|");
-        Serial.print(UID);
-        Serial.print("|\n\n");
-
-        numUsers++;
-        lcd.clear();
-        lcd.setCursor(0, 0);
-        lcd.print("USER ADDED!");
-        delay(DELAY);
-        break;
-      } else {
-        lcd.print("RFID ALREADY REG");
-        delay(DELAY);
-        break;
-      }
     }
   }
 }
@@ -483,6 +461,7 @@ void deleteUserWithRFID() {
               users[j] = users[j + 1];
             }
             numUsers--;
+            userDeletionMQTTPublish(UID);
             lcd.print("USER DELETED!");
           }
         }
@@ -603,6 +582,7 @@ void definitiveChangeMenu() {
       break;
     }
   }
+  stateChangeMQTTPublish(state);
 }
 
 void returnToNormalStatus() {
@@ -640,7 +620,7 @@ String readUid(byte* uid) {
 }
 
 String lookForUid(String UID) {
-  for (int i = 0; i < maxUsers; i++) {
+  for (int i = 0; i < numUsers; i++) {
 
     if (users[i] == UID) {
       return users[i];
@@ -994,17 +974,17 @@ void LCDAccessDeniedMessage() {
 void LCDAdminMenuMessage() {
   lcd.clear();
   lcd.setCursor(0, 0);
-  lcd.print("A: ADD USER");
+  lcd.print("A: DELETE USER");
   lcd.setCursor(0, 1);
-  lcd.print("B: DELETE USER");
+  lcd.print("B: CHANGE CODE");
 
   delay(THINK_DELAY);
 
   lcd.clear();
   lcd.setCursor(0, 0);
-  lcd.print("C: CHANGE CODE");
+  lcd.print("C: CHANGE STATUS");
   lcd.setCursor(0, 1);
-  lcd.print("D: CHANGE STATUS");
+
   delay(THINK_DELAY);
 
   lcd.clear();

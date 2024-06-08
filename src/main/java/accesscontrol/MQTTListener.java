@@ -1,8 +1,6 @@
 package accesscontrol;
 
-import accesscontrol.controller.AttemptController;
-import accesscontrol.controller.ExitController;
-import accesscontrol.controller.UidController;
+import accesscontrol.controller.*;
 import accesscontrol.dto.AttemptDto;
 import accesscontrol.dto.DateTimeMessage;
 import org.eclipse.paho.client.mqttv3.*;
@@ -19,20 +17,29 @@ public class MQTTListener {
     private final ExitController exitController;
     private final AttemptController attemptController;
     private final UidController uidController;
+    private final UserController userController;
+    private final LockController lockController;
 
 
-    public MQTTListener(String broker, ExitController exitController, AttemptController attemptController, UidController uidController) {
+    public MQTTListener(String broker,
+                        ExitController exitController,
+                        AttemptController attemptController,
+                        UidController uidController,
+                        UserController userController,
+                        LockController lockController) {
         this.broker = broker;
         this.exitController = exitController;
         this.attemptController = attemptController;
         this.uidController = uidController;
+        this.userController = userController;
+        this.lockController = lockController;
         connectMQTT();
     }
 
     private void connectMQTT() {
         try {
             if (this.client == null) {
-                String clientId = "awsListener";
+                String clientId = "santosListener";
                 this.client = new MqttClient(broker, clientId);
             }
             MqttConnectOptions options = new MqttConnectOptions();
@@ -71,14 +78,17 @@ public class MQTTListener {
                 if (topic.equals("exit")) {
                     persistExit(messageString);
                 }
-                else if(topic.equals("access")) {
+                else if (topic.equals("access")) {
                     persistAttempt(messageString);
                 }
                 else if (topic.equals("new_user")) {
                     sendNewUserUID(messageString);
                 }
                 else if (topic.equals("hardware_state")){
-                    //TODO: hardware_state
+                    changeHardwareState(messageString);
+                }
+                else if (topic.equals("hardware_user_deactivate")){
+                    deactivateUserWithUID(messageString);
                 }
             }
 
@@ -119,5 +129,15 @@ public class MQTTListener {
 
     private void sendNewUserUID(String messageString){
         uidController.processNewUserUID(messageString);
+    }
+
+    private void deactivateUserWithUID(String messageString){
+        String uid = gson.fromJson(messageString, String.class);
+        userController.deactivateUserWithUID(uid);
+    }
+
+    private void changeHardwareState(String messageString){
+        int state = gson.fromJson(messageString, Integer.class);
+        //TODO: LLamar a un metodo en  de cambiar estado de hardware
     }
 }
