@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import "../Home.css"
+import "./ManageUsers.css"
 import authentication from "../../Hoc/Hoc"; // Importar el HOC de autenticación
 import { Link } from 'react-router-dom'; // Importar Link si es necesario
 
@@ -58,6 +58,11 @@ const ManageUsers = () => {
 
 
     const handleDeactivateUser = async (userId) => {
+        const newErrors1 = {
+            [userId]: ''
+        };
+        setInactiveErrors(newErrors1);
+        setActiveErrors(newErrors1);
         try {
             await axios.post(`http://localhost:3333/user/deactivate/${userId}`);
             const newInactiveErrors = {...inactiveErrors, [userId]: ''}; // Limpiar errores anteriores
@@ -71,6 +76,12 @@ const ManageUsers = () => {
     };
 
     const handleActivateUser = async (userId) => {
+        const newErrors = {
+            [userId]: ''
+        };
+        setActiveErrors(newErrors);
+        setInactiveErrors(newErrors);
+
         try {
             await axios.post(`http://localhost:3333/user/activate/${userId}`);
             const newActiveErrors = {...activeErrors, [userId]: ''}; // Limpiar errores anteriores
@@ -84,27 +95,31 @@ const ManageUsers = () => {
     }
 
     return (
-        <div className="home-page">
+        <div className="header-container">
             <div className="main-title">Manage Users</div>
-            <button className={"button-container"} onClick={handleCreateUser}>Create New User</button>
+            <button onClick={handleCreateUser}>Create New User</button>
             <div className="user-list">
                 {users.length > 0 ? (
                     <ul>
                         {users.map(user => (
-                            <li key={user.uid}>
-                                {user.firstName} {user.lastName}
-                                <button className='home-components-modification-button'
-                                        onClick={() => handleDeactivateUser(user.uid)}>Deactivate User
-                                </button>
-                                {inactiveErrors[user.uid] &&
-                                    <p className="error-message">{inactiveErrors[user.uid]}</p>}
-
-                                <button className='home-components-modification-button'
-                                        onClick={() => handleActivateUser(user.uid)}>Activate User
-                                </button>
-                                {activeErrors[user.uid] && <p className="error-message">{activeErrors[user.uid]}</p>}
+                            <li key={user.uid} className="user-item">
+                                <div className="user-info">
+                                    {user.firstName} {user.lastName}
+                                </div>
+                                <div className="user-actions">
+                                    <button className='action-button'
+                                            onClick={() => handleDeactivateUser(user.uid)}>Deactivate
+                                    </button>
+                                    {inactiveErrors[user.uid] &&
+                                        <p className="error-message">{inactiveErrors[user.uid]}</p>}
+                                    <button className='action-button'
+                                            onClick={() => handleActivateUser(user.uid)}>Activate
+                                    </button>
+                                    {activeErrors[user.uid] && <p className="error-message">{activeErrors[user.uid]}</p>}
+                                </div>
                             </li>
                         ))}
+
                     </ul>
                 ) : (
                     <p>No users found.</p>
@@ -115,6 +130,5 @@ const ManageUsers = () => {
         </div>
     );
 };
-
 
 export default authentication(ManageUsers);

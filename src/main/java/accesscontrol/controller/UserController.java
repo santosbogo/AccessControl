@@ -1,5 +1,6 @@
 package accesscontrol.controller;
-import accesscontrol.MQTTPublisher;
+//import accesscontrol.MQTTPublisher;
+import accesscontrol.*;
 import accesscontrol.dto.*;
 import accesscontrol.model.*;
 import com.google.gson.Gson;
@@ -15,6 +16,7 @@ public class UserController{
     private final MQTTPublisher mqttPublisher;
 
     private final Gson gson = new Gson();
+
     public UserController(MQTTPublisher mqttPublisher) {
         this.mqttPublisher = mqttPublisher;
         this.users = new Users();
@@ -84,7 +86,7 @@ public class UserController{
         User user = users.findUserByUid(uid);
         if (user != null) {
             user.deactivate();
-            users.persist(user); // Actualizar el usuario en la base de datos
+            users.persist(user);
         }
     }
 }

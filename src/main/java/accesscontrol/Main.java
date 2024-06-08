@@ -35,12 +35,13 @@ public class Main {
     public static void createUsers(EntityManager entityManager){
         List<User> users = new ArrayList<>();
         users.add(new User("ea 85 b6 b2 ", "Santos", "Bogo"));
-        users.add(new User("ea 85 b6 b4 ", "Juan", "Perez"));
-//        users.add(new User("hougiyf", "Maria", "Gomez"));
-//        users.add(new User("jugkyey54", "Pedro", "Rodriguez"));
-//        users.add(new User("srw654hiuth9", "Ana", "Martinez"));
-//        users.add(new User("a3 53 e8 f4", "Carlos", "Lopez"));
+        users.add(new User("qwrfjsw12", "Juan", "Perez"));
+        users.add(new User("hougiyf", "Maria", "Gomez"));
+        users.add(new User("jugkyey54", "Pedro", "Rodriguez"));
+        users.add(new User("srw654hiuth9", "Ana", "Martinez"));
+        users.add(new User("a3 53 e8 f4", "Carlos", "Lopez"));
 
+        //a3 53 e8 f4
 
 
         entityManager.getTransaction().begin();

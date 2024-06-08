@@ -86,26 +86,6 @@ button:hover {
     background: rgba(0, 0, 0, 0.6);
 }
 
-.inputs {
-    display: flex;
-    flex-direction: column;
-    gap: 25px;
-}
-
-
-.inputs input {
-    display: flex;
-    align-items: center;
-    margin: auto;
-    width: 480px;
-    height: 60px;
-    background: #eaeaea;
-    border-color: #004aad; /* Borde azul oscuro */
-    border-style: solid;
-    border-width: 2px;
-    border-radius: 6px;
-}
-
 .modal-content {
     background: white;
     padding: 20px;
@@ -141,45 +121,3 @@ button:hover {
     color: white;
 }
 
-
-.home-components-modification-button {
-    padding: 5px 15px;
-    margin-right: 10px;
-    background-color: #f0f0f0;
-    border: 1px solid #ccc;
-    cursor: pointer;
-    font-size: 12px; /* Smaller font size */
-    display: inline-block; /* Display buttons inline */
-}
-
-
-.error-message {
-    color: red;
-    font-size: 12px;
-    margin-top: 5px;
-}
-
-.sub-title {
-    color: #004aad; /* Azul oscuro */
-    font-size: 15px; /* Tamaño de fuente ajustado */
-    font-weight: bold; /* Texto en negrita */
-    margin-bottom: 30px; /* Espaciado inferior */
-    padding: 10px 20px; /* Ajustar el espacio alrededor del texto */
-    background-color: white; /* Fondo blanco */
-    border-radius: 20px;
-    text-align: center;
-}
-
-
-input[type="date"] {
-    width: 100%; /* Aprovechar el ancho disponible */
-    padding: 10px;
-    margin-bottom: 20px; /* Espaciado debajo del input */
-    border: 2px solid #ccc;
-    border-radius: 8px;
-    background-color: #f9f9f9; /* Fondo más claro para el input */
-}
-
-p {
-    color: #aba5a5; /* Color naranja */
-}

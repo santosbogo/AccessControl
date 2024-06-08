@@ -107,14 +107,13 @@ const HomePage = () => {
 
     return (
         <div className="home-page">
-            <div className="main-title">Welcome Access Control System</div>
+            <div className="main-title">Welcome to the Access Control System</div>
             <div className="button-container">
                 <button onClick={handleManageUsers}>Manage Users</button>
             </div>
             <div className="button-container">
                 <button onClick={handleViewHistory}>View History</button>
             </div>
-            <div className="button-group">
                 <div className="button-container">
                     <button className="button-spacing" onClick={handleLockDoors}>Lock Doors</button>
                 </div>
@@ -124,7 +123,6 @@ const HomePage = () => {
                 <div className="button-container">
                     <button className="button-spacing" onClick={handleReturnNormal}>Return to normal state</button>
                 </div>
-            </div>
             <div className='button-container'>
                 <button onClick={handleLogout}>Log Out</button>
             </div>

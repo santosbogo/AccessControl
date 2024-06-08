@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, useNavigate } from 'react-router-dom';
+import './Login.css';
 import axios from "axios";
-import '../Home/Home.css';
 
 const Login = () => {
     const [username, setUsername] = React.useState("");
@@ -18,22 +18,27 @@ const Login = () => {
 
             localStorage.setItem('token', response.data.token);
             console.log(response.data);
-            navigate('/home');
+            navigate('/home')
 
         } catch (error) {
             const errorMsg = error.response?.data || 'An unexpected error occurred.';
             console.error('Error while sending request:', errorMsg);
             setLoginError('');
-            if (errorMsg.includes("User does not exist") || errorMsg.includes("User not found")) {
+            if (errorMsg.includes("User does not exist")|| errorMsg.includes("User not found")) {
                 setLoginError("Invalid username or password");
             }
         }
     };
 
     return (
-        <div className="home-page">
-            <div className="main-title">Login</div>
-                <div className="inputs">
+        <div className="login-container">
+            <div className="login-header">
+                <div className="login-title">
+                    <div className="title"> Login </div>
+                </div>
+            </div>
+            <div className="login-inputs">
+                <div className="login-input">
                     <input
                         type="text"
                         name="username"
@@ -42,7 +47,7 @@ const Login = () => {
                         placeholder="Username"
                     />
                 </div>
-                <div className="inputs">
+                <div className="login-input">
                     <input
                         type="password"
                         name="password"
@@ -51,8 +56,10 @@ const Login = () => {
                         placeholder="Password"
                     />
                 </div>
+            </div>
+
             {loginError &&
-                <div className="error-message" style={{ color: 'red', textAlign: 'center' }}>{loginError}</div>}
+                <div className="error-message" style={{color: 'red', textAlign: 'center'}}>{loginError}</div>}
             <button className="login-button" onClick={login}>Login</button>
         </div>
     );

@@ -73,4 +73,3 @@ public class AuthenticationController {
     return Optional.ofNullable(request.headers("Authorization")).map(auth -> auth.replace("Bearer ", ""));
   }
 }
-

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link } from 'react-router-dom';
 import authentication from "../../../Hoc/Hoc"; // Importar el HOC de autenticación
 import axios from "axios";
-import '../../Home.css'
+import './Create.css';
 import { useNavigate } from "react-router-dom";
 
 
@@ -14,8 +14,6 @@ const CreateUser = () => {
     const [showUidField, setShowUidField] = useState(false);
     const [showCreateButton, setShowCreateButton] = useState(false);
     const navigate = useNavigate();
-
-
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         if (name === "firstName") {
@@ -24,8 +22,6 @@ const CreateUser = () => {
             setLastName(value);
         }
     };
-
-
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -63,11 +59,12 @@ const CreateUser = () => {
     };
 
         return (
-            <div className="home-page">
-                <div className="main-title">Create New User</div>
-
+            <div className="header-container">
+                <header className="main-title">
+                    <h1>Create New User</h1>
+                </header>
                 <div className="container">
-                    <div className="inputs">
+                    <div className="create-input">
                         <input
                             type="text"
                             name="firstName"
@@ -76,7 +73,7 @@ const CreateUser = () => {
                             placeholder="First name"
                         />
                     </div>
-                    <div className="inputs">
+                    <div className="create-input">
                         <input
                             type="text"
                             name="lastName"
@@ -89,19 +86,20 @@ const CreateUser = () => {
                         <h3>UID Detected: {uid}</h3>
                     )}
 
-                    <div className="button-group">
+                    <div className="button-container">
                         {!showUidField && (
-                            <button className="home-button" onClick={handleRequestUid}>Request UID</button>
+                            <button className="action-button" onClick={handleRequestUid}>Request UID</button>
                         )}
-
+                    </div>
+                    <div className="button-container">
                         {showCreateButton && (
-                            <button className="home-button" onClick={handleSubmit}>Create User</button>
-                        )}
-                        <button className="home-button" onClick={handleGoBack}>Go Back</button>
+                                <button className="action-button" onClick={handleSubmit}>Create User</button>
+                            )}
+                            <button className="action-button" onClick={handleGoBack}>Go Back</button>
                     </div>
                 </div>
             </div>
         );
-};
+    };
 
 export default authentication(CreateUser);

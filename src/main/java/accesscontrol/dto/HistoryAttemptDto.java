@@ -1,3 +1,4 @@
+
 package accesscontrol.dto;
 
 import accesscontrol.model.*;
@@ -48,4 +49,3 @@ public class HistoryAttemptDto {
   }
 
 }
-
