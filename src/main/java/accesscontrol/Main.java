@@ -70,6 +70,10 @@ public class Main {
         entityManager.getTransaction().begin();
         entityManager.persist(accessAttempt4);
         entityManager.getTransaction().commit();
+        AccessAttempt accessAttempt5 = new AccessAttempt("a3 e8 f4", java.time.LocalDate.now(), LocalTime.now(), false);
+        entityManager.getTransaction().begin();
+        entityManager.persist(accessAttempt5);
+        entityManager.getTransaction().commit();
     }
 
     public static void createExit(EntityManager entityManager){
