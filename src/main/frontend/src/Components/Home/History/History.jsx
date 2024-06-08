@@ -23,7 +23,7 @@ const ViewHistory = () => {
             console.log("Fetching history for", selectedDate);
             const fetchHistory = async () => {
                 try {
-                    const response = await axios.get('http://localhost:3333/attempt/getAttempt', {
+                    const response = await axios.get(`${process.env.publicIP}/attempt/getAttempt`, {
                         params: {
                             selectedDate: selectedDate
                         }
@@ -47,7 +47,7 @@ const ViewHistory = () => {
             const fetchExits = async () => {
                 console.log("Fetching exits for", selectedDate);
                 try {
-                    const response = await axios.get('http://localhost:3333/exit/getExits', {
+                    const response = await axios.get(`${process.env.publicIP}/exit/getExits`, {
                         params: {
                             selectedDate: selectedDate
                         }

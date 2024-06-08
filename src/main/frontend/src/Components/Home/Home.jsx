@@ -39,7 +39,7 @@ const HomePage = () => {
     const handleConfirmLockDoors = async () => {
         console.log('Locking doors');
         try{
-            const response = await axios.post('http://localhost:3333/admin/lock');
+            const response = await axios.post(`${process.env.publicIP}/admin/lock`);
             console.log(response.data);
             setLockAllDoorsModal(false);
         }
@@ -52,7 +52,7 @@ const HomePage = () => {
     const handleConfirmUnlockDoors = async () => {
         console.log('Locking doors');
         try{
-            const response = await axios.post('http://localhost:3333/admin/unlock');
+            const response = await axios.post(`${process.env.publicIP}/admin/unlock`);
             console.log(response.data);
             setUnlockAllDoorsModal(false);
         }
@@ -65,7 +65,7 @@ const HomePage = () => {
     const handleReturnToNormalState = async () => {
         console.log('Locking doors');
         try{
-            const response = await axios.post('http://localhost:3333/admin/normal-state');
+            const response = await axios.post(`${process.env.publicIP}/admin/normal-state`);
             console.log(response.data);
             setReturnToNormal(false);
         }
@@ -92,7 +92,7 @@ const HomePage = () => {
         const token = localStorage.getItem('token');
         if (token) {
             try {
-                await axios.post('http://localhost:3333/user/logout', {}, {
+                await axios.post(`${process.env.publicIP}/user/logout`, {}, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
