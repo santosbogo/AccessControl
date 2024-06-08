@@ -13,6 +13,8 @@ const CreateUser = () => {
     const [uid, setUid] = useState("");
     const [showUidField, setShowUidField] = useState(false);
     const [showCreateButton, setShowCreateButton] = useState(false);
+    const navigate = useNavigate();
+
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -22,6 +24,8 @@ const CreateUser = () => {
             setLastName(value);
         }
     };
+
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
