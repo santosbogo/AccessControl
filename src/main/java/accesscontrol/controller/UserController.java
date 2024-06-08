@@ -80,7 +80,7 @@ public class UserController{
         }
     }
 
-    public void deactivateUidMqtt(String uid){
+    public void deactivateUserWithUID(String uid){
         User user = users.findUserByUid(uid);
         if (user != null) {
             user.deactivate();
