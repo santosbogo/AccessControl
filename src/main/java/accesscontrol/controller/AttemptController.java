@@ -33,7 +33,9 @@ public class AttemptController {
         List<HistoryAttemptDto> attemptDtos = new ArrayList<>();
         for (AccessAttempt attempt : attempts) {
             User user = users.findUserByUid(attempt.getUid());
-            attemptDtos.add(new HistoryAttemptDto(String.valueOf(attempt.getAttemptStatus()), attempt.getUid(), attempt.getAttemptHour().toString(), attempt.getAttemptDate().toString(), user));
+            if(user != null && user.getFirstName() != null) {
+                attemptDtos.add(new HistoryAttemptDto(String.valueOf(attempt.getAttemptStatus()), attempt.getUid(), attempt.getAttemptHour().toString(), attempt.getAttemptDate().toString(), user));
+            }
         }
         response.type("application/json");
         return gson.toJson(attemptDtos);
