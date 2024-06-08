@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "./History.css";
+import '../Home.css'
 import axios from "axios";
 import authentication from "../../Hoc/Hoc";
 
@@ -82,20 +82,20 @@ const ViewHistory = () => {
 
 
     const handleGoBack = () => {
-        navigate("/home"); // Redireccionar a la página de inicio (Home)
+        navigate("/home");
     };
 
     return (
-        <div className="header-container">
-            <div className="main-title">
-                <h1>View History</h1>
-                <input
+        <div className="home-page">
+            <div className="main-title">View History</div>
+                <div className="button-container"></div>
+             <input
                     type="date"
                     value={selectedDate}
                     onChange={handleDateChange}
                 />
-                <h2>History for {selectedDate}:</h2>
-            </div>
+            <div className= "sub-title">History for {selectedDate}</div>
+
             <div className="history-list-container">
                 {combinedData.length > 0 ? (
                     <ul>
