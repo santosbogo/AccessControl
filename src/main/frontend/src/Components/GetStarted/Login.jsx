@@ -1,6 +1,5 @@
 import React from "react";
 import { Link, useNavigate } from 'react-router-dom';
-import './Login.css';
 import axios from "axios";
 import '../Home/Home.css';
 
@@ -34,8 +33,7 @@ const Login = () => {
     return (
         <div className="home-page">
             <div className="main-title">Login</div>
-            <div className="login-inputs">
-                <div className="login-input">
+                <div className="inputs">
                     <input
                         type="text"
                         name="username"
@@ -44,7 +42,7 @@ const Login = () => {
                         placeholder="Username"
                     />
                 </div>
-                <div className="login-input">
+                <div className="inputs">
                     <input
                         type="password"
                         name="password"
@@ -53,7 +51,6 @@ const Login = () => {
                         placeholder="Password"
                     />
                 </div>
-            </div>
             {loginError &&
                 <div className="error-message" style={{ color: 'red', textAlign: 'center' }}>{loginError}</div>}
             <button className="login-button" onClick={login}>Login</button>

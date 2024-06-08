@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link } from 'react-router-dom';
 import authentication from "../../../Hoc/Hoc"; // Importar el HOC de autenticación
 import axios from "axios";
-import './Create.css';
+import '../../Home.css'
 import { useNavigate } from "react-router-dom";
 
 
@@ -63,12 +63,11 @@ const CreateUser = () => {
     };
 
         return (
-            <div className="header-container">
-                <header className="main-title">
-                    <h1>Create New User</h1>
-                </header>
+            <div className="home-page">
+                <div className="main-title">Create New User</div>
+
                 <div className="container">
-                    <div className="search-input">
+                    <div className="inputs">
                         <input
                             type="text"
                             name="firstName"
@@ -77,7 +76,7 @@ const CreateUser = () => {
                             placeholder="First name"
                         />
                     </div>
-                    <div className="search-input">
+                    <div className="inputs">
                         <input
                             type="text"
                             name="lastName"
@@ -103,6 +102,6 @@ const CreateUser = () => {
                 </div>
             </div>
         );
-    };
+};
 
 export default authentication(CreateUser);
