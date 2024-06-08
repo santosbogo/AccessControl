@@ -24,7 +24,7 @@ public class MQTTPublisher {
     private void connectMQTT() {
         try {
             if (this.client == null) {
-                String clientId = "santosPublisher";
+                String clientId = "awsPublisher";
                 this.client = new MqttClient(broker, clientId);
             }
             MqttConnectOptions options = new MqttConnectOptions();
