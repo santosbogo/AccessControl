@@ -107,7 +107,7 @@ const HomePage = () => {
 
     return (
         <div className="home-page">
-            <div className="main-title">Welcome to the Access Control System</div>
+            <div className="main-title">Welcome Access Control System</div>
             <div className="button-container">
                 <button onClick={handleManageUsers}>Manage Users</button>
             </div>
