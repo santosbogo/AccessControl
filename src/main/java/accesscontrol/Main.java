@@ -41,7 +41,6 @@ public class Main {
         users.add(new User("srw654hiuth9", "Ana", "Martinez"));
         users.add(new User("a3 53 e8 f4", "Carlos", "Lopez"));
 
-        //a3 53 e8 f4
 
 
         entityManager.getTransaction().begin();

@@ -79,4 +79,12 @@ public class UserController{
             return "User not found.";
         }
     }
+
+    public void deactivateUidMqtt(String uid){
+        User user = users.findUserByUid(uid);
+        if (user != null) {
+            user.deactivate();
+            users.persist(user); // Actualizar el usuario en la base de datos
+        }
+    }
 }

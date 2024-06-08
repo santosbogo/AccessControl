@@ -235,7 +235,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
   Serial.println();
 
   if (strcmp(topic, "state") == 0) {
-    Serial.println("state");
+    updateState(payload);
   } else if (strcmp(topic, "users") == 0) {
     updateUsersList(payload);
   }
@@ -289,7 +289,22 @@ void updateUsersList(byte* payload) {  //TESTEAR
 
 }
 
-void updateStatus() {
+void updateState(byte* payload) {
+  state = atoi((char*)payload);
+
+  switch(state){
+    case 0:
+      returnToNormalStatus();
+      break;
+    case 1:
+      definitiveLockStatus();
+      break;
+    default:
+      definitiveUnlockStatus();
+      break;
+  }
+
+  LCDinitialMessage();
 }
 
 //Functional methods
