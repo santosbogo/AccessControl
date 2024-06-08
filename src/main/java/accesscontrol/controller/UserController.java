@@ -46,9 +46,13 @@ public class UserController{
         String userId = req.params("id");
         User user = users.findUserByUid(userId);
         if (user != null) {
+            if (!user.state()) {
+                res.status(400);
+                return "User is already deactivated.";
+            }
             user.deactivate();
             users.persist(user); // Actualizar el usuario en la base de datos
-            mqttPublisher.publishUsersList(users.findAllUsers());
+            mqttPublisher.publishUsersList(users.findAllActive());
             res.status(200);
             return "User deactivated successfully.";
         } else {
@@ -61,9 +65,13 @@ public class UserController{
         String userId = req.params("id");
         User user = users.findUserByUid(userId);
         if (user != null) {
+            if (user.state()) {
+                res.status(400);
+                return "User is already activated.";
+            }
             user.activate();
             users.persist(user); // Actualizar el usuario en la base de datos
-            mqttPublisher.publishUsersList(users.findAllUsers());
+            mqttPublisher.publishUsersList(users.findAllActive());
             res.status(200);
             return "User activated successfully.";
         } else {

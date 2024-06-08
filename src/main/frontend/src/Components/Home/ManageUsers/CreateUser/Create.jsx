@@ -2,6 +2,10 @@ import React, { useState } from "react";
 import { Link } from 'react-router-dom';
 import authentication from "../../../Hoc/Hoc"; // Importar el HOC de autenticación
 import axios from "axios";
+import './Create.css';
+import { useNavigate } from "react-router-dom";
+
+
 
 const CreateUser = () => {
     const [firstName, setFirstName] = useState("");
@@ -32,6 +36,11 @@ const CreateUser = () => {
             console.error('Error sending request:', error);
         }
     };
+
+    const handleGoBack = () => {
+        console.log("Redirect to manage users page");
+        navigate("/Home/manage-users");
+    }
 
     const handleRequestUid = async () => {
         try {
@@ -85,7 +94,7 @@ const CreateUser = () => {
                         {showCreateButton && (
                             <button className="home-button" onClick={handleSubmit}>Create User</button>
                         )}
-                        <Link to="/Home/manage-users" className="home-button">Go Back</Link>
+                        <button className="home-button" onClick={handleGoBack}>Go Back</button>
                     </div>
                 </div>
             </div>

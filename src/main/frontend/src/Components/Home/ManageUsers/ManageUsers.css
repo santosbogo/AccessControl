@@ -1,95 +1,73 @@
-.manage-users {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center; /* Centrar verticalmente */
-    background-image: url("../../../../public/accessControl.jpeg"); /* Ruta a tu imagen de fondo */
-    background-size: cover; /* Ajustar la imagen al tamaño del contenedor */
-    background-position: center; /* Centrar la imagen */
-    background-repeat: no-repeat; /* No repetir la imagen */
-    color: #003379; /* Texto azul claro para legibilidad */
-    font-family: 'Arial', sans-serif; /* Fuente */
-    width: 90%; /* Ancho del componente */
-    max-width: 1000px; /* Ancho máximo */
-    margin: auto; /* Centrado horizontal */
-    padding: 50px; /* Espacio interno */
-    border-radius: 8px; /* Borde redondeado */
-    box-shadow: 0 4px 8px rgba(0, 120, 255, 0.3); /* Sombra */
+.home-page {
+    width: 90%;
+    margin: auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
 }
 
-.manage-users h1 {
-    font-size: 24px; /* Tamaño del título */
-    margin-bottom: 20px; /* Espacio inferior */
-}
-
-.button-container {
-    margin-bottom: 20px; /* Espacio entre botones */
-}
-
-.manage-users button {
-    padding: 15px 30px; /* Espacio interno */
-    border: none; /* Sin borde */
-    border-radius: 30px; /* Borde redondeado */
-    color: #fff; /* Color de texto */
-    font-size: 18px; /* Tamaño de fuente */
-    font-weight: 600; /* Grosor de fuente */
-    text-transform: uppercase; /* Convertir texto a mayúsculas */
-    cursor: pointer; /* Cursor de puntero */
-    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease; /* Transición suave */
-    width: 100%; /* Ancho del botón */
-    display: flex; /* Mostrar como flexbox */
-    justify-content: center; /* Centrar horizontalmente */
-    align-items: center; /* Centrar verticalmente */
-    background-image: linear-gradient(to right, #007bff, #0056b3); /* Gradiente de color de fondo */
-    font-family: 'Poppins', sans-serif; /* Fuente */
-    text-decoration: none; /* Sin subrayado */
-}
-
-.manage-users button:not(:last-child) {
-    margin-bottom: 10px; /* Espacio entre botones */
-}
-
-.manage-users button:hover {
-    background-image: linear-gradient(145deg, #004aad, #003379); /* Color de fondo al pasar el ratón */
-    transform: scale(1.05); /* Escalar al pasar el ratón */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra al pasar el ratón */
-}
-
-
-.home-button :hover {
-    background-image: linear-gradient(145deg, #004aad, #003379); /* Color de fondo al pasar el ratón */
-    transform: scale(1.05); /* Escalar al pasar el ratón */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra al pasar el ratón */
-}
-
-.home-button {
-    padding: 15px 30px;
-    border: none;
-    border-radius: 30px;
-    color: #fff;
-    font-size: 20px;
-    font-weight: 600;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
-    width: 50%;
-    font-family: 'Poppins', sans-serif;
-    background-image: linear-gradient(145deg, #007bff, #0056b3);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    outline: none;
-    margin-top: 20px;
-    text-decoration: none; /* Remover subrayado */
-}
-
-.search-input {
-    width: 100%;
-    padding: 10px;
-    border-radius: 6px;
-    border: 2px solid #004aad;
-    background-color: #eaeaea;
+.main-title {
+    font-size: 24px;
+    font-weight: bold;
     color: #333;
-    font-size: 16px;
     margin-bottom: 20px;
+}
+
+.button {
+    padding: 10px 20px;
+    margin-right: 10px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.user-list ul {
+    list-style: none;
+    padding: 0;
+}
+
+.user-list li {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 5px;
+}
+
+.home-components-modification-button {
+    padding: 5px 15px;
+    margin-right: 10px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    font-size: 12px; /* Smaller font size */
+    display: inline-block; /* Display buttons inline */
+}
+.home-button {
+    padding: 5px 10px;
+    margin-right: 10px;
+    background-color: #f0f0f0;
+    color: #333;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px; /* Smaller font size */
+    display: inline-block; /* Display buttons inline */
+}
+
+
+.error-message {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+/* Additional styles for mobile responsiveness */
+@media (max-width: 600px) {
+    .button, .home-components-modification-button {
+        display: block;
+        width: 100%;
+        margin-top: 10px;
+    }
 }

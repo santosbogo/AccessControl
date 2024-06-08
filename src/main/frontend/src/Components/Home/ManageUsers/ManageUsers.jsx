@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import "../Home.css"
+import "./ManageUsers.css"
 import authentication from "../../Hoc/Hoc"; // Importar el HOC de autenticación
 import { Link } from 'react-router-dom'; // Importar Link si es necesario
 
@@ -9,25 +9,44 @@ const ManageUsers = () => {
     const [users, setUsers] = useState([]);
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const fetchAllUsers = async () => {
-            try {
-                const response = await axios.get('http://localhost:3333/users/findAll');
-                setUsers(response.data);
-                console.log('Fetched users:', response.data);
-            } catch (error) {
-                console.error('Error fetching users:', error);
-            }
-        };
-        fetchAllUsers();
+    const [activeError, setActiveError] = useState('');
+    const [inactiveError, setInactiveError] = useState('');
 
+    const [activeErrors, setActiveErrors] = useState({});
+    const [inactiveErrors, setInactiveErrors] = useState({});
+
+
+
+    useEffect(() => {
+        fetchAllUsers();
     }, []);
 
+    const fetchAllUsers = async () => {
+        try {
+            const response = await axios.get('http://localhost:3333/users/findAll');
+            setUsers(response.data);
+            console.log('Fetched users:', response.data);
+            setActiveError('');
+            setInactiveError('')
+        } catch (error) {
+            const errorMsg = error.response?.data || 'An unexpected error occurred.';
+            if (error.Msg.includes("User is already activated.")){
+                setActiveError("User is already activated.");
+            } else if (error.Msg.includes("User is already deactivated.")){
+                setInactiveError("User is already deactivated.");
+            }
+        }
+    };
 
     const handleCreateUser = () => {
         console.log("Redirect to create new user page");
         navigate("/Home/manage-users/create");
     };
+
+    const handleBackHome = () => {
+        console.log("Redirect to home page");
+        navigate("/Home");
+    }
 
     const updateUserState = (userId, newState) => {
         const updatedUsers = users.map(user =>
@@ -37,23 +56,30 @@ const ManageUsers = () => {
         setUsers(updatedUsers);
     };
 
+
     const handleDeactivateUser = async (userId) => {
-        console.log("Deactivating user with id:", userId);
         try {
             await axios.post(`http://localhost:3333/user/deactivate/${userId}`);
-            updateUserState(userId, false)
+            const newInactiveErrors = {...inactiveErrors, [userId]: ''}; // Limpiar errores anteriores
+            setInactiveErrors(newInactiveErrors);
+            updateUserState(userId, false);
         } catch (error) {
-            console.error('Error deactivating user:', error);
+            const errorMsg = error.response?.data.message || 'Error deactivating user.';
+            const newInactiveErrors = {...inactiveErrors, [userId]: errorMsg};
+            setInactiveErrors(newInactiveErrors);
         }
     };
 
     const handleActivateUser = async (userId) => {
-        console.log("Activating user with id:", userId);
         try {
             await axios.post(`http://localhost:3333/user/activate/${userId}`);
-            updateUserState(userId, true)
+            const newActiveErrors = {...activeErrors, [userId]: ''}; // Limpiar errores anteriores
+            setActiveErrors(newActiveErrors);
+            updateUserState(userId, true);
         } catch (error) {
-            console.error('Error activating user:', error);
+            const errorMsg = error.response?.data.message || 'Error activating user.';
+            const newActiveErrors = {...activeErrors, [userId]: errorMsg};
+            setActiveErrors(newActiveErrors);
         }
     }
 
@@ -61,25 +87,31 @@ const ManageUsers = () => {
         <div className="home-page">
             <div className="main-title">Manage Users</div>
             <button onClick={handleCreateUser}>Create New User</button>
-            <Link to="/Home/" className="button">Home</Link>
             <div className="user-list">
                 {users.length > 0 ? (
                     <ul>
                         {users.map(user => (
                             <li key={user.uid}>
                                 {user.firstName} {user.lastName}
-                                {user.state ? (
-                                    <button onClick={() => handleDeactivateUser(user.uid)}>Deactivate User</button>
-                                ) : (
-                                    <button onClick={() => handleActivateUser(user.uid)}>Activate User</button>
-                                )}
+                                <button className='home-components-modification-button'
+                                        onClick={() => handleDeactivateUser(user.uid)}>Deactivate User
+                                </button>
+                                {inactiveErrors[user.uid] &&
+                                    <p className="error-message">{inactiveErrors[user.uid]}</p>}
+
+                                <button className='home-components-modification-button'
+                                        onClick={() => handleActivateUser(user.uid)}>Activate User
+                                </button>
+                                {activeErrors[user.uid] && <p className="error-message">{activeErrors[user.uid]}</p>}
                             </li>
                         ))}
-                            </ul>
-                        ) : (
-                            <p>No users found.</p>
-                            )}
-                    </div>
+                    </ul>
+                ) : (
+                    <p>No users found.</p>
+                )}
+            </div>
+            <button onClick={handleBackHome}>Home</button>
+
         </div>
     );
 };
