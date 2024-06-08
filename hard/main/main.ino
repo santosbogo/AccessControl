@@ -70,7 +70,7 @@
   String adminkey = "123456";  //Deffault admin password
 
 //MQTT instance
-#define PUBLIC_IP "3.84.203.19"
+#define PUBLIC_IP "34.207.199.67"
 
 void setup() {
   Serial.begin(9600);
@@ -94,8 +94,8 @@ void setup() {
   pinMode(buttonPin, INPUT_PULLUP);
 
   // connectWifi("UA-Alumnos", "41umn05WLC");
-  connectWifi("Flia Lando 2", "aabbccddeeff");
-  // connectWifi("Fila Bogo 2.4", "244466666");
+  // connectWifi("Flia Lando 2", "aabbccddeeff");
+  connectWifi("Fila Bogo 2.4", "244466666");
 
   //Set Time
   if (WiFi.status() == WL_CONNECTED) {
