@@ -39,7 +39,7 @@ public class MQTTListener {
     private void connectMQTT() {
         try {
             if (this.client == null) {
-                String clientId = "santosListener";
+                String clientId = "awsListener";
                 this.client = new MqttClient(broker, clientId);
             }
             MqttConnectOptions options = new MqttConnectOptions();
