@@ -29,9 +29,9 @@ public class Application {
         UidController uidController = new UidController();
 
         UserController userController = new UserController(mqttPublisher);
-        LockController LockController = new LockController(mqttPublisher);
+        LockController lockController = new LockController(mqttPublisher);
 
-        MQTTListener mqttListener = new MQTTListener(broker, exitController, attemptController, uidController);
+        MQTTListener mqttListener = new MQTTListener(broker, exitController, attemptController, uidController, userController, lockController);
 
         Admin adminUser = new Admin("Fernando", "Lichtschein", "taylor", "swift");
         adminController.addAdmin(adminUser);
@@ -57,9 +57,9 @@ public class Application {
         Spark.get("/uid/getUid", uidController::requestUid);
         //admin
         Spark.post("/admin/login", autController::createAuthentication);
-        Spark.post("/admin/normal-state", LockController::returnToNormal);
-        Spark.post("/admin/lock", LockController::lockDoors);
-        Spark.post("/admin/unlock", LockController::unlockDoors);
+        Spark.post("/admin/normal-state", lockController::returnToNormal);
+        Spark.post("/admin/lock", lockController::lockDoors);
+        Spark.post("/admin/unlock", lockController::unlockDoors);
         //authentication
         Spark.get("/user/verify", autController::getCurrentUser);
         Spark.post("/user/login", autController::createAuthentication);
