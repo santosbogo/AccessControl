@@ -16,7 +16,7 @@ const authentication = WrappedComponent => {
 
             const verifyToken = async () => {
                 try {
-                    const response = await axios.get(`${process.env.publicIP}/user/verify`, {
+                    const response = await axios.get('http://localhost:3333/user/verify', {
                         headers: {
                             'Authorization': `Bearer ${token}`
                         }

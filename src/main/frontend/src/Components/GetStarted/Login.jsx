@@ -11,7 +11,7 @@ const Login = () => {
 
     const login = async () => {
         try {
-            const response = await axios.post(`${process.env.publicIP}/admin/login`, {
+            const response = await axios.post(`http://localhost:3333/admin/login`, {
                 username: username,
                 password: password
             });
