@@ -3,6 +3,7 @@ package accesscontrol;
 import accesscontrol.controller.*;
 import accesscontrol.dto.AttemptDto;
 import accesscontrol.dto.DateTimeMessage;
+import com.google.gson.JsonObject;
 import org.eclipse.paho.client.mqttv3.*;
 
 import java.time.LocalDate;
@@ -39,7 +40,7 @@ public class MQTTListener {
     private void connectMQTT() {
         try {
             if (this.client == null) {
-                String clientId = "santosListener";
+                String clientId = "santossListener";
                 this.client = new MqttClient(broker, clientId);
             }
             MqttConnectOptions options = new MqttConnectOptions();
@@ -90,6 +91,9 @@ public class MQTTListener {
                 else if (topic.equals("hardware_user_deactivate")){
                     deactivateUserWithUID(messageString);
                 }
+                else if (topic.equals("request_from_hardware")){
+                    handleHardwareRequests(messageString);
+                }
             }
 
             public void deliveryComplete(IMqttDeliveryToken token) {
@@ -139,5 +143,21 @@ public class MQTTListener {
     private void changeHardwareState(String messageString){
         int state = gson.fromJson(messageString, Integer.class);
         //TODO: LLamar a un metodo en  de cambiar estado de hardware
+    }
+
+    private void handleHardwareRequests(String messageString){
+        JsonObject jsonObject = gson.fromJson(messageString, JsonObject.class);
+        String requestType = jsonObject.get("request").getAsString();
+
+        if (requestType.equals("usersList")) {
+            sendUsersList();
+        }
+        else {
+            System.out.println("Tipo de solicitud no reconocido: " + requestType);
+        }
+    }
+
+    private void sendUsersList(){
+        userController.publishUsersList();
     }
 }
