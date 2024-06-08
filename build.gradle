@@ -1,46 +1,50 @@
 plugins {
     id 'java'
-    id 'com.diffplug.spotless' version '6.10.0'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
-group = 'org.example'
-version = '1.0-SNAPSHOT'
+group 'com.example'
+version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
+    // MySQL Connection
+    implementation 'mysql:mysql-connector-java:8.0.32'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
+    implementation 'org.hibernate:hibernate-core:5.5.7.Final'
+
     // MQTT Client
     implementation 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.5'
-
-    //Local DB Drivers
-    implementation 'org.hsqldb:hsqldb:2.7.3'
-    testImplementation platform('org.junit:junit-bom:5.9.1')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
-    implementation 'org.hibernate:hibernate-core:5.6.5.Final'
+    implementation 'com.google.code.gson:gson:2.9.0'
 
     // Implementation of the Spark Java framework
     implementation 'com.sparkjava:spark-core:2.9.3'
     implementation 'com.sparkjava:spark-template-freemarker:2.7.1'
-    implementation 'com.google.guava:guava:31.1-jre'
-    implementation 'com.google.code.gson:gson:2.9.0'
 
-    implementation 'com.auth0:java-jwt:3.18.2'
+}
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'accesscontrol.Application'
+        )
+    }
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
 }
 
 test {
     useJUnitPlatform()
 }
 
-//spotless {
-//    java {
-//        googleJavaFormat()
-//
-//        // Target specific files or directories
-//        target 'src/main/java/**/*.java', 'src/test/java/**/*.java'
-//
-//        // You can also include other formats like import order, license headers, etc.
-//        importOrder 'java', 'javax', 'org', 'com', 'accesscontrol'  // Specifies import order
-//    }
-//}
+// Task to create a fat JAR
+shadowJar {
+    archiveClassifier.set('')
+    mergeServiceFiles()
+}
