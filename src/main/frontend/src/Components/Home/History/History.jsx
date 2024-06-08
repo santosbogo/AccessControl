@@ -102,7 +102,7 @@ const ViewHistory = () => {
                         {combinedData.map((entry, index) => (
                             <li key={index}>
                                 {entry.firstName ? (
-                                    `${entry.firstName} ${entry.lastName} Access Attempt at ${entry.time}`
+                                    `${entry.firstName} ${entry.lastName} Access Attempt at ${entry.time}, Access Status: ${entry.state}`
                                 ) : (
                                     `Exit at ${entry.time}`
                                 )}
