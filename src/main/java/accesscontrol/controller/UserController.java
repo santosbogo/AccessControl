@@ -91,6 +91,6 @@ public class UserController{
     }
 
     public void publishUsersList(){
-        mqttPublisher.publishUsersList(users.findAllUsers());
+        mqttPublisher.publishUsersList(users.findAllActive());
     }
 }
