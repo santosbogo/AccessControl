@@ -26,7 +26,7 @@ const CreateUser = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:3333/user/add', {
+            const response = await axios.post(`http://${process.env.REACT_APP_PUBLIC_IP}/user/add`, {
                 uid : uid,
                 firstName: firstName,
                 lastName: lastName,
@@ -44,7 +44,7 @@ const CreateUser = () => {
 
     const handleRequestUid = async () => {
         try {
-            const response = await axios.get(`http://localhost:3333/uid/getUid`);
+            const response = await axios.get(`http://${process.env.REACT_APP_PUBLIC_IP}/uid/getUid`);
             if (response.data && response.data.uid) {
                 setUid(response.data.uid);
                 setShowUidField(true);

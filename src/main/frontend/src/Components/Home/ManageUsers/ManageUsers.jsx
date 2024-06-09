@@ -23,7 +23,7 @@ const ManageUsers = () => {
 
     const fetchAllUsers = async () => {
         try {
-            const response = await axios.get('http://localhost:3333/users/findAll');
+            const response = await axios.get(`http://${process.env.REACT_APP_PUBLIC_IP}/users/findAll`);
             setUsers(response.data);
             console.log('Fetched users:', response.data);
             setActiveError('');
@@ -64,7 +64,7 @@ const ManageUsers = () => {
         setInactiveErrors(newErrors1);
         setActiveErrors(newErrors1);
         try {
-            await axios.post(`http://localhost:3333/user/deactivate/${userId}`);
+            await axios.post(`http://${process.env.REACT_APP_PUBLIC_IP}/user/deactivate/${userId}`);
             const newInactiveErrors = {...inactiveErrors, [userId]: ''}; // Limpiar errores anteriores
             setInactiveErrors(newInactiveErrors);
             updateUserState(userId, false);
@@ -83,7 +83,7 @@ const ManageUsers = () => {
         setInactiveErrors(newErrors);
 
         try {
-            await axios.post(`http://localhost:3333/user/activate/${userId}`);
+            await axios.post(`http://${process.env.REACT_APP_PUBLIC_IP}/user/activate/${userId}`);
             const newActiveErrors = {...activeErrors, [userId]: ''}; // Limpiar errores anteriores
             setActiveErrors(newActiveErrors);
             updateUserState(userId, true);
