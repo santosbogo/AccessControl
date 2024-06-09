@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import './Home.css'; // Importa los estilos CSS
-import authentication from '../Hoc/Hoc';
 import axios from "axios";
 
 

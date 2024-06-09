@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Link } from 'react-router-dom';
-import authentication from "../../../Hoc/Hoc"; // Importar el HOC de autenticación
 import axios from "axios";
 import './Create.css';
 import { useNavigate } from "react-router-dom";
@@ -102,4 +101,4 @@ const CreateUser = () => {
         );
     };
 
-export default authentication(CreateUser);
+export default CreateUser;

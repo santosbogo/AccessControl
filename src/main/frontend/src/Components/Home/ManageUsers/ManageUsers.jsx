@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./ManageUsers.css"
-import authentication from "../../Hoc/Hoc"; // Importar el HOC de autenticación
 import { Link } from 'react-router-dom'; // Importar Link si es necesario
 
 const ManageUsers = () => {
@@ -131,4 +130,4 @@ const ManageUsers = () => {
     );
 };
 
-export default authentication(ManageUsers);
+export default ManageUsers;
