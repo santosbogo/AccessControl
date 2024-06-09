@@ -20,14 +20,14 @@ WiFiClient WIFI_CLIENT;
 PubSubClient MQTT_CLIENT(WIFI_CLIENT);
 
 // MQTT instance
-#define PUBLIC_IP "18.209.1.171"
+#define PUBLIC_IP "34.207.199.67"
 
 // Topic name
 #define NEW_USER_TOPIC "new_user"
 
 // WiFi credentials
-const char* ssid = "Flia Lando 2";
-const char* password = "aabbccddeeff";
+const char* ssid = "Fila Bogo 2.4";
+const char* password = "244466666";
 
 void setup() {
 	Serial.begin(9600);		// Initialize serial communications with the PC
