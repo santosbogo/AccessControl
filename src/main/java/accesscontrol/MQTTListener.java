@@ -136,8 +136,8 @@ public class MQTTListener {
         userController.deactivateUserWithUID(uid);
     }
 
-    private void changeHardwareState(String messageString){
-        int state = gson.fromJson(messageString, Integer.class);
-        //TODO: LLamar a un metodo en  de cambiar estado de hardware
+    private void changeHardwareState(String messageString) {
+        int state = Integer.parseInt(messageString);
+        lockController.changeHardwareState(state);
     }
 }

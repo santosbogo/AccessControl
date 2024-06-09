@@ -121,3 +121,9 @@ button:hover {
     color: white;
 }
 
+.text-State {
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}

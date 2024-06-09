@@ -102,7 +102,11 @@ const ViewHistory = () => {
                         {combinedData.map((entry, index) => (
                             <li key={index}>
                                 {entry.firstName ? (
-                                    `${entry.firstName} ${entry.lastName} Access Attempt at ${entry.time}, Access Status: ${entry.state}`
+                                    entry.state === "true" ? (
+                                        `${entry.firstName} ${entry.lastName} , Access granted at ${entry.time}`
+                                    ) : (
+                                        `${entry.firstName} ${entry.lastName} , Access denied at ${entry.time}`
+                                    )
                                 ) : (
                                     `Exit at ${entry.time}`
                                 )}
