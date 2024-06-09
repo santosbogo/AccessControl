@@ -35,10 +35,8 @@ public class AuthenticationController {
       return gson.toJson("User not found or password mismatch");
     }
 
-    final String token = tokenStore.generateToken(admin.getUsername());
-    AuthenticationDto authenticationDto = new AuthenticationDto(admin, token);
     res.status(200);
-    return gson.toJson(authenticationDto);
+    return gson.toJson(admin.asJson());
   }
 
   public String deleteAuthentication(Request req, Response res) {
