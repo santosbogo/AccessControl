@@ -70,7 +70,7 @@
   String adminkey = "123456";  //Deffault admin password
 
 //MQTT instance
-#define PUBLIC_IP "3.84.203.19"
+#define PUBLIC_IP "18.209.1.171"
 
 void setup() {
   Serial.begin(9600);
@@ -106,6 +106,7 @@ void setup() {
 
   //Connect to MQTT server
   connectMQTT();
+  requestListMQTTPublish();
 
   LCDinitialMessage();
 }
@@ -150,9 +151,7 @@ void loop() {
 }
 
 
-
 //MQTT Methods
-
 
 
 void connectMQTT() {
@@ -167,8 +166,6 @@ void connectMQTT() {
 
   while (!MQTT_CLIENT.connected()) {
     if (MQTT_CLIENT.connect("ESP32Client")) {
-      MQTT_CLIENT.subscribe("users");  //Subscribe to all topics
-      MQTT_CLIENT.subscribe("state");
       MQTT_CLIENT.subscribe("#");
     }
     delay(DELAY * 6);
@@ -192,6 +189,21 @@ void checkMQTT() {
     LCDinitialMessage();
   }
   MQTT_CLIENT.loop();
+}
+
+void requestListMQTTPublish(){
+  StaticJsonDocument<200> message;
+
+  message["request"] = "usersList";
+
+  size_t neededSize = measureJson(message) + 1;
+  char jsonBuffer[neededSize];
+  serializeJson(message, jsonBuffer, sizeof(jsonBuffer));
+
+  MQTT_CLIENT.publish("request_from_hardware", jsonBuffer);
+
+  Serial.print("Solicitud de lista de usuarios enviada por MQTT: ");
+  Serial.println(jsonBuffer);
 }
 
 void accessRecordMQTTPublish(String UID, bool granted, bool fromOut) {
@@ -259,13 +271,13 @@ void callback(char* topic, byte* payload, unsigned int length) {
   Serial.println();
 
   if (strcmp(topic, "state") == 0) {
-    updateState(payload);
+    updateStateMQTTListen(payload);
   } else if (strcmp(topic, "users") == 0) {
-    updateUsersList(payload);
+    updateUsersListMQTTListen(payload);
   }
 }
 
-void updateUsersList(byte* payload) {
+void updateUsersListMQTTListen(byte* payload) {
   int payloadMaxSize = 1000;
 
   // Payload to string
@@ -313,7 +325,7 @@ void updateUsersList(byte* payload) {
 
 }
 
-void updateState(byte* payload) {
+void updateStateMQTTListen(byte* payload) {
   state = atoi((char*)payload);
 
   switch(state){
@@ -332,9 +344,7 @@ void updateState(byte* payload) {
 }
 
 
-
 //Functional methods
-
 
 
 bool requestKey() {
@@ -908,9 +918,7 @@ String getDate() {
 }
 
 
-
 // LCD display methods
-
 
 
 void LCDinitialMessage() {

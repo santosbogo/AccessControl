@@ -28,7 +28,7 @@ public class UserController{
         String lastName = userDto.getLastName();
         User user = new User(uid, name, lastName);
         users.persist(user);
-        mqttPublisher.publishUsersList(users.findAllUsers());
+        publishUsersList();
         res.type("application/json");
         return user.asJson();
     }
@@ -54,7 +54,7 @@ public class UserController{
             }
             user.deactivate();
             users.persist(user); // Actualizar el usuario en la base de datos
-            mqttPublisher.publishUsersList(users.findAllActive());
+            publishUsersList();
             res.status(200);
             return "User deactivated successfully.";
         } else {
@@ -73,7 +73,7 @@ public class UserController{
             }
             user.activate();
             users.persist(user); // Actualizar el usuario en la base de datos
-            mqttPublisher.publishUsersList(users.findAllActive());
+            publishUsersList();
             res.status(200);
             return "User activated successfully.";
         } else {
@@ -88,5 +88,9 @@ public class UserController{
             user.deactivate();
             users.persist(user);
         }
+    }
+
+    public void publishUsersList(){
+        mqttPublisher.publishUsersList(users.findAllUsers());
     }
 }

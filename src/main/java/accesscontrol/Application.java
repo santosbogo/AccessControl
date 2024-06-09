@@ -14,7 +14,7 @@ import static spark.Spark.*;
 
 public class Application {
     static Gson gson = new Gson();
-    private static final String broker = "tcp://18.234.91.71";
+    private static final String broker = "tcp://3.89.4.21:1883";
 
     public static void main(String[] args) {
         final EntityManagerFactory factory = Persistence.createEntityManagerFactory("accessControlDB");
@@ -31,7 +31,12 @@ public class Application {
         UserController userController = new UserController(mqttPublisher);
         LockController lockController = new LockController(mqttPublisher);
 
-        MQTTListener mqttListener = new MQTTListener(broker, exitController, attemptController, uidController, userController, lockController);
+        MQTTListener mqttListener = new MQTTListener(broker,
+                exitController,
+                attemptController,
+                uidController,
+                userController,
+                lockController);
 
         Admin adminUser = new Admin("Fernando", "Lichtschein", "taylor", "swift");
         adminController.addAdmin(adminUser);
