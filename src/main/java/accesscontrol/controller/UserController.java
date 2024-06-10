@@ -44,7 +44,8 @@ public class UserController{
 
 
     public String deactivateUser(Request req, Response res) {
-        String userId = req.params("id");
+        UidDto uidDto = gson.fromJson(req.body(), UidDto.class);
+        String userId = uidDto.getUid();
         User user = users.findUserByUid(userId);
         if (user != null) {
             if (!user.state()) {
@@ -63,7 +64,8 @@ public class UserController{
     }
 
     public String activateUser(Request req, Response res) {
-        String userId = req.params("id");
+        UidDto uidDto = gson.fromJson(req.body(), UidDto.class);
+        String userId = uidDto.getUid();
         User user = users.findUserByUid(userId);
         if (user != null) {
             if (user.state()) {

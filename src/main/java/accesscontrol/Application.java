@@ -71,8 +71,8 @@ public class Application {
         Spark.post("/user/add", userController::addUser);
         Spark.get("/user/verify", autController::getCurrentUser);
         Spark.get("/users/findAll", userController::searchUsers);
-        Spark.post("/user/deactivate/:id", userController::deactivateUser);
-        Spark.post("/user/activate/:id", userController::activateUser);
+        Spark.post("/user/deactivate", userController::deactivateUser);
+        Spark.post("/user/activate", userController::activateUser);
 
         try {
             Thread.currentThread().join();

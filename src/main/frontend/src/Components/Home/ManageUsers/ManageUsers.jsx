@@ -63,8 +63,8 @@ const ManageUsers = () => {
         setInactiveErrors(newErrors1);
         setActiveErrors(newErrors1);
         try {
-            await axios.post(`http://${process.env.REACT_APP_PUBLIC_IP}/user/deactivate/${userId}`);
-            const newInactiveErrors = {...inactiveErrors, [userId]: ''}; // Limpiar errores anteriores
+            await axios.post(`http://${process.env.REACT_APP_PUBLIC_IP}/user/deactivate`, { userId: userId });
+            const newInactiveErrors = {...inactiveErrors, [userId]: ''};
             setInactiveErrors(newInactiveErrors);
             updateUserState(userId, false);
         } catch (error) {
@@ -82,8 +82,8 @@ const ManageUsers = () => {
         setInactiveErrors(newErrors);
 
         try {
-            await axios.post(`http://${process.env.REACT_APP_PUBLIC_IP}/user/activate/${userId}`);
-            const newActiveErrors = {...activeErrors, [userId]: ''}; // Limpiar errores anteriores
+            await axios.post(`http://${process.env.REACT_APP_PUBLIC_IP}/user/activate`, { userId: userId });
+            const newActiveErrors = {...activeErrors, [userId]: ''};
             setActiveErrors(newActiveErrors);
             updateUserState(userId, true);
         } catch (error) {
