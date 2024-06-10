@@ -70,7 +70,12 @@
   String adminkey = "123456";  //Deffault admin password
 
 //MQTT instance
-#define PUBLIC_IP "18.209.1.171"
+#define MQTT_IP "54.197.218.117"
+// #define WIFI_SSID "UA-Alumnos"
+// #define WIFI_PASSWORD "41umn05WLC"
+#define WIFI_SSID "Fila Bogo 2.4"
+#define WIFI_PASSWORD "244466666"
+
 
 void setup() {
   Serial.begin(9600);
@@ -93,9 +98,7 @@ void setup() {
   //Initialize Button
   pinMode(buttonPin, INPUT_PULLUP);
 
-  // connectWifi("UA-Alumnos", "41umn05WLC");
-  connectWifi("Flia Lando 2", "aabbccddeeff");
-  // connectWifi("Fila Bogo 2.4", "244466666");
+  connectWifi();
 
   //Set Time
   if (WiFi.status() == WL_CONNECTED) {
@@ -114,10 +117,10 @@ void setup() {
 void loop() {
   char key = keypad.getKey();
   bool RFIDReaderCondition = mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial();
-  String UID;
 
   buttonInterruption();
 
+  checkWifi();
   checkMQTT();
 
   if (key) {
@@ -144,9 +147,54 @@ void loop() {
   }
 
   if (RFIDReaderCondition) {
-    UID = readUid(mfrc522.uid.uidByte);
+    String UID = readUid(mfrc522.uid.uidByte);
     accessController(UID, true);
     LCDinitialMessage();
+  }
+}
+
+
+//WIFI Methods
+
+
+void connectWifi() {
+  const int maxAttempts = 16;
+  int attempts = 0;
+
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("CONECTING WIFI");
+  lcd.setCursor(0, 1);
+
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(DELAY);
+    lcd.print(".");
+    attempts++;
+
+    if (attempts >= maxAttempts) {
+      lcd.clear();
+      lcd.setCursor(0, 0);
+      lcd.print("FAILED CONECTION");
+      delay(DELAY);
+      WiFi.disconnect(true);
+      WiFi.mode(WIFI_OFF);
+      manualTimeConfiguration();
+      return;
+    }
+  }
+
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("CONECTED!");
+  delay(DELAY);
+}
+
+void checkWifi(){
+  if (WiFi.status() != WL_CONNECTED) {
+    connectWifi();
+    getTimeFromWifi();
   }
 }
 
@@ -157,7 +205,7 @@ void loop() {
 void connectMQTT() {
   const int maxAttempts = 16;
   int attempts = 0;
-  MQTT_CLIENT.setServer(PUBLIC_IP, 1883);
+  MQTT_CLIENT.setServer(MQTT_IP, 1883);
   MQTT_CLIENT.setCallback(callback);
   MQTT_CLIENT.setClient(WIFI_CLIENT);
 
@@ -255,7 +303,7 @@ void stateChangeMQTTPublish(int state){
   char jsonBuffer[neededSize];
   serializeJson(message, jsonBuffer, sizeof(jsonBuffer));
 
-  MQTT_CLIENT.publish("system/state", jsonBuffer);
+  MQTT_CLIENT.publish("hardware_state", jsonBuffer);
 
   Serial.print("Estado publicado por MQTT: ");
   Serial.println(jsonBuffer);
@@ -686,40 +734,6 @@ void deniedAccessLight() {
 
 //Time methods
 
-
-void connectWifi(String ssid, String password) {
-  const int maxAttempts = 16;
-  int attempts = 0;
-
-  lcd.clear();
-  lcd.setCursor(0, 0);
-  lcd.print("CONECTING WIFI");
-  lcd.setCursor(0, 1);
-
-  WiFi.begin(ssid.c_str(), password.c_str());
-
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(DELAY);
-    lcd.print(".");
-    attempts++;
-
-    if (attempts >= maxAttempts) {
-      lcd.clear();
-      lcd.setCursor(0, 0);
-      lcd.print("FAILED CONECTION");
-      delay(DELAY);
-      WiFi.disconnect(true);
-      WiFi.mode(WIFI_OFF);
-      manualTimeConfiguration();
-      return;
-    }
-  }
-
-  lcd.clear();
-  lcd.setCursor(0, 0);
-  lcd.print("CONECTED!");
-  delay(DELAY);
-}
 
 void getTimeFromWifi() {
   const int maxAttempts = 16;
