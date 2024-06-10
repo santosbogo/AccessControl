@@ -40,7 +40,7 @@ public class MQTTListener {
     private void connectMQTT() {
         try {
             if (this.client == null) {
-                String clientId = "santossListener";
+                String clientId = "santosListener";
                 this.client = new MqttClient(broker, clientId);
             }
             MqttConnectOptions options = new MqttConnectOptions();
@@ -136,12 +136,14 @@ public class MQTTListener {
     }
 
     private void deactivateUserWithUID(String messageString){
-        String uid = gson.fromJson(messageString, String.class);
+        JsonObject jsonObject = gson.fromJson(messageString, JsonObject.class);
+        String uid = jsonObject.get("UID").getAsString();
         userController.deactivateUserWithUID(uid);
     }
 
     private void changeHardwareState(String messageString) {
-        int state = Integer.parseInt(messageString);
+        JsonObject jsonObject = gson.fromJson(messageString, JsonObject.class);
+        int state = jsonObject.get("state").getAsInt();
         lockController.changeHardwareState(state);
     }
 
@@ -153,7 +155,7 @@ public class MQTTListener {
             sendUsersList();
         }
         else {
-            System.out.println("Tipo de solicitud no reconocido: " + requestType);
+            System.out.println("Request from MQTT not available: " + requestType);
         }
     }
 
