@@ -136,24 +136,25 @@ public class MQTTListener {
     }
 
     private void deactivateUserWithUID(String messageString){
-        String uid = gson.fromJson(messageString, String.class);
+        JsonObject jsonObject = gson.fromJson(messageString, JsonObject.class);
+        String uid = jsonObject.get("UID").getAsString();
         userController.deactivateUserWithUID(uid);
     }
 
-    private void changeHardwareState(String messageString){
-        int state = gson.fromJson(messageString, Integer.class);
-        //TODO: LLamar a un metodo en  de cambiar estado de hardware
+    private void changeHardwareState(String messageString) {
+        JsonObject jsonObject = gson.fromJson(messageString, JsonObject.class);
+        int state = jsonObject.get("state").getAsInt();
+        lockController.changeHardwareState(state);
     }
 
     private void handleHardwareRequests(String messageString){
         JsonObject jsonObject = gson.fromJson(messageString, JsonObject.class);
         String requestType = jsonObject.get("request").getAsString();
-
         if (requestType.equals("usersList")) {
             sendUsersList();
         }
         else {
-            System.out.println("Tipo de solicitud no reconocido: " + requestType);
+            System.out.println("Request from MQTT not available: " + requestType);
         }
     }
 

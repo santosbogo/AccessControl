@@ -5,7 +5,6 @@ import accesscontrol.queries.*;
 import accesscontrol.service.*;
 
 import com.google.gson.Gson;
-import accesscontrol.dto.AuthenticationDto;
 import accesscontrol.dto.LoginDto;
 import spark.Request;
 import spark.Response;

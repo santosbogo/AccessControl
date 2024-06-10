@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom";
 import './Home.css'; // Importa los estilos CSS
 import axios from "axios";
+
 
 
 
@@ -10,8 +11,25 @@ const HomePage = () => {
     const [showLockDoors, setLockAllDoorsModal] = useState(false);
     const [showUnlockDoors, setUnlockAllDoorsModal] = useState(false);
     const [showReturnToNormal, setReturnToNormal] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [lockState, setLockState] = useState('');
 
 
+    useEffect(() => {
+        const fetchLockState = async () => {
+            setLoading(true);
+            try {
+                const response = await axios.get(`http://${process.env.REACT_APP_PUBLIC_IP}/admin/getState`);
+                console.log('Lock state:', response.data);
+                setLockState(response.data);
+                setLoading(false);
+            } catch (error) {
+                console.error('Error fetching lock state:', error);
+                setLoading(false);
+            }
+        };
+        fetchLockState();
+    } ,[]);
 
     const handleManageUsers = () => {
         console.log('Redirect to manage users page');
@@ -41,6 +59,8 @@ const HomePage = () => {
             const response = await axios.post(`http://${process.env.REACT_APP_PUBLIC_IP}/admin/lock`);
             console.log(response.data);
             setLockAllDoorsModal(false);
+            window.location.reload();
+
         }
         catch(error){
             console.error('Error sending request:', error);
@@ -54,6 +74,8 @@ const HomePage = () => {
             const response = await axios.post(`http://${process.env.REACT_APP_PUBLIC_IP}/admin/unlock`);
             console.log(response.data);
             setUnlockAllDoorsModal(false);
+            window.location.reload();
+
         }
         catch(error){
             console.error('Error sending request:', error);
@@ -67,6 +89,8 @@ const HomePage = () => {
             const response = await axios.post(`http://${process.env.REACT_APP_PUBLIC_IP}/admin/normal-state`);
             console.log(response.data);
             setReturnToNormal(false);
+            window.location.reload();
+
         }
         catch(error){
             console.error('Error sending request:', error);
@@ -107,21 +131,26 @@ const HomePage = () => {
     return (
         <div className="home-page">
             <div className="main-title">Welcome to the Access Control System</div>
+            <div className="text-State">
+                {loading ? <h2>Loading...</h2> :
+                    <h2>Lock State: {lockState}</h2>
+                }
+            </div>
             <div className="button-container">
                 <button onClick={handleManageUsers}>Manage Users</button>
             </div>
             <div className="button-container">
                 <button onClick={handleViewHistory}>View History</button>
             </div>
-                <div className="button-container">
-                    <button className="button-spacing" onClick={handleLockDoors}>Lock Doors</button>
-                </div>
-                <div className="button-container">
-                    <button className="button-spacing" onClick={handleUnlockDoors}>Unlock Doors</button>
-                </div>
-                <div className="button-container">
-                    <button className="button-spacing" onClick={handleReturnNormal}>Return to normal state</button>
-                </div>
+            <div className="button-container">
+                <button className="button-spacing" onClick={handleLockDoors}>Lock Doors</button>
+            </div>
+            <div className="button-container">
+                <button className="button-spacing" onClick={handleUnlockDoors}>Unlock Doors</button>
+            </div>
+            <div className="button-container">
+                <button className="button-spacing" onClick={handleReturnNormal}>Return to normal state</button>
+            </div>
             <div className='button-container'>
                 <button onClick={handleLogout}>Log Out</button>
             </div>

@@ -62,6 +62,7 @@ public class Application {
         Spark.post("/admin/normal-state", lockController::returnToNormal);
         Spark.post("/admin/lock", lockController::lockDoors);
         Spark.post("/admin/unlock", lockController::unlockDoors);
+        Spark.get("/admin/getState", lockController::getState);
         //authentication
         Spark.get("/user/verify", autController::getCurrentUser);
         Spark.post("/user/login", autController::createAuthentication);

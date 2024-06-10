@@ -1,11 +1,10 @@
 package accesscontrol.controller;
-//import accesscontrol.MQTTPublisher;
+
 import accesscontrol.*;
 import accesscontrol.dto.*;
 import accesscontrol.model.*;
 import com.google.gson.Gson;
 import accesscontrol.queries.Users;
-import org.eclipse.paho.client.mqttv3.MqttClient;
 import spark.*;
 
 import java.util.*;
@@ -53,7 +52,7 @@ public class UserController{
                 return "User is already deactivated.";
             }
             user.deactivate();
-            users.persist(user); // Actualizar el usuario en la base de datos
+            users.persist(user);
             publishUsersList();
             res.status(200);
             return "User deactivated successfully.";
@@ -72,7 +71,7 @@ public class UserController{
                 return "User is already activated.";
             }
             user.activate();
-            users.persist(user); // Actualizar el usuario en la base de datos
+            users.persist(user);
             publishUsersList();
             res.status(200);
             return "User activated successfully.";
@@ -91,6 +90,6 @@ public class UserController{
     }
 
     public void publishUsersList(){
-        mqttPublisher.publishUsersList(users.findAllUsers());
+        mqttPublisher.publishUsersList(users.findAllActive());
     }
 }

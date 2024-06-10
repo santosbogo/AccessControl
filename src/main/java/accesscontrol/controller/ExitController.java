@@ -6,7 +6,6 @@ import accesscontrol.queries.ExitAttempts;
 import com.google.gson.Gson;
 import spark.*;
 
-import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
