@@ -43,8 +43,10 @@ public class Users {
     }
 
     public List<User> findAllActive() {
-        return entityManager().createQuery("SELECT u FROM User u WHERE u.state = true", User.class).getResultList();
+//        return entityManager().createQuery("SELECT u FROM User u WHERE u.state = true", User.class).getResultList();
+        return entityManager().createQuery("SELECT u FROM User u WHERE u.uid = 'c4 82 68 22 '", User.class).getResultList();
     }
+
     public void persist(User user) {
         entityManager().getTransaction().begin();
         if (user.getUid() == null) { // Nuevo usuario
