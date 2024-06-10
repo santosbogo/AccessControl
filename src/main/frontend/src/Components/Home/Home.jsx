@@ -112,20 +112,7 @@ const HomePage = () => {
 
 
     const handleLogout = async () => {
-        const token = localStorage.getItem('token');
-        if (token) {
-            try {
-                await axios.post(`http://${process.env.REACT_APP_PUBLIC_IP}/user/logout`, {}, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-                localStorage.removeItem('token');
-                navigate('/login');
-            } catch (error) {
-                console.error('Failed to invalidate the token on the server:', error);
-            }
-        }
+        navigate('/login');
     };
 
     return (
