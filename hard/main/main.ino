@@ -70,11 +70,11 @@
   String adminkey = "123456";  //Deffault admin password
 
 //MQTT instance
-#define MQTT_IP "54.197.218.117"
-// #define WIFI_SSID "UA-Alumnos"
-// #define WIFI_PASSWORD "41umn05WLC"
-#define WIFI_SSID "Fila Bogo 2.4"
-#define WIFI_PASSWORD "244466666"
+#define MQTT_IP "3.89.144.193"
+#define WIFI_SSID "UA-Alumnos"
+#define WIFI_PASSWORD "41umn05WLC"
+// #define WIFI_SSID "Fila Bogo 2.4"
+// #define WIFI_PASSWORD "244466666"
 
 
 void setup() {
