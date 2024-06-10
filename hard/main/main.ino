@@ -213,7 +213,7 @@ void connectMQTT() {
   lcd.print("                ");
 
   while (!MQTT_CLIENT.connected()) {
-    if (MQTT_CLIENT.connect("ESP32Client")) {
+    if (MQTT_CLIENT.connect("AccessControll")) {
       MQTT_CLIENT.subscribe("#");
     }
     delay(DELAY * 6);
